@@ -1,5 +1,5 @@
 // DOPAMINE service worker — offline-first arcade.
-const CACHE = 'dopamine-v3';
+const CACHE = 'dopamine-v4';
 const CORE = [
   '/', '/index.html', '/css/style.css',
   '/js/app.js', '/js/data.js', '/js/rng.js', '/js/store.js', '/js/audio.js',
@@ -26,6 +26,12 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
+
+  // API calls: ALWAYS network-only — never cache live data
+  if (url.pathname.startsWith('/api/')) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
 
   // external (fonts, flags): network-first, cache fallback
   if (url.origin !== location.origin) {

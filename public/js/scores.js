@@ -1,6 +1,8 @@
 // scores.js — global daily leaderboard client: name handling, score submit, result panels.
 import { dayNumber } from './rng.js';
 import { sfx } from './audio.js';
+import { store } from './store.js';
+import { events } from './analytics.js';
 
 const NAME_KEY = 'dopamine:name';
 export const GAME_LABELS = {
@@ -52,6 +54,9 @@ export function promptName() {
 /** Submit a score. Returns {rank} or null. Silent on failure (offline-safe). */
 export async function submitScore(game, score) {
   try {
+    store.incr('plays:' + game);
+    const total = store.incr('plays:total');
+    events.gameCompleted(game, { score, totalPlays: total });
     const name = await promptName();
     if (!name) return null;
     const res = await fetch('/api/score', {

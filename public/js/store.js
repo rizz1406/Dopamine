@@ -59,5 +59,31 @@ export const store = {
     const h = this.history(key);
     h.unshift(entry);
     this.set('history:' + key, h.slice(0, 30));
+  },
+
+  // ── counters (total plays etc.) ──
+  incr(key, by = 1) {
+    const v = (this.get(key, 0) || 0) + by;
+    this.set(key, v);
+    return v;
+  },
+
+  // ── daily challenge results ──
+  /** Record today's result for a daily game. Keeps the BEST score. */
+  setDailyResult(game, day, { score, won }) {
+    const db = read();
+    db.daily = db.daily || {};
+    db.daily[day] = db.daily[day] || {};
+    const cur = db.daily[day][game];
+    if (!cur || score > cur.score) db.daily[day][game] = { score, won };
+    write(db);
+    return db.daily[day][game];
+  },
+  getDailyResult(game, day) {
+    return read().daily?.[day]?.[game] || null;
+  },
+  /** All daily results for a given day: { reel: {score, won}, ... } */
+  getDailySummary(day) {
+    return read().daily?.[day] || {};
   }
 };

@@ -6,6 +6,7 @@ import { sfx } from '../audio.js';
 import { burst, bigWin } from '../confetti.js';
 import { animateNumber, staggerGrid, winJuice } from '../juice.js';
 import { submitScore, mountLeaderboard } from '../scores.js';
+import { events } from '../analytics.js';
 import { maybeShowInterstitial } from '../ads.js';
 import { ui } from '../app.js';
 
@@ -163,6 +164,8 @@ export function renderWord(view, registerCleanup) {
     let streak = store.streak('word').current;
     if (firstToday) streak = store.recordDaily('word', won, day).current;
     document.getElementById('w-streak').textContent = streak;
+    store.setDailyResult('word', new Date().toISOString().slice(0, 10), { score: state.guesses.length, won });
+    events.gameCompleted('word', { score: state.guesses.length, won, puzzleId: day });
 
     const v = wordVerdict(state.guesses.length);
     if (won && state.guesses.length <= 3) bigWin();

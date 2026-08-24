@@ -17,6 +17,7 @@
   <meta name="twitter:description" content="7 daily mini-games. Can you beat your friends?" />
   <meta name="twitter:image" content="https://dopamine.games/og.png" />
   <meta name="theme-color" content="#0b0b12" />
+  <link rel="canonical" href="https://dopamine.games/" />
   <link rel="manifest" href="/site.webmanifest" />
   <link rel="apple-touch-icon" href="/icons/icon-192.png" />
   <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
@@ -49,7 +50,17 @@
 
   <footer class="footer">
     <div class="ad-slot" data-ad="footer">ad space — your future revenue lives here</div>
-    <p>Made with 💜 + too much caffeine · <span id="foot-year"></span> · <a href="#/admin" data-nav style="color:var(--muted);text-decoration:underline">⚙️ Ad Settings</a></p>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="/" data-nav>Games</a>
+      <a href="/leaderboard" data-nav>Leaderboard</a>
+      <a href="/stats" data-nav>Stats</a>
+      <a href="/about" data-nav>About</a>
+      <a href="/privacy" data-nav>Privacy</a>
+      <a href="/terms" data-nav>Terms</a>
+      <a href="/contact" data-nav>Contact</a>
+      <a href="/admin" data-nav title="Owner">⚙️</a>
+    </nav>
+    <p>© <span id="foot-year"></span> DOPAMINE. — Made with 💜 + too much caffeine</p>
   </footer>
 
   <div id="toast-root" aria-live="polite"></div>

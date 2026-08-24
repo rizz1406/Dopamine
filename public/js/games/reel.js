@@ -6,6 +6,7 @@ import { sfx } from '../audio.js';
 import { burst, bigWin } from '../confetti.js';
 import { animateNumber, staggerGrid, winJuice } from '../juice.js';
 import { submitScore, mountLeaderboard } from '../scores.js';
+import { events } from '../analytics.js';
 import { ui } from '../app.js';
 
 const HINT_STAGES = [
@@ -151,9 +152,11 @@ export function renderReel(view, registerCleanup) {
     if (firstToday) {
       streak = store.recordDaily('reel', true, day).current;
     }
+    const score = state.results.filter(r => r.won).length;
+    store.setDailyResult('reel', new Date().toISOString().slice(0, 10), { score, won: true });
+    events.gameCompleted('reel', { score, won: true, puzzleId: day });
     updateStats();
 
-    const score = state.results.filter(r => r.won).length;
     const perfect = score === rounds.length;
     if (perfect) winJuice(true); else { burst(innerWidth / 2, innerHeight * 0.3, 70, 9); sfx.correct(); }
 

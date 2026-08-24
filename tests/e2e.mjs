@@ -68,13 +68,36 @@ after(async () => {
 
 describe('DOPAMINE E2E', () => {
 
-  test('hub loads with 9 game cards + puzzle #1 chip', async () => {
+  test('hub loads with 9 game cards + daily challenge card', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
     assert.equal(await page.locator('.game-card').count(), 9);
+    await assert.doesNotReject(() => page.locator('[data-test="challenge-card"]').waitFor({ timeout: 3000 }));
+    await assert.doesNotReject(() => page.locator('[data-test="continue-btn"]').waitFor({ timeout: 3000 }));
     const dayChip = await page.locator('#day-chip').textContent();
     assert.match(dayChip, /^#\d[\d,]*$/, 'day chip shows puzzle number');
     assert.match(await page.locator('.hero p').textContent(), /Puzzle #\d+ · \w{3} \d+/);
     assert.match(await page.title(), /DOPAMINE/);
+  });
+
+  test('PATH ROUTES: clean URLs work with per-page SEO meta + legal pages', async () => {
+    // direct load of a path route (server SPA fallback)
+    await page.goto(BASE + '/reel', { waitUntil: 'networkidle' });
+    await page.waitForSelector('[data-test="clue"]');
+    assert.match(await page.title(), /REEL — Guess the Movie/);
+    const desc = await page.locator('meta[name="description"]').getAttribute('content');
+    assert.match(desc, /movie from emojis/);
+
+    // client-side nav to another path keeps working
+    await page.goto(BASE + '/privacy', { waitUntil: 'networkidle' });
+    await page.waitForSelector('[data-test="legal-page"]');
+    assert.match(await page.title(), /Privacy Policy/);
+    assert.match(await page.locator('[data-test="legal-page"]').textContent(), /localStorage/i);
+
+    // stats page renders achievements
+    await page.goto(BASE + '/stats', { waitUntil: 'networkidle' });
+    await page.waitForSelector('[data-test="achievements"]');
+    assert.ok((await page.locator('[data-test="ach"]').count()) >= 10, 'achievements rendered');
+    await assert.doesNotReject(() => page.locator('[data-test="stat-cards"]').waitFor({ timeout: 3000 }));
   });
 
   test('PWA: manifest, service worker, robots, sitemap, og image all live', async () => {

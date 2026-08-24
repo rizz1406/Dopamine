@@ -56,7 +56,9 @@ export async function submitScore(game, score) {
   try {
     store.incr('plays:' + game);
     const total = store.incr('plays:total');
-    events.gameCompleted(game, { score, totalPlays: total });
+    // game_completed is emitted by the game modules (with puzzle id);
+    // here we track the leaderboard submission itself to avoid double-counting
+    events.track('score_submitted', { game, score, totalPlays: total });
     const name = await promptName();
     if (!name) return null;
     const res = await fetch('/api/score', {

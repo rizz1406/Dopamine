@@ -81,6 +81,10 @@ async function handleApi(request, env, url) {
       return err('bad day', 400);
     }
     const name = cleanName(body.name);
+    // spam guard: cap submissions per player/game/day (works across isolates via D1)
+    const { count } = await db.prepare('SELECT COUNT(*) AS count FROM scores WHERE day = ? AND game = ? AND name = ?')
+      .bind(day, game, name).first();
+    if (count >= 50) return err('too many submissions today', 429);
     await db.prepare('INSERT INTO scores (day, game, name, score, ts) VALUES (?, ?, ?, ?, ?)')
       .bind(day, game, name, score, Date.now()).run();
     // prune older than 8 days (lazy)
@@ -113,12 +117,12 @@ async function handleApi(request, env, url) {
     const pw = String(body.password || '');
     const ok = timingSafeEqual(pw, env.ADMIN_PASSWORD || 'dopamine-admin');
     if (!ok) return err('wrong password', 401);
-    return json({ token: await hmac(env.SECRET, 'admin') });
+    return json({ token: await hmac(env.SECRET || env.ADMIN_PASSWORD || 'dopamine-secret', 'admin') });
   }
 
   const auth = request.headers.get('authorization') || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
-  const expected = await hmac(env.SECRET, 'admin');
+  const expected = await hmac(env.SECRET || env.ADMIN_PASSWORD || 'dopamine-secret', 'admin');
   if (!token || !timingSafeEqual(token, expected)) return err('unauthorized', 401);
 
   // ── admin (authed) ──

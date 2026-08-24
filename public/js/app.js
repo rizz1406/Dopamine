@@ -85,6 +85,7 @@ export const ui = {
   },
 
   openShareModal({ title, grid, text }) {
+    events.shareClicked(text.split('\n')[0]);
     const backdrop = document.createElement('div');
     backdrop.className = 'modal-backdrop';
     const targets = shareTargets(text);
@@ -152,6 +153,7 @@ function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls }) {
 
 function renderHub() {
   const day = dayNumber();
+  applyAdsConfig(); // paint dynamic ad slots created by this template
   const dayLabel = `#${day.toLocaleString()} · ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}`;
   const s = todaySummary();
   const bestStreak = Math.max(store.streak('reel').best, store.streak('word').best);
@@ -175,6 +177,9 @@ function renderHub() {
       </div>
       <div class="cc-right">${challengeBtn}</div>
     </section>
+
+    <!-- AD SLOT: below challenge card, above arcade grid -->
+    <div class="ad-slot" data-ad="top" style="display:none">ad space</div>
 
     <h3 class="hub-section-title">🕹️ Daily Arcade</h3>
     <section class="game-grid">

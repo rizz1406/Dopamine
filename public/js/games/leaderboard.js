@@ -1,6 +1,7 @@
 // 🏆 LEADERBOARD — global daily rankings for all games.
 import { GAME_LABELS } from '../scores.js';
 import { sfx } from '../audio.js';
+import { events } from '../analytics.js';
 
 const GAMES = Object.keys(GAME_LABELS);
 
@@ -30,6 +31,7 @@ export function renderLeaderboard(view) {
 
   async function load(game) {
     current = game;
+    events.leaderboardViewed(game);
     view.querySelectorAll('.lb-tab').forEach(t => t.classList.toggle('active', t.dataset.game === game));
     list.innerHTML = '<div class="lb-empty">Loading…</div>';
     try {

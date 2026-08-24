@@ -1,11 +1,13 @@
 // DOPAMINE service worker — offline-first arcade.
-const CACHE = 'dopamine-v5';
+const CACHE = 'dopamine-v6';
 const CORE = [
   '/', '/index.html', '/css/style.css',
   '/js/app.js', '/js/data.js', '/js/rng.js', '/js/store.js', '/js/audio.js',
   '/js/confetti.js', '/js/share.js', '/js/ads.js', '/js/reel-logic.js',
   '/js/hl-logic.js', '/js/word-logic.js', '/js/timeline-logic.js', '/js/flag-logic.js',
   '/js/words.js', '/js/flags.js', '/js/juice.js', '/js/scores.js',
+  '/js/daily.js', '/js/achievements.js', '/js/analytics.js',
+  '/js/pages/stats.js', '/js/pages/legal.js',
   '/js/games/reel.js', '/js/games/higherlower.js', '/js/games/reflex.js',
   '/js/games/memory.js', '/js/games/timeline.js', '/js/games/word.js',
   '/js/games/flagrush.js', '/js/games/speed.js', '/js/games/snake.js',

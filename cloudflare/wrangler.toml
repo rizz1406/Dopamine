@@ -12,7 +12,7 @@ not_found_handling = "single-page-application"
 [[d1_databases]]
 binding = "DB"
 database_name = "dopamine"
-database_id = "REPLACE_ME" # npx wrangler d1 create dopamine → paste the id here
+database_id = "b74eea69-b878-429a-b188-29e781545b68"
 
 # Secrets (set via: npx wrangler secret put ADMIN_PASSWORD / SECRET)
 # [vars] not used for secrets

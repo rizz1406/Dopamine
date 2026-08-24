@@ -123,7 +123,7 @@ export function renderTimeline(view) {
       ui.openShareModal({
         title: 'Flex your film history',
         grid: null,
-        text: `⏳ TIMELINE\n${state.roundsWon}/${ROUND_COUNT} rounds — ${v.title}\nBeat me → https://dopamine.games`
+        text: `⏳ TIMELINE\n${state.roundsWon}/${ROUND_COUNT} rounds — ${v.title}\nBeat me → https://dopamine.rizwanmirza95551.workers.dev`
       });
     });
   }

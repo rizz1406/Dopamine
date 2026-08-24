@@ -196,7 +196,7 @@ export function renderSpeed(view, registerCleanup) {
       ui.openShareModal({
         title: 'Flex your drive',
         grid: null,
-        text: `🏎️ SPEED RUSH\n${m} meters — think you can beat that?\nPlay → https://dopamine.games`
+        text: `🏎️ SPEED RUSH\n${m} meters — think you can beat that?\nPlay → https://dopamine.rizwanmirza95551.workers.dev`
       });
     });
   }

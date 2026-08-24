@@ -128,7 +128,7 @@ export function renderFlagRush(view) {
       ui.openShareModal({
         title: 'Flex your flag game',
         grid: null,
-        text: `🏳️ FLAG RUSH\n${state.score}/${ROUNDS} — ${v.title}\nBeat me → https://dopamine.games`
+        text: `🏳️ FLAG RUSH\n${state.score}/${ROUNDS} — ${v.title}\nBeat me → https://dopamine.rizwanmirza95551.workers.dev`
       });
     });
   }

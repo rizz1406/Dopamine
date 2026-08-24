@@ -152,7 +152,7 @@ export function renderMemory(view) {
       ui.openShareModal({
         title: 'Flex your memory',
         grid: null,
-        text: `🧠 MEMORY\nI reached level ${state.level} ${state.level >= 10 ? '🧠' : '🔥'} (best: ${best})\nBeat me → https://dopamine.rizwanmirza95551.workers.dev`
+        text: `🧠 MEMORY\nI reached level ${state.level} ${state.level >= 10 ? '🧠' : '🔥'} (best: ${best})\nBeat me → https://dopaminegames.pages.dev`
       });
     });
   }

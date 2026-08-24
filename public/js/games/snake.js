@@ -181,7 +181,7 @@ export function renderSnake(view, registerCleanup) {
       ui.openShareModal({
         title: 'Flex your serpent',
         grid: null,
-        text: `🐍 SNAKE\nScore: ${state.score} — think you can beat that?\nPlay → https://dopamine.rizwanmirza95551.workers.dev`
+        text: `🐍 SNAKE\nScore: ${state.score} — think you can beat that?\nPlay → https://dopaminegames.pages.dev`
       });
     });
   }

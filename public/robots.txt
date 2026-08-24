@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dopamine.rizwanmirza95551.workers.dev/sitemap.xml
+Sitemap: https://dopaminegames.pages.dev/sitemap.xml

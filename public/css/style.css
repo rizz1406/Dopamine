@@ -210,6 +210,33 @@ a { color: inherit; text-decoration: none; }
   40% { transform: scale(1); filter: drop-shadow(0 6px 16px rgba(0,0,0,.4)); }
 }
 
+/* SPEED RUSH: car zooms forward with speed lines */
+.game-card.speed:hover .card-emoji { animation: speed-zoom .6s cubic-bezier(.34,1.56,.64,1); }
+.game-card.speed:hover .card-emoji::after {
+  content: '💨'; position: absolute; left: -26px; top: 50%; transform: translateY(-50%);
+  font-size: 1rem; opacity: 0; animation: speed-lines .6s ease;
+}
+@keyframes speed-zoom {
+  0% { transform: translateX(0); }
+  40% { transform: translateX(16px) skewX(-10deg); }
+  60% { transform: translateX(-5px) skewX(3deg); }
+  100% { transform: translateX(0); }
+}
+@keyframes speed-lines {
+  0% { opacity: 0; transform: translateY(-50%) translateX(10px); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-50%) translateX(-8px); }
+}
+
+/* SNAKE: slither wiggle */
+.game-card.snake:hover .card-emoji { animation: snake-slither 1.1s ease-in-out infinite; }
+@keyframes snake-slither {
+  0%, 100% { transform: rotate(0) translate(0, 0); }
+  25% { transform: rotate(-9deg) translate(-3px, -4px); }
+  50% { transform: rotate(0) translate(2px, 0); }
+  75% { transform: rotate(9deg) translate(3px, 4px); }
+}
+
 /* ── shared game UI ── */
 .game-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; animation: rise .35s ease both; }
 .back-btn {

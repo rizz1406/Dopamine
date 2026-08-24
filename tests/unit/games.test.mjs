@@ -100,7 +100,7 @@ describe('flag logic', () => {
   });
 
   test('country data valid + unique', () => {
-    assert.ok(COUNTRIES.length >= 90, 'variety');
+    assert.ok(COUNTRIES.length >= 170, 'variety');
     const codes = new Set(COUNTRIES.map(c => c.code));
     assert.equal(codes.size, COUNTRIES.length);
     COUNTRIES.forEach(c => {

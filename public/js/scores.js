@@ -26,6 +26,7 @@ function today() {
 export function promptName() {
   return new Promise(resolve => {
     if (getName()) return resolve(getName());
+    try { if (localStorage.getItem('dopamine:anon') === '1') return resolve(null); } catch {}
     const backdrop = document.createElement('div');
     backdrop.className = 'modal-backdrop';
     backdrop.innerHTML = `
@@ -47,7 +48,10 @@ export function promptName() {
     };
     backdrop.querySelector('[data-test="name-save"]').addEventListener('click', save);
     input.addEventListener('keydown', e => { if (e.key === 'Enter') save(); });
-    backdrop.querySelector('[data-test="name-skip"]').addEventListener('click', () => close(null));
+    backdrop.querySelector('[data-test="name-skip"]').addEventListener('click', () => {
+      try { localStorage.setItem('dopamine:anon', '1'); } catch {}
+      close(null);
+    });
   });
 }
 
@@ -59,8 +63,9 @@ export async function submitScore(game, score) {
     // game_completed is emitted by the game modules (with puzzle id);
     // here we track the leaderboard submission itself to avoid double-counting
     events.track('score_submitted', { game, score, totalPlays: total });
-    const name = await promptName();
-    if (!name) return null;
+    let name = getName();
+    if (!name) name = await promptName();
+    if (!name) name = 'anon'; // skipped the modal — still compete, anonymously
     const res = await fetch('/api/score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

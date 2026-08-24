@@ -44,7 +44,6 @@ const ROUTES = {
   '/admin': { render: renderAdmin, title: 'Admin — DOPAMINE', desc: 'Owner console.' }
 };
 
-const HASH_ALIASES = { '/': '#/', '/reel': '#/reel', '/higher-lower': '#/higher-lower', '/word': '#/word', '/memory': '#/memory', '/timeline': '#/timeline', '/flags': '#/flags', '/speed': '#/speed', '/snake': '#/snake', '/reflex': '#/reflex', '/leaderboard': '#/leaderboard', '/stats': '#/stats', '/admin': '#/admin' };
 
 function setMeta(title, desc) {
   document.title = title;
@@ -69,7 +68,8 @@ function resolveRoute() {
 }
 
 export function navigate(href) {
-  const path = HASH_ALIASES[href] ? href.slice(1) : (href.startsWith('#') ? '/' : href);
+  // accepts '/reel', '#/reel', '#/' — always lands on a clean path
+  const path = href.startsWith('#') ? (href.slice(1) || '/') : href;
   history.pushState({}, '', path);
   router();
 }

@@ -20,6 +20,8 @@ Same puzzles for everyone, every day — new at midnight UTC. Build streaks, cli
 | 🧠 | **MEMORY** | Simon-style pattern game — watch, repeat, watch it get harder |
 | ⏳ | **TIMELINE** | Order 4 movies from oldest to newest — 3 strikes only |
 | 🏳️ | **FLAG RUSH** | 10 flags, 5 seconds each — how many countries do you know? |
+| 🏎️ | **SPEED RUSH** | Dodge highway traffic at insane speeds — every meter counts |
+| 🐍 | **SNAKE** | The classic. Eat apples, grow long, don't bite yourself |
 | ⚡ | **REFLEX** | 5 clicks, one average. Superhuman or just sleepy? |
 
 ## 🏆 Features
@@ -47,11 +49,15 @@ npm start       # → http://localhost:4173
 ## 🧪 Testing
 
 ```bash
-npm test        # 49 unit + API tests (game logic, RNG, storage, REST API)
-npm run test:e2e  # 14 end-to-end tests in real Chrome (full gameplay flows)
+npm test        # 51 unit + API tests (game logic, RNG, storage, REST API, dedup)
+npm run test:e2e  # 16 end-to-end tests in real Chrome (full gameplay flows)
 ```
 
 E2E suite auto-detects Chrome/Edge — no browser downloads needed.
+
+## ☁️ Deploying to Cloudflare ($0, no cold starts)
+
+See **[DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md)** — the production target. Worker + D1 port of the API included in `cloudflare/`. Free tier handles ~3k daily players.
 
 ## 🔐 Owner Admin
 

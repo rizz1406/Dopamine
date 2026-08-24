@@ -588,6 +588,24 @@ a { color: inherit; text-decoration: none; }
 .lb-panel .lb-name { font-size: .88rem; }
 .lb-panel .lb-score { font-size: .9rem; }
 
+/* ── canvas arcade (racing / snake) ── */
+.race-wrap { position: relative; max-width: 420px; margin: 0 auto; }
+.race-overlay {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(11, 11, 18, .82); backdrop-filter: blur(4px); border-radius: 16px;
+}
+.race-overlay[style*="display: none"], .race-overlay[style*="display:none"] { display: none !important; }
+.race-controls { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+.race-btn {
+  min-width: 74px; padding: 13px 20px; border-radius: 14px;
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
+  font-weight: 700; font-size: .95rem;
+  transition: transform .12s cubic-bezier(.34,1.56,.64,1), background .15s;
+  touch-action: manipulation; user-select: none;
+}
+.race-btn:hover { background: rgba(255,255,255,.14); transform: translateY(-2px); }
+.race-btn:active { transform: scale(.93); }
+
 /* misc */
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 @media (prefers-reduced-motion: reduce) {

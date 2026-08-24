@@ -1,0 +1,17 @@
+name = "dopamine"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+
+# Static site served straight from the Worker's edge — free, unlimited requests
+[assets]
+directory = "../public"
+binding = "ASSETS"
+
+# D1 free tier: 5M row reads/day, 100k writes/day
+[[d1_databases]]
+binding = "DB"
+database_name = "dopamine"
+database_id = "REPLACE_ME" # npx wrangler d1 create dopamine → paste the id here
+
+# Secrets (set via: npx wrangler secret put ADMIN_PASSWORD / SECRET)
+# [vars] not used for secrets

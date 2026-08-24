@@ -1,5 +1,5 @@
 // DOPAMINE service worker — offline-first arcade.
-const CACHE = 'dopamine-v4';
+const CACHE = 'dopamine-v5';
 const CORE = [
   '/', '/index.html', '/css/style.css',
   '/js/app.js', '/js/data.js', '/js/rng.js', '/js/store.js', '/js/audio.js',
@@ -8,7 +8,8 @@ const CORE = [
   '/js/words.js', '/js/flags.js', '/js/juice.js', '/js/scores.js',
   '/js/games/reel.js', '/js/games/higherlower.js', '/js/games/reflex.js',
   '/js/games/memory.js', '/js/games/timeline.js', '/js/games/word.js',
-  '/js/games/flagrush.js', '/js/games/leaderboard.js', '/js/games/admin.js'
+  '/js/games/flagrush.js', '/js/games/speed.js', '/js/games/snake.js',
+  '/js/games/leaderboard.js', '/js/games/admin.js'
 ];
 
 self.addEventListener('install', e => {

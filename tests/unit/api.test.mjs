@@ -49,6 +49,24 @@ describe('leaderboard API', () => {
     assert.deepEqual(lb.top.map(t => t.score), [5, 4, 3]);
   });
 
+  test('leaderboard dedupes players — best score only, one row', async () => {
+    const day = new Date().toISOString().slice(0, 10);
+    await post('/api/score', { game: 'word', name: 'Dup', score: 2, day });
+    await post('/api/score', { game: 'word', name: 'Dup', score: 6, day });
+    await post('/api/score', { game: 'word', name: 'Dup', score: 4, day });
+
+    const lb = await (await get(`/api/leaderboard?game=word&day=${day}`)).json();
+    const dupRows = lb.top.filter(t => t.name === 'Dup');
+    assert.equal(dupRows.length, 1, 'one row per player');
+    assert.equal(dupRows[0].score, 6, 'best score kept');
+  });
+
+  test('new games accepted (speed, snake)', async () => {
+    const day = new Date().toISOString().slice(0, 10);
+    assert.equal((await post('/api/score', { game: 'speed', name: 'Racer', score: 850, day })).status, 200);
+    assert.equal((await post('/api/score', { game: 'snake', name: 'Snek', score: 120, day })).status, 200);
+  });
+
   test('same player twice keeps best rank', async () => {
     const day = new Date().toISOString().slice(0, 10);
     const r = await post('/api/score', { game: 'reel', name: 'Beta', score: 5, day });

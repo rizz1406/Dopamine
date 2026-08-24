@@ -5,7 +5,8 @@ import { sfx } from './audio.js';
 const NAME_KEY = 'dopamine:name';
 export const GAME_LABELS = {
   reel: '🎬 REEL', hl: '⚖️ Higher/Lower', word: '🔤 Word Guess',
-  memory: '🧠 Memory', timeline: '⏳ Timeline', flags: '🏳️ Flag Rush', reflex: '⚡ Reflex'
+  memory: '🧠 Memory', timeline: '⏳ Timeline', flags: '🏳️ Flag Rush', reflex: '⚡ Reflex',
+  speed: '🏎️ Speed Rush', snake: '🐍 Snake'
 };
 
 export function getName() {

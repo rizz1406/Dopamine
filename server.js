@@ -10,8 +10,8 @@ const DATA = join(ROOT, 'data');
 const PORT = process.env.PORT || 4173;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dopamine-admin';
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], speed: [0, 1000000], snake: [0, 100000] };
 
 // ── storage ───────────────────────────────────────────────
 let scores = {};   // { 'YYYY-MM-DD': { game: [{name, score, ts}] } }
@@ -143,8 +143,14 @@ async function handleApi(req, res, url) {
     const game = url.searchParams.get('game') || '';
     if (!GAMES.includes(game)) return json(res, 400, { error: 'bad game' });
     const day = cleanDay(url.searchParams.get('day'));
-    const list = (scores[day]?.[game] || []).slice().sort((a, b) => b.score - a.score || a.ts - b.ts).slice(0, 20);
-    return json(res, 200, { day, game, top: list });
+    // one row per player — their BEST score that day
+    const best = new Map();
+    for (const s of scores[day]?.[game] || []) {
+      const cur = best.get(s.name);
+      if (!cur || s.score > cur.score || (s.score === cur.score && s.ts < cur.ts)) best.set(s.name, s);
+    }
+    const top = [...best.values()].sort((a, b) => b.score - a.score || a.ts - b.ts).slice(0, 20);
+    return json(res, 200, { day, game, top });
   }
 
   if (path === '/api/ads-config' && req.method === 'GET') {

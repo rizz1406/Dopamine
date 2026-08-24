@@ -3,7 +3,7 @@ import { dayNumber } from './rng.js';
 import { store } from './store.js';
 import { isMuted, toggleMute, sfx } from './audio.js';
 import { applyAdsConfig, initServerConfig } from './ads.js';
-import { shareTargets, brandIconSvg, BRANDS, nativeShare, hasNativeShare } from './share.js';
+import { shareTargets, brandIconSvg, BRANDS, nativeShare, hasNativeShare, shareImageCard } from './share.js';
 import { renderReel } from './games/reel.js';
 import { renderHigherLower } from './games/higherlower.js';
 import { renderReflex } from './games/reflex.js';
@@ -11,6 +11,8 @@ import { renderMemory } from './games/memory.js';
 import { renderTimeline } from './games/timeline.js';
 import { renderWord } from './games/word.js';
 import { renderFlagRush } from './games/flagrush.js';
+import { renderSpeed } from './games/speed.js';
+import { renderSnake } from './games/snake.js';
 import { renderLeaderboard } from './games/leaderboard.js';
 import { renderAdmin } from './games/admin.js';
 
@@ -39,6 +41,7 @@ export const ui = {
           ${targets.map(t => `<a class="share-app" data-test="share-${t.key}" href="${t.url}" target="_blank" rel="noopener"><span class="share-chip" style="--bc:${BRANDS[t.key].color}">${brandIconSvg(t.key)}</span><span>${t.name}</span></a>`).join('')}
         </div>
         ${hasNativeShare() ? `<button class="btn" style="width:100%" data-native>📱 More apps...</button>` : ''}
+        <button class="btn" style="width:100%;margin-top:10px" data-image data-test="share-image">📸 Share as Image</button>
         <button class="btn" style="width:100%;margin-top:10px" data-copy>📋 Copy Result</button>
         <button class="btn ghost" style="width:100%;margin-top:10px" data-close>Close</button>
       </div>`;
@@ -48,6 +51,19 @@ export const ui = {
     backdrop.querySelector('[data-close]').addEventListener('click', () => { sfx.click(); close(); });
     const nativeBtn = backdrop.querySelector('[data-native]');
     if (nativeBtn) nativeBtn.addEventListener('click', () => nativeShare(text));
+    backdrop.querySelector('[data-image]').addEventListener('click', async e => {
+      sfx.click();
+      e.target.disabled = true;
+      const result = await shareImageCard({
+        headline: text.split('\n')[0].replace(/^🎬 |^⚖️ |^🔤 |^🧠 |^⏳ |^🏳️ |^🏎️ |^🐍 |^⚡ /, ''),
+        sub: 'play → dopamine.games',
+        grid: grid || ''
+      });
+      e.target.disabled = false;
+      if (result === 'shared') { ui.toast('📤 Shared!'); close(); }
+      else if (result === 'downloaded') ui.toast('📸 Image downloaded — post it!');
+      else e.target.disabled = false;
+    });
     backdrop.querySelector('[data-copy]').addEventListener('click', async e => {
       sfx.correct();
       try {
@@ -118,6 +134,16 @@ function renderHub() {
         streakKey: 'flags', glow: 'rgba(34,211,238,.2)', daily: false, cls: 'flags'
       })}
       ${gameCard({
+        href: '#/speed', emoji: '🏎️', name: 'SPEED RUSH',
+        desc: 'Dodge traffic at insane speeds. How far can you get?',
+        streakKey: 'speed', glow: 'rgba(251,113,133,.22)', daily: false, cls: 'speed'
+      })}
+      ${gameCard({
+        href: '#/snake', emoji: '🐍', name: 'SNAKE',
+        desc: 'The classic. Eat apples, grow long, don\'t bite yourself.',
+        streakKey: 'snake', glow: 'rgba(163,230,53,.22)', daily: false, cls: 'snake'
+      })}
+      ${gameCard({
         href: '#/reflex', emoji: '⚡', name: 'REFLEX',
         desc: '5 clicks. One average. Are you superhuman or just sleepy?',
         streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex'
@@ -134,6 +160,8 @@ const ROUTES = {
   '#/timeline': renderTimeline,
   '#/word': renderWord,
   '#/flags': renderFlagRush,
+  '#/speed': renderSpeed,
+  '#/snake': renderSnake,
   '#/leaderboard': renderLeaderboard,
   '#/admin': renderAdmin,
 };

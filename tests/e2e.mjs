@@ -68,9 +68,9 @@ after(async () => {
 
 describe('DOPAMINE E2E', () => {
 
-  test('hub loads with 7 game cards + puzzle #1 chip', async () => {
+  test('hub loads with 9 game cards + puzzle #1 chip', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
-    assert.equal(await page.locator('.game-card').count(), 7);
+    assert.equal(await page.locator('.game-card').count(), 9);
     const dayChip = await page.locator('#day-chip').textContent();
     assert.match(dayChip, /^#\d[\d,]*$/, 'day chip shows puzzle number');
     assert.match(await page.locator('.hero p').textContent(), /Puzzle #\d+ · \w{3} \d+/);
@@ -165,7 +165,9 @@ describe('DOPAMINE E2E', () => {
       const grid = await page.locator('[data-test="result-grid"]').textContent();
     assert.match(grid.replace(/<br>/g, ''), /^[🟩⬛🟨]+$/u);
     assert.match(await page.locator('[data-test="result-title"]').textContent(), /SORCERER|LEXICON|WIZARD|POET/);
-    assert.equal(await page.locator('[data-test="streak-final"]').textContent(), '1');
+    // streak chip counts up from 0 — wait for the animation to land
+    await page.waitForFunction(() =>
+      document.querySelector('[data-test="streak-final"]')?.textContent === '1', { timeout: 5000 });
 
     // leaderboard panel mounted with today's entries
     await assert.doesNotReject(() => page.locator('[data-test="lb-panel"]').waitFor({ timeout: 5000 }));
@@ -201,6 +203,26 @@ describe('DOPAMINE E2E', () => {
     await page.click('.lb-tab[data-game="flags"]');
     await page.waitForTimeout(600);
     assert.ok((await page.locator('[data-test="lb-list"]').textContent()).length > 0);
+  });
+
+  test('SPEED RUSH: start, drive, eventually crash → result', async () => {
+    await disableInterstitials();
+    await page.goto(BASE + '/#/speed', { waitUntil: 'networkidle' });
+    await page.click('[data-test="btn-start"]');
+    // drive blind: stationary car gets hit by random-lane traffic eventually
+    await page.waitForSelector('[data-test="result"]', { timeout: 45000 });
+    const final = parseInt(await page.locator('[data-test="score-final"]').textContent(), 10);
+    assert.ok(final >= 0, 'meters recorded: ' + final);
+    await skipNamed();
+  });
+
+  test('SNAKE: start → wall hit → result', async () => {
+    await disableInterstitials();
+    await page.goto(BASE + '/#/snake', { waitUntil: 'networkidle' });
+    await page.click('[data-test="btn-start"]');
+    // snake starts moving right → deterministic wall death in ~1.5s
+    await page.waitForSelector('[data-test="result"]', { timeout: 10000 });
+    await skipNamed();
   });
 
   test('HIGHER OR LOWER: play until game over, result screen + replay', async () => {

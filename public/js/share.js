@@ -60,3 +60,75 @@ export async function nativeShare(text, title = 'DOPAMINE') {
 export function hasNativeShare() {
   return typeof navigator !== 'undefined' && !!navigator.share;
 }
+
+/**
+ * Render a branded 1000×500 result card on canvas → PNG blob.
+ */
+export async function renderResultCard({ headline, sub = '', grid = '' }) {
+  const W = 1000, H = 500;
+  const cv = document.createElement('canvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+
+  // bg gradient
+  const bg = ctx.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0, '#0b0b12'); bg.addColorStop(1, '#241640');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+  // glow blobs
+  const blob = (x, y, r, color) => {
+    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0, color); g.addColorStop(1, 'transparent');
+    ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2);
+  };
+  blob(880, 60, 300, 'rgba(124,58,237,.5)');
+  blob(90, 460, 260, 'rgba(34,211,238,.4)');
+  blob(920, 430, 200, 'rgba(244,114,182,.3)');
+
+  // dots
+  ['#a3e635', '#22d3ee', '#f472b6', '#fbbf24', '#ffffff'].forEach((c, i) => {
+    ctx.fillStyle = c;
+    ctx.beginPath(); ctx.arc(390 + i * 55, 110, 13, 0, 7); ctx.fill();
+  });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 92px "Archivo Black", "Arial Black", sans-serif';
+  ctx.fillText('DOPAMINE.', W / 2, 250);
+
+  if (grid) {
+    ctx.font = '64px serif';
+    ctx.fillText(grid, W / 2, 330);
+  }
+
+  ctx.font = '700 44px "Space Grotesk", sans-serif';
+  ctx.fillStyle = '#a3e635';
+  ctx.fillText(headline.slice(0, 42), W / 2, grid ? 410 : 360);
+  if (sub) {
+    ctx.font = '28px "Space Grotesk", sans-serif';
+    ctx.fillStyle = 'rgba(200,200,220,.9)';
+    ctx.fillText(sub.slice(0, 60), W / 2, grid ? 462 : 430);
+  }
+
+  return new Promise(resolve => cv.toBlob(b => resolve(b), 'image/png'));
+}
+
+/**
+ * Share the result card as an image (native share sheet with file support),
+ * falling back to a download. Returns 'shared' | 'downloaded' | null.
+ */
+export async function shareImageCard(opts) {
+  const blob = await renderResultCard(opts);
+  if (!blob) return null;
+  const file = new File([blob], 'dopamine-result.png', { type: 'image/png' });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    try { await navigator.share({ files: [file], title: 'DOPAMINE' }); return 'shared'; }
+    catch { return null; } // cancelled
+  }
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'dopamine-result.png';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+  return 'downloaded';
+}

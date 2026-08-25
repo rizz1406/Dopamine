@@ -2,8 +2,8 @@
 // Deploys as one Worker serving both the API and the static site (assets binding).
 // Free tier: 100k requests/day, no cold starts. See DEPLOY-CLOUDFLARE.md.
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], speed: [0, 1000000], snake: [0, 100000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000] };
 
 const json = (obj, code = 200) =>
   new Response(JSON.stringify(obj), {
@@ -96,13 +96,27 @@ async function handleApi(request, env, url) {
   if (path === '/api/leaderboard' && request.method === 'GET') {
     const game = url.searchParams.get('game') || '';
     if (!GAMES.includes(game)) return err('bad game', 400);
+    const range = url.searchParams.get('range') || 'daily';
+    if (!['daily', 'weekly', 'all'].includes(range)) return err('bad range', 400);
     const day = cleanDay(url.searchParams.get('day'));
-    const { results } = await db.prepare(`
-      SELECT name, MAX(score) AS score, MIN(ts) AS ts
-      FROM scores WHERE day = ? AND game = ?
-      GROUP BY name ORDER BY score DESC, ts ASC LIMIT 20
-    `).bind(day, game).all();
-    return json({ day, game, top: results || [] });
+    let sql, params;
+    if (range === 'daily') {
+      sql = `SELECT name, MAX(score) AS score, MIN(ts) AS ts
+        FROM scores WHERE day = ? AND game = ?
+        GROUP BY name ORDER BY score DESC, ts ASC LIMIT 20`;
+      params = [day, game];
+    } else {
+      const cutoff = range === 'weekly' ? new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10) : '2000-01-01';
+      // best score per player per day, summed across the range
+      sql = `SELECT name, SUM(best) AS score, MIN(ts) AS ts FROM (
+          SELECT name, day, MAX(score) AS best, MIN(ts) AS ts
+          FROM scores WHERE game = ? AND day >= ?
+          GROUP BY name, day
+        ) GROUP BY name ORDER BY score DESC, ts ASC LIMIT 20`;
+      params = [game, cutoff];
+    }
+    const { results } = await db.prepare(sql).bind(...params).all();
+    return json({ day, game, range, top: results || [] });
   }
 
   if (path === '/api/ads-config' && request.method === 'GET') {

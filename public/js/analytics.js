@@ -1,6 +1,38 @@
 // analytics.js — privacy-friendly event abstraction. Provider-agnostic:
-// events go to window.dataLayer (GTM/GA4-ready) + console.debug in dev.
-// No personal data: only game keys, scores, puzzle ids, result flags.
+// events go to window.dataLayer (GTM/GA4-ready) + GA4/Plausible when configured
+// in index.html (window.DOPAMINE_CONFIG). No personal data: only game keys,
+// scores, puzzle ids, result flags.
+
+const cfg = (typeof window !== 'undefined' && window.DOPAMINE_CONFIG) || {};
+let gaLoaded = false;
+let plausibleLoaded = false;
+
+function loadGA4() {
+  if (gaLoaded || !cfg.gaId) return;
+  gaLoaded = true;
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${cfg.gaId}`;
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', cfg.gaId);
+}
+
+function loadPlausible() {
+  if (plausibleLoaded || !cfg.plausibleDomain) return;
+  plausibleLoaded = true;
+  const s = document.createElement('script');
+  s.defer = true;
+  s.dataset.domain = cfg.plausibleDomain;
+  s.src = 'https://plausible.io/js/script.js';
+  document.head.appendChild(s);
+  window.plausible = window.plausible || ((...a) => (window.plausible.q = window.plausible.q || []).push(a));
+}
+
+loadGA4();
+loadPlausible();
 
 const enabled = true;
 
@@ -10,6 +42,10 @@ export function track(event, props = {}) {
   try {
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(payload);
+  } catch {}
+  try {
+    if (window.gtag) window.gtag('event', event, props);
+    if (window.plausible) window.plausible(event, { props });
   } catch {}
   if (location.hostname === 'localhost') {
     // dev visibility without polluting production consoles

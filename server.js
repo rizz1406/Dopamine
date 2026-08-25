@@ -10,8 +10,8 @@ const DATA = join(ROOT, 'data');
 const PORT = process.env.PORT || 4173;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dopamine-admin';
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], speed: [0, 1000000], snake: [0, 100000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000] };
 
 // ── storage ───────────────────────────────────────────────
 let scores = {};   // { 'YYYY-MM-DD': { game: [{name, score, ts}] } }
@@ -142,15 +142,39 @@ async function handleApi(req, res, url) {
   if (path === '/api/leaderboard' && req.method === 'GET') {
     const game = url.searchParams.get('game') || '';
     if (!GAMES.includes(game)) return json(res, 400, { error: 'bad game' });
+    const range = url.searchParams.get('range') || 'daily';
+    if (!['daily', 'weekly', 'all'].includes(range)) return json(res, 400, { error: 'bad range' });
     const day = cleanDay(url.searchParams.get('day'));
-    // one row per player — their BEST score that day
-    const best = new Map();
-    for (const s of scores[day]?.[game] || []) {
-      const cur = best.get(s.name);
-      if (!cur || s.score > cur.score || (s.score === cur.score && s.ts < cur.ts)) best.set(s.name, s);
+    const cutoff = range === 'weekly' ? new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10) : day;
+
+    // collect entries in range
+    let entries = [];
+    for (const [d, games] of Object.entries(scores)) {
+      if (range === 'daily' && d !== day) continue;
+      if (range === 'weekly' && d < cutoff) continue;
+      for (const s of games[game] || []) entries.push({ ...s, day: d });
     }
-    const top = [...best.values()].sort((a, b) => b.score - a.score || a.ts - b.ts).slice(0, 20);
-    return json(res, 200, { day, game, top });
+    // per player: best score per day, summed across days; daily = single day so best overall
+    const perPlayer = new Map();
+    for (const s of entries) {
+      const cur = perPlayer.get(s.name) || { name: s.name, score: 0 };
+      if (range === 'daily') {
+        cur.score = Math.max(cur.score, s.score);
+      } else {
+        const dayBest = cur['d' + s.day] || 0;
+        if (s.score > dayBest) {
+          cur.score += s.score - dayBest;
+          cur['d' + s.day] = s.score;
+        }
+      }
+      cur.ts = Math.min(cur.ts ?? Infinity, s.ts);
+      perPlayer.set(s.name, cur);
+    }
+    const top = [...perPlayer.values()]
+      .map(({ name, score, ts }) => ({ name, score, ts }))
+      .sort((a, b) => b.score - a.score || a.ts - b.ts)
+      .slice(0, 20);
+    return json(res, 200, { day, game, range, top });
   }
 
   if (path === '/api/ads-config' && req.method === 'GET') {

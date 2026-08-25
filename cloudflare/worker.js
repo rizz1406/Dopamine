@@ -2,8 +2,8 @@
 // Deploys as one Worker serving both the API and the static site (assets binding).
 // Free tier: 100k requests/day, no cold starts. See DEPLOY-CLOUDFLARE.md.
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], speed: [0, 1000000], snake: [0, 100000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000] };
 
 const json = (obj, code = 200) =>
   new Response(JSON.stringify(obj), {
@@ -59,8 +59,51 @@ export default {
       }
     }
     return env.ASSETS.fetch(request);
+  },
+
+  // Daily streak reminder — activates when VAPID keys are configured
+  // (wrangler secret put VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY) + a cron trigger.
+  async scheduled(event, env) {
+    if (!env.VAPID_PUBLIC_KEY || !env.VAPID_PRIVATE_KEY) return;
+    const row = await env.DB.prepare("SELECT value FROM config WHERE key = 'pushsubs'").first();
+    const subs = row ? JSON.parse(row.value) : [];
+    if (!subs.length) return;
+    const jwt = await makeVapidJwt(env.VAPID_PUBLIC_KEY, env.VAPID_PRIVATE_KEY);
+    await Promise.allSettled(subs.map(async sub => {
+      const res = await fetch(sub.endpoint, {
+        method: 'POST',
+        headers: {
+          Authorization: `vapid t=${jwt}, k=${env.VAPID_PUBLIC_KEY}`,
+          'Content-Type': 'application/octet-stream',
+          TTL: '86400'
+        },
+        body: JSON.stringify({ title: '🎮 DOPAMINE', body: "Today's challenge is ready — keep that streak!" })
+      });
+      if (res.status === 404 || res.status === 410) {
+        const all = await env.DB.prepare("SELECT value FROM config WHERE key = 'pushsubs'").first();
+        const list = JSON.parse(all.value).filter(s => s.endpoint !== sub.endpoint);
+        await env.DB.prepare("INSERT INTO config (key, value) VALUES ('pushsubs', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
+          .bind(JSON.stringify(list)).run();
+      }
+    }));
   }
 };
+
+async function makeVapidJwt(publicKey, privateKey) {
+  const header = { typ: 'JWT', alg: 'ES256' };
+  const payload = {
+    aud: 'https://fcm.googleapis.com',
+    exp: Math.floor(Date.now() / 1000) + 12 * 3600,
+    sub: 'mailto:admin@dopamine.games'
+  };
+  const enc = obj => btoa(JSON.stringify(obj)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const b64ToBytes = b64 => Uint8Array.from(atob(b64.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+  const input = `${enc(header)}.${enc(payload)}`;
+  const key = await crypto.subtle.importKey('pkcs8', b64ToBytes(privateKey), { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']);
+  const sig = await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, key, new TextEncoder().encode(input));
+  const sigB64 = btoa(String.fromCharCode(...new Uint8Array(sig))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  return `${input}.${sigB64}`;
+}
 
 async function handleApi(request, env, url) {
   const db = env.DB;
@@ -96,18 +139,54 @@ async function handleApi(request, env, url) {
   if (path === '/api/leaderboard' && request.method === 'GET') {
     const game = url.searchParams.get('game') || '';
     if (!GAMES.includes(game)) return err('bad game', 400);
+    const range = url.searchParams.get('range') || 'daily';
+    if (!['daily', 'weekly', 'all'].includes(range)) return err('bad range', 400);
     const day = cleanDay(url.searchParams.get('day'));
-    const { results } = await db.prepare(`
-      SELECT name, MAX(score) AS score, MIN(ts) AS ts
-      FROM scores WHERE day = ? AND game = ?
-      GROUP BY name ORDER BY score DESC, ts ASC LIMIT 20
-    `).bind(day, game).all();
-    return json({ day, game, top: results || [] });
+    let sql, params;
+    if (range === 'daily') {
+      sql = `SELECT name, MAX(score) AS score, MIN(ts) AS ts
+        FROM scores WHERE day = ? AND game = ?
+        GROUP BY name ORDER BY score DESC, ts ASC LIMIT 20`;
+      params = [day, game];
+    } else {
+      const cutoff = range === 'weekly' ? new Date(Date.now() - 7 * 86400000).toISOString().slice(0, 10) : '2000-01-01';
+      // best score per player per day, summed across the range
+      sql = `SELECT name, SUM(best) AS score, MIN(ts) AS ts FROM (
+          SELECT name, day, MAX(score) AS best, MIN(ts) AS ts
+          FROM scores WHERE game = ? AND day >= ?
+          GROUP BY name, day
+        ) GROUP BY name ORDER BY score DESC, ts ASC LIMIT 20`;
+      params = [game, cutoff];
+    }
+    const { results } = await db.prepare(sql).bind(...params).all();
+    return json({ day, game, range, top: results || [] });
   }
 
   if (path === '/api/ads-config' && request.method === 'GET') {
     const row = await db.prepare("SELECT value FROM config WHERE key = 'ads'").first();
     return json({ config: row ? JSON.parse(row.value) : null });
+  }
+
+  // ── push reminders ──
+  if (path === '/api/push/key' && request.method === 'GET') {
+    return json({ key: env.VAPID_PUBLIC_KEY || null });
+  }
+
+  if (path === '/api/push/subscribe' && request.method === 'POST') {
+    const body = await readBody(request);
+    if (!body?.subscription?.endpoint && !body?.remove) return err('bad subscription', 400);
+    const row = await db.prepare("SELECT value FROM config WHERE key = 'pushsubs'").first();
+    let subs = row ? JSON.parse(row.value) : [];
+    if (body.remove) {
+      subs = subs.filter(s => s.endpoint !== body.endpoint);
+    } else {
+      subs = subs.filter(s => s.endpoint !== body.subscription.endpoint);
+      subs.push({ ...body.subscription, ts: Date.now() });
+      if (subs.length > 10000) subs = subs.slice(-10000);
+    }
+    await db.prepare("INSERT INTO config (key, value) VALUES ('pushsubs', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value")
+      .bind(JSON.stringify(subs)).run();
+    return json({ ok: true });
   }
 
   // ── admin auth ──

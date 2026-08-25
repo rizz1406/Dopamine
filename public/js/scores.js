@@ -2,13 +2,13 @@
 import { dayNumber } from './rng.js';
 import { sfx } from './audio.js';
 import { store } from './store.js';
-import { events } from './analytics.js';
+import { events, track } from './analytics.js';
 
 const NAME_KEY = 'dopamine:name';
 export const GAME_LABELS = {
   reel: '🎬 REEL', hl: '⚖️ Higher/Lower', word: '🔤 Word Guess',
   memory: '🧠 Memory', timeline: '⏳ Timeline', flags: '🏳️ Flag Rush', reflex: '⚡ Reflex',
-  speed: '🏎️ Speed Rush', snake: '🐍 Snake'
+  speed: '🏎️ Speed Rush', snake: '🐍 Snake', g2048: '🔢 2048'
 };
 
 export function getName() {
@@ -62,19 +62,23 @@ export async function submitScore(game, score) {
     const total = store.incr('plays:total');
     // game_completed is emitted by the game modules (with puzzle id);
     // here we track the leaderboard submission itself to avoid double-counting
-    events.track('score_submitted', { game, score, totalPlays: total });
+    track('score_submitted', { game, score, totalPlays: total });
     let name = getName();
     if (!name) name = await promptName();
     if (!name) name = 'anon'; // skipped the modal — still compete, anonymously
     const res = await fetch('/api/score', {
       method: 'POST',
+      keepalive: true, // survive navigation away mid-submit
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ game, name, score, day: today() })
     });
     if (!res.ok) return null;
     const j = await res.json();
     return j.rank != null ? { rank: j.rank } : null;
-  } catch { return null; }
+  } catch (e) {
+    console.error('[scores] submit failed:', e);
+    return null;
+  }
 }
 
 function esc(s) {

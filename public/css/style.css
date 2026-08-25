@@ -237,6 +237,14 @@ a { color: inherit; text-decoration: none; }
   75% { transform: rotate(9deg) translate(3px, 4px); }
 }
 
+/* 2048: tile merge pop */
+.game-card.g2048:hover .card-emoji { animation: g2048-pop .5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes g2048-pop {
+  0%, 100% { transform: scale(1) rotate(0); }
+  40% { transform: scale(1.25) rotate(-6deg); filter: drop-shadow(0 0 14px rgba(168,85,247,.7)); }
+  70% { transform: scale(.95) rotate(3deg); }
+}
+
 /* ── shared game UI ── */
 .game-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; animation: rise .35s ease both; }
 .back-btn {

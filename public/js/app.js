@@ -6,6 +6,7 @@ import { applyAdsConfig, initServerConfig } from './ads.js';
 import { shareTargets, brandIconSvg, BRANDS, nativeShare, hasNativeShare, shareImageCard } from './share.js';
 import { todaySummary, nextDailyHref } from './daily.js';
 import { events } from './analytics.js';
+import { t, getLang, setLang } from './i18n.js';
 import { renderReel } from './games/reel.js';
 import { renderHigherLower } from './games/higherlower.js';
 import { renderReflex } from './games/reflex.js';
@@ -15,9 +16,11 @@ import { renderWord } from './games/word.js';
 import { renderFlagRush } from './games/flagrush.js';
 import { renderSpeed } from './games/speed.js';
 import { renderSnake } from './games/snake.js';
+import { render2048 } from './games/g2048.js';
 import { renderLeaderboard } from './games/leaderboard.js';
 import { renderStats } from './pages/stats.js';
 import { renderLegal, legalMeta } from './pages/legal.js';
+import { renderSEO } from './pages/seo.js';
 import { renderAdmin } from './games/admin.js';
 
 const view = document.getElementById('view');
@@ -34,6 +37,9 @@ const ROUTES = {
   '/flags': { render: renderFlagRush, title: 'Flag Rush — Guess the Country Flag in 5 Seconds', desc: '10 flags, 5 seconds each. A fast geography quiz for flags and countries. Free, no signup.' },
   '/speed': { render: renderSpeed, title: 'Speed Rush — Free Car Dodging Racing Game', desc: 'Dodge highway traffic at insane speeds in this free browser racing game. One more try guaranteed.' },
   '/snake': { render: renderSnake, title: 'Snake — The Classic Free Browser Game', desc: 'The Snake game you love: eat apples, grow long, survive. Free in your browser, with global daily leaderboard.' },
+  '/2048': { render: render2048, title: '2048 — Free Online Slide & Merge Puzzle', desc: 'The legendary 2048 number puzzle: slide tiles, merge equals, chase the 2048 tile. Free in your browser with a global leaderboard.' },
+  '/games-like-wordle': { render: renderSEO('games-like-wordle'), title: '10 Free Games Like Wordle — Daily Puzzle Games', desc: 'Love Wordle? Discover 10 free daily puzzle games like Wordle — emoji movie quizzes, flag quizzes, memory games and more. No signup.' },
+  '/brain-games': { render: renderSEO('brain-games'), title: 'Free Brain Games — Train Memory, Reflexes & Logic Daily', desc: 'Free online brain games to train memory, reaction time and logic. Short daily challenges, a global leaderboard and streaks. No signup.' },
   '/reflex': { render: renderReflex, title: 'Reflex Test — How Fast Are You Really?', desc: 'A 5-round reaction time test with instant verdicts. Average under 250ms? You might be superhuman. Free.' },
   '/leaderboard': { render: renderLeaderboard, title: 'Leaderboard — Today\'s Best Players', desc: 'The global daily leaderboard for every DOPAMINE game. Top 20 players per game, reset at 00:00 UTC.' },
   '/stats': { render: renderStats, title: 'Your Stats — Streaks, Bests & Achievements', desc: 'Your DOPAMINE stats: daily streaks, per-game bests, total games played and achievements. All stored privately on your device.' },
@@ -97,10 +103,10 @@ export const ui = {
         <div class="share-apps" data-test="share-apps">
           ${targets.map(t => `<a class="share-app" data-test="share-${t.key}" href="${t.url}" target="_blank" rel="noopener"><span class="share-chip" style="--bc:${BRANDS[t.key].color}">${brandIconSvg(t.key)}</span><span>${t.name}</span></a>`).join('')}
         </div>
-        ${hasNativeShare() ? `<button class="btn" style="width:100%" data-native>📱 More apps...</button>` : ''}
-        <button class="btn" style="width:100%;margin-top:10px" data-image data-test="share-image">📸 Share as Image</button>
-        <button class="btn" style="width:100%;margin-top:10px" data-copy>📋 Copy Result</button>
-        <button class="btn ghost" style="width:100%;margin-top:10px" data-close>Close</button>
+        ${hasNativeShare() ? `<button class="btn" style="width:100%" data-native>${t('moreApps')}</button>` : ''}
+        <button class="btn" style="width:100%;margin-top:10px" data-image data-test="share-image">${t('shareImage')}</button>
+        <button class="btn" style="width:100%;margin-top:10px" data-copy>${t('copyResult')}</button>
+        <button class="btn ghost" style="width:100%;margin-top:10px" data-close>${t('close')}</button>
       </div>`;
     document.body.appendChild(backdrop);
     const close = () => backdrop.remove();
@@ -146,8 +152,8 @@ function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls }) {
       <span class="card-emoji">${emoji}</span>
       <h2>${name}</h2>
       <p>${desc}</p>
-      <span class="streak-pill ${hot ? 'hot' : ''}">🔥 ${st.current} streak${daily ? ' · today' + (store.hasPlayed(streakKey, dayNumber()) ? ' ✓' : '') : ''}</span>
-      <span class="play-hint">play →</span>
+      <span class="streak-pill ${hot ? 'hot' : ''}">🔥 ${st.current} ${t('streak')}${daily ? ' · ' + t('today') + (store.hasPlayed(streakKey, dayNumber()) ? ' ✓' : '') : ''}</span>
+      <span class="play-hint">${t('play')} →</span>
     </a>`;
 }
 
@@ -158,22 +164,22 @@ function renderHub() {
   const s = todaySummary();
   const bestStreak = Math.max(store.streak('reel').best, store.streak('word').best);
   const challengeBtn = s.complete
-    ? `<a class="btn lime big" href="/stats" data-nav>✅ Challenge complete — ${s.points} pts · see stats</a>`
-    : `<a class="btn big" href="${nextDailyHref()}" data-nav data-test="continue-btn">▶ Continue Today's Challenge</a>`;
+    ? `<a class="btn lime big" href="/stats" data-nav>${t('challengeDone')} — ${s.points} pts · ${t('seeStats')}</a>`
+    : `<a class="btn big" href="${nextDailyHref()}" data-nav data-test="continue-btn">${t('continueChallenge')}</a>`;
 
   view.innerHTML = `
     <section class="hero">
       <h1>DOPAMINE.</h1>
-      <p><span class="pulse-dot"></span>Puzzle <b>${dayLabel}</b> is live — same challenge for everyone, new at midnight UTC</p>
+      <p><span class="pulse-dot"></span>Puzzle <b>${dayLabel}</b> ${t('tagline')}</p>
     </section>
 
     <section class="challenge-card" data-test="challenge-card">
       <div class="cc-left">
-        <h3>Today's Challenge</h3>
+        <h3>${t('challenge')}</h3>
         <div class="cc-games">
           ${s.games.map(g => `<span class="cc-game ${g.done ? 'done' : ''}">${g.done ? '✅' : '⬜'} ${g.label}</span>`).join('')}
         </div>
-        <p class="cc-sub">${s.doneCount}/${s.total} complete · <b>${s.points}</b> points today</p>
+        <p class="cc-sub">${s.doneCount}/${s.total} ${t('complete')} · <b>${s.points}</b> ${t('pointsToday')}</p>
       </div>
       <div class="cc-right">${challengeBtn}</div>
     </section>
@@ -181,7 +187,7 @@ function renderHub() {
     <!-- AD SLOT: below challenge card, above arcade grid -->
     <div class="ad-slot" data-ad="top" style="display:none">ad space</div>
 
-    <h3 class="hub-section-title">🕹️ Daily Arcade</h3>
+    <h3 class="hub-section-title">${t('arcade')}</h3>
     <section class="game-grid">
       ${gameCard({
         href: '/reel', emoji: '🎬', name: 'REEL',
@@ -224,6 +230,11 @@ function renderHub() {
         streakKey: 'snake', glow: 'rgba(163,230,53,.22)', daily: false, cls: 'snake'
       })}
       ${gameCard({
+        href: '/2048', emoji: '🔢', name: '2048',
+        desc: 'Slide, merge, chase the legendary 2048 tile.',
+        streakKey: 'g2048', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'g2048'
+      })}
+      ${gameCard({
         href: '/reflex', emoji: '⚡', name: 'REFLEX',
         desc: '5 clicks. One average. Are you superhuman or just sleepy?',
         streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex'
@@ -231,17 +242,17 @@ function renderHub() {
     </section>
 
     <section class="hub-strip" data-test="streak-strip">
-      <div>🔥 <b>${bestStreak}</b> best daily streak</div>
-      <div>🏆 <a href="/leaderboard" data-nav>Today's leaderboard</a></div>
-      <div>📊 <a href="/stats" data-nav>Your stats</a></div>
+      <div>🔥 <b>${bestStreak}</b> ${t('bestStreak')}</div>
+      <div>🏆 <a href="/leaderboard" data-nav>${t('todaysLeaderboard')}</a></div>
+      <div>📊 <a href="/stats" data-nav>${t('yourStats')}</a></div>
     </section>
 
     <section class="how-it-works">
-      <h3 class="hub-section-title">❓ How it works</h3>
+      <h3 class="hub-section-title">${t('howItWorks')}</h3>
       <div class="hiw-grid">
-        <div class="hiw"><span>1</span><b>Play the daily games</b><p>REEL and Word Guess refresh every day at 00:00 UTC — identical for every player on Earth.</p></div>
-        <div class="hiw"><span>2</span><b>Build your streak</b><p>Finish a daily game to keep the fire alive. Miss a day, and it resets to zero. Brutal. Fair.</p></div>
-        <div class="hiw"><span>3</span><b>Share & compete</b><p>Post your result grid (no spoilers), climb the global daily leaderboard, come back tomorrow.</p></div>
+        <div class="hiw"><span>1</span><b>${t('hiw1')}</b><p>${t('hiw1p')}</p></div>
+        <div class="hiw"><span>2</span><b>${t('hiw2')}</b><p>${t('hiw2p')}</p></div>
+        <div class="hiw"><span>3</span><b>${t('hiw3')}</b><p>${t('hiw3p')}</p></div>
       </div>
     </section>`;
 }
@@ -274,6 +285,16 @@ document.getElementById('mute-btn').addEventListener('click', function () {
   this.textContent = toggleMute() ? '🔇' : '🔊';
 });
 if (isMuted()) document.getElementById('mute-btn').textContent = '🔇';
+
+const langBtn = document.getElementById('lang-btn');
+function paintLang() { langBtn.textContent = getLang() === 'hi' ? 'A' : 'अ'; }
+langBtn.addEventListener('click', () => {
+  sfx.click();
+  setLang(getLang() === 'hi' ? 'en' : 'hi');
+  paintLang();
+  router();
+});
+paintLang();
 document.getElementById('foot-year').textContent = new Date().getFullYear();
 document.getElementById('day-chip').textContent = '#' + dayNumber();
 applyAdsConfig();

@@ -1,17 +1,17 @@
 // DOPAMINE service worker — offline-first arcade.
-const CACHE = 'dopamine-v6';
+const CACHE = 'dopamine-v7';
 const CORE = [
   '/', '/index.html', '/css/style.css',
   '/js/app.js', '/js/data.js', '/js/rng.js', '/js/store.js', '/js/audio.js',
   '/js/confetti.js', '/js/share.js', '/js/ads.js', '/js/reel-logic.js',
   '/js/hl-logic.js', '/js/word-logic.js', '/js/timeline-logic.js', '/js/flag-logic.js',
   '/js/words.js', '/js/flags.js', '/js/juice.js', '/js/scores.js',
-  '/js/daily.js', '/js/achievements.js', '/js/analytics.js',
-  '/js/pages/stats.js', '/js/pages/legal.js',
+  '/js/daily.js', '/js/achievements.js', '/js/analytics.js', '/js/i18n.js', '/js/push.js',
+  '/js/pages/stats.js', '/js/pages/legal.js', '/js/pages/seo.js',
   '/js/games/reel.js', '/js/games/higherlower.js', '/js/games/reflex.js',
   '/js/games/memory.js', '/js/games/timeline.js', '/js/games/word.js',
   '/js/games/flagrush.js', '/js/games/speed.js', '/js/games/snake.js',
-  '/js/games/leaderboard.js', '/js/games/admin.js'
+  '/js/games/g2048.js', '/js/games/leaderboard.js', '/js/games/admin.js'
 ];
 
 self.addEventListener('install', e => {
@@ -24,6 +24,26 @@ self.addEventListener('activate', e => {
       .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
+});
+
+// ── push notifications (streak reminders) ──
+self.addEventListener('push', event => {
+  let data = { title: '🎮 DOPAMINE', body: "Today's challenge is ready!" };
+  try { data = { ...data, ...event.data.json() }; } catch {}
+  event.waitUntil(self.registration.showNotification(data.title, {
+    body: data.body,
+    icon: '/icons/icon-192.png',
+    badge: '/icons/icon-192.png',
+    data: { url: '/' }
+  }));
+});
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  event.waitUntil(clients.matchAll({ type: 'window' }).then(list => {
+    for (const c of list) if ('focus' in c) return c.focus();
+    return self.clients.openWindow('/');
+  }));
 });
 
 self.addEventListener('fetch', e => {

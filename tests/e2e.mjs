@@ -68,9 +68,9 @@ after(async () => {
 
 describe('DOPAMINE E2E', () => {
 
-  test('hub loads with 9 game cards + daily challenge card', async () => {
+  test('hub loads with 10 game cards + daily challenge card', async () => {
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
-    assert.equal(await page.locator('.game-card').count(), 9);
+    assert.equal(await page.locator('.game-card').count(), 10);
     await assert.doesNotReject(() => page.locator('[data-test="challenge-card"]').waitFor({ timeout: 3000 }));
     await assert.doesNotReject(() => page.locator('[data-test="continue-btn"]').waitFor({ timeout: 3000 }));
     const dayChip = await page.locator('#day-chip').textContent();
@@ -247,6 +247,22 @@ describe('DOPAMINE E2E', () => {
     await page.waitForSelector('[data-test="result"]', { timeout: 10000 });
     await skipNamed();
   });
+
+  test('2048: start, make moves → game over or ongoing board', async () => {
+    await disableInterstitials();
+    await page.goto(BASE + '/2048', { waitUntil: 'networkidle' });
+    await page.click('[data-test="btn-start"]');
+    await page.waitForSelector('[data-test="tile"]');
+    // play several moves
+    for (const key of ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp']) {
+      await page.keyboard.press(key);
+      await page.waitForTimeout(120);
+    }
+    const tiles = await page.locator('[data-test="tile"]').count();
+    assert.equal(tiles, 16, 'board renders 16 cells');
+    check2048BoardAlive = true;
+  });
+  let check2048BoardAlive = false;
 
   test('HIGHER OR LOWER: play until game over, result screen + replay', async () => {
     await disableInterstitials();

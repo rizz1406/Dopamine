@@ -177,7 +177,7 @@ function logo3d(cls, emoji){
     <rect x="12" y="30" width="5" height="4" rx="1" fill="#555"/>
     <rect x="12" y="36" width="5" height="4" rx="1" fill="#555"/>
     <circle class="reel-dot" cx="16" cy="26" r="1" fill="#facc15"/>
-  `, 'reel-logo')`;
+  `, 'reel-logo');
   if(cls==='hl') return svg(`
     <line x1="32" y1="28" x2="32" y2="50" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
     <polygon points="28,50 36,50 32,54" fill="#64748b"/>
@@ -188,7 +188,7 @@ function logo3d(cls, emoji){
       <line x1="52" y1="28" x2="52" y2="36" stroke="#94a3b8" stroke-width="1.5"/>
       <path d="M46,36 Q46,42 52,42 Q58,42 58,36 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
     </g>
-  `, 'hl-logo')`;
+  `, 'hl-logo');
   if(cls==='word') return svg(`
     <rect class="w-block" x="8" y="12" width="14" height="16" rx="3" fill="#22c55e"/>
     <text x="15" y="24" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">W</text>
@@ -198,7 +198,7 @@ function logo3d(cls, emoji){
     <text x="49" y="24" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">R</text>
     <rect class="w-block" x="17" y="34" width="14" height="16" rx="3" fill="#a855f7"/>
     <text x="24" y="46" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">D</text>
-  `, 'word-logo')`;
+  `, 'word-logo');
   if(cls==='memory') return svg(`
     <line x1="32" y1="32" x2="12" y2="16" stroke="#c084fc" stroke-width="1.5" opacity=".5"/>
     <line x1="32" y1="32" x2="52" y2="16" stroke="#c084fc" stroke-width="1.5" opacity=".5"/>
@@ -209,14 +209,14 @@ function logo3d(cls, emoji){
     <circle class="mem-n n2" cx="52" cy="16" r="5" fill="#c084fc"/>
     <circle class="mem-n n3" cx="12" cy="48" r="5" fill="#c084fc"/>
     <circle class="mem-n n4" cx="52" cy="48" r="5" fill="#c084fc"/>
-  `, 'memory-logo')`;
+  `, 'memory-logo');
   if(cls==='timeline') return svg(`
     <path d="M22,12 L42,12 L36,30 L28,30 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
     <path d="M28,34 L36,34 L42,52 L22,52 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
     <rect x="30" y="30" width="4" height="4" fill="#d97706"/>
     <line class="tl-sand" x1="32" y1="30" x2="32" y2="34" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
     <ellipse cx="32" cy="50" rx="6" ry="2" fill="#fbbf24" opacity=".6"/>
-  `, 'timeline-logo')`;
+  `, 'timeline-logo');
   if(cls==='flags') return svg(`
     <line x1="16" y1="10" x2="16" y2="54" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
     <ellipse cx="16" cy="54" rx="6" ry="2" fill="#64748b"/>
@@ -225,7 +225,7 @@ function logo3d(cls, emoji){
         values="M16,10 L48,14 L48,32 L16,28 Z;M16,10 L46,16 L48,30 L16,28 Z;M16,10 L48,14 L48,32 L16,28 Z"/>
     </path>
     <circle cx="32" cy="21" r="4" fill="#fbbf24"/>
-  `, 'flags-logo')`;
+  `, 'flags-logo');
   if(cls==='speed') return svg(`
     <path class="sp-body" d="M14,34 L18,26 L46,26 L52,34 L52,40 L14,40 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="1"/>
     <path d="M24,26 L28,18 L40,18 L44,26 Z" fill="#93c5fd" stroke="#60a5fa" stroke-width="1"/>
@@ -235,7 +235,7 @@ function logo3d(cls, emoji){
     <circle cx="44" cy="42" r="2" fill="#888"/>
     <line class="sp-line" x1="4" y1="30" x2="12" y2="30" stroke="#fff" stroke-width="2" opacity=".4" stroke-linecap="round"/>
     <line class="sp-line" x1="2" y1="36" x2="10" y2="36" stroke="#fff" stroke-width="2" opacity=".3" stroke-linecap="round"/>
-  `, 'speed-logo')`;
+  `, 'speed-logo');
   if(cls==='snake') return svg(`
     <circle class="sk-eye" cx="16" cy="22" r="2" fill="#fff"/>
     <circle cx="16" cy="22" r="1" fill="#000"/>
@@ -248,7 +248,7 @@ function logo3d(cls, emoji){
     <rect class="sk-seg" x="34" y="38" width="10" height="10" rx="3" fill="#a3e635"/>
     <rect class="sk-seg" x="42" y="38" width="10" height="10" rx="3" fill="#84cc16"/>
     <circle cx="50" cy="44" r="3" fill="#ef4444"/>
-  `, 'snake-logo')`;
+  `, 'snake-logo');
   if(cls==='g2048') return svg(`
     <rect class="g-tile" x="8" y="8" width="22" height="22" rx="4" fill="#94a3b8"/>
     <text x="19" y="24" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">2</text>
@@ -258,20 +258,20 @@ function logo3d(cls, emoji){
     <text x="19" y="50" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">8</text>
     <rect class="g-tile" x="34" y="34" width="22" height="22" rx="4" fill="#f97316"/>
     <text x="45" y="50" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">16</text>
-  `, 'g2048-logo')`;
+  `, 'g2048-logo');
   if(cls==='reflex') return svg(`
     <polygon class="rf-bolt" points="30,4 38,24 28,24 36,60 22,30 32,30 24,4" fill="#facc15" stroke="#eab308" stroke-width="1"/>
     <circle class="rf-spark" cx="14" cy="16" r="3" fill="#fde047" opacity=".7"/>
     <circle class="rf-spark" cx="50" cy="20" r="2.5" fill="#fde047" opacity=".6"/>
     <circle class="rf-spark" cx="48" cy="46" r="2" fill="#fde047" opacity=".5"/>
-  `, 'reflex-logo')`;
+  `, 'reflex-logo');
   if(cls==='tetris') return svg(`
     <rect class="t-blk" x="20" y="4" width="12" height="12" rx="2" fill="#22d3ee"/>
     <rect class="t-blk" x="32" y="4" width="12" height="12" rx="2" fill="#06b6d4"/>
     <rect class="t-blk" x="32" y="16" width="12" height="12" rx="2" fill="#0891b2"/>
     <rect class="t-blk" x="44" y="16" width="12" height="12" rx="2" fill="#22d3ee"/>
     <rect x="8" y="52" width="48" height="3" rx="1.5" fill="#f59e0b"/>
-  `, 'tetris-logo')`;
+  `, 'tetris-logo');
   if(cls==='minesweeper') return svg(`
     <circle class="m-body" cx="32" cy="32" r="12" fill="#1a1a24"/>
     <line x1="32" y1="16" x2="32" y2="12" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
@@ -287,7 +287,7 @@ function logo3d(cls, emoji){
     <circle cx="36" cy="32" r="2" fill="#fff"/>
     <circle cx="32" cy="38" r="2" fill="#fff"/>
     <circle class="m-spark" cx="32" cy="10" r="4" fill="#f59e0b"/>
-  `, 'minesweeper-logo')`;
+  `, 'minesweeper-logo');
   if(cls==='flappy') return svg(`
     <ellipse class="f-body" cx="30" cy="32" rx="16" ry="12" fill="#facc15" stroke="#eab308" stroke-width="1"/>
     <ellipse class="f-wing" cx="22" cy="28" rx="8" ry="5" fill="#eab308" transform="rotate(-20,22,28)"/>
@@ -295,7 +295,7 @@ function logo3d(cls, emoji){
     <circle cx="38" cy="28" r="3.5" fill="#fff"/>
     <circle cx="39" cy="28" r="2" fill="#1a1a24"/>
     <path d="M26,40 Q30,44 34,40" stroke="#eab308" stroke-width="1.5" fill="none"/>
-  `, 'flappy-logo')`;
+  `, 'flappy-logo');
   if(cls==='breakout') return svg(`
     <rect x="12" y="8" width="12" height="6" rx="2" fill="#ef4444"/>
     <rect x="26" y="8" width="12" height="6" rx="2" fill="#f97316"/>
@@ -305,7 +305,7 @@ function logo3d(cls, emoji){
     <rect x="40" y="16" width="12" height="6" rx="2" fill="#a855f7"/>
     <rect class="b-paddle" x="20" y="48" width="24" height="6" rx="3" fill="#a3e635"/>
     <circle class="b-ball" cx="32" cy="38" r="5" fill="#fff" stroke="#ccc" stroke-width="1"/>
-  `, 'breakout-logo')`;
+  `, 'breakout-logo');
   if(cls==='whack') return svg(`
     <ellipse cx="32" cy="46" rx="14" ry="6" fill="#1a1a24"/>
     <ellipse class="w-mole" cx="32" cy="40" rx="10" ry="10" fill="#a16207" stroke="#854d0e" stroke-width="1"/>
@@ -318,14 +318,14 @@ function logo3d(cls, emoji){
       <rect x="42" y="10" width="12" height="6" rx="2" fill="#78350f"/>
       <rect x="46" y="14" width="4" height="20" rx="2" fill="#92400e"/>
     </g>
-  `, 'whack-logo')`;
+  `, 'whack-logo');
   if(cls==='stack') return svg(`
     <rect x="12" y="48" width="40" height="8" rx="2" fill="#38bdf8"/>
     <rect x="14" y="38" width="36" height="8" rx="2" fill="#a855f7"/>
     <rect x="16" y="28" width="32" height="8" rx="2" fill="#facc14"/>
     <rect x="18" y="18" width="28" height="8" rx="2" fill="#ef4444"/>
     <rect class="st-fall" x="10" y="6" width="28" height="8" rx="2" fill="#22c55e" opacity=".8"/>
-  `, 'stack-logo')`;
+  `, 'stack-logo');
   return `<span class="card-emoji">${emoji}</span>`;
 }
 function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat }) {

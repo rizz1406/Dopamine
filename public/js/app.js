@@ -234,77 +234,77 @@ function renderHub() {
       ${gameCard({
         href: '/reel', emoji: '🎬', name: 'REEL',
         desc: 'Guess the movie from emojis. 4 tries, hints get desperate.',
-        streakKey: 'reel', glow: 'rgba(244,114,182,.25)', daily: true, cls: 'reel', cat: 'daily'
+        streakKey: 'reel', glow: 'rgba(244,114,182,.25)', daily: true, cls: 'reel', cat: 'daily', cat: 'daily'
       })}
       ${gameCard({
         href: '/hl', emoji: '⚖️', name: 'HIGHER OR LOWER',
         desc: 'What does the internet search more? Build an insane streak.',
-        streakKey: 'hl', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'hl', cat: 'arcade'
+        streakKey: 'hl', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'hl', cat: 'arcade', cat: 'arcade'
       })}
       ${gameCard({
         href: '/word', emoji: '🔤', name: 'WORD GUESS',
         desc: 'Crack the hidden 5-letter word. 6 tries. Daily.',
-        streakKey: 'word', glow: 'rgba(251,191,36,.2)', daily: true, cls: 'word', cat: 'daily'
+        streakKey: 'word', glow: 'rgba(251,191,36,.2)', daily: true, cls: 'word', cat: 'daily', cat: 'daily'
       })}
       ${gameCard({
         href: '/memory', emoji: '🧠', name: 'MEMORY',
         desc: 'Watch the pattern. Repeat it. How far can your brain go?',
-        streakKey: 'memory', glow: 'rgba(124,58,237,.28)', daily: false, cls: 'memory', cat: 'puzzle'
+        streakKey: 'memory', glow: 'rgba(124,58,237,.28)', daily: false, cls: 'memory', cat: 'puzzle', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/timeline', emoji: '⏳', name: 'TIMELINE',
         desc: 'Order the movies from oldest to newest. 3 strikes only.',
-        streakKey: 'timeline', glow: 'rgba(251,191,36,.18)', daily: false, cls: 'timeline', cat: 'puzzle'
+        streakKey: 'timeline', glow: 'rgba(251,191,36,.18)', daily: false, cls: 'timeline', cat: 'puzzle', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/flags', emoji: '🏳️', name: 'FLAG RUSH',
         desc: '10 flags, 5 seconds each. How many countries do you know?',
-        streakKey: 'flags', glow: 'rgba(34,211,238,.2)', daily: false, cls: 'flags', cat: 'puzzle'
+        streakKey: 'flags', glow: 'rgba(34,211,238,.2)', daily: false, cls: 'flags', cat: 'puzzle', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/speed', emoji: '🏎️', name: 'SPEED RUSH',
         desc: 'Dodge traffic at insane speeds. How far can you get?',
-        streakKey: 'speed', glow: 'rgba(251,113,133,.22)', daily: false, cls: 'speed', cat: 'arcade'
+        streakKey: 'speed', glow: 'rgba(251,113,133,.22)', daily: false, cls: 'speed', cat: 'arcade', cat: 'arcade'
       })}
       ${gameCard({
         href: '/snake', emoji: '🐍', name: 'SNAKE',
         desc: 'The classic. Eat apples, grow long, don\'t bite yourself.',
-        streakKey: 'snake', glow: 'rgba(163,230,53,.22)', daily: false, cls: 'snake', cat: 'arcade'
+        streakKey: 'snake', glow: 'rgba(163,230,53,.22)', daily: false, cls: 'snake', cat: 'arcade', cat: 'arcade'
       })}
       ${gameCard({
         href: '/2048', emoji: '🔢', name: '2048',
         desc: 'Slide, merge, chase the legendary 2048 tile.',
-        streakKey: 'g2048', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'g2048', cat: 'puzzle'
+        streakKey: 'g2048', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'g2048', cat: 'puzzle', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/reflex', emoji: '⚡', name: 'REFLEX',
         desc: '5 clicks. One average. Are you superhuman or just sleepy?',
-        streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex', cat: 'arcade'
+        streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex', cat: 'arcade', cat: 'arcade'
       })}
       ${gameCard({
         href: '/tetris', emoji: '🧱', name: 'TETRIS',
         desc: 'Stack blocks, clear lines. The timeless stacking puzzle.',
-        streakKey: 'tetris', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'tetris', cat: 'puzzle'
+        streakKey: 'tetris', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'tetris', cat: 'puzzle', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/minesweeper', emoji: '💣', name: 'MINESWEEPER',
         desc: 'Flag the mines, clear the board. Logic at its purest.',
-        streakKey: 'minesweeper', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'minesweeper', cat: 'puzzle'
+        streakKey: 'minesweeper', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'minesweeper', cat: 'puzzle', cat: 'puzzle'
       })}
       ${gameCard({
-        href: '/flappy', emoji: '🐦', name: 'FLAPPY',
-        desc: 'Tap to fly, dodge pipes. One more try guaranteed.',
+        href: '/flappy', emoji: '🐦', name: 'FLAPPY 3D',
+        desc: 'True 3D flight — tap to flap wings, dodge pipes.',
         streakKey: 'flappy', glow: 'rgba(250,204,21,.22)', daily: false, cls: 'flappy', cat: '3d'
       })}
       ${gameCard({
         href: '/breakout', emoji: '🎯', name: 'BREAKOUT',
         desc: 'Bounce the ball, smash the bricks. Pure arcade joy.',
-        streakKey: 'breakout', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'breakout', cat: 'arcade'
+        streakKey: 'breakout', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'breakout', cat: 'arcade', cat: 'arcade'
       })}
       ${gameCard({
         href: '/whack', emoji: '🔨', name: 'WHACK-A-MOLE',
         desc: '30 seconds, 9 holes. How fast can you hammer?',
-        streakKey: 'whack', glow: 'rgba(251,146,60,.22)', daily: false, cls: 'whack', cat: 'arcade'
+        streakKey: 'whack', glow: 'rgba(251,146,60,.22)', daily: false, cls: 'whack', cat: 'arcade', cat: 'arcade'
       })}
       ${gameCard({
         href: '/stack', emoji: '🧊', name: 'STACK 3D',

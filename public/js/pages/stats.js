@@ -18,10 +18,12 @@ export function renderStats(view) {
     const st = store.streak(k);
     const played = store.get('plays:' + k, 0);
     const bestMap = {
-      reel: st.best, word: store.streak('word').best,
+      reel: store.streak('reel').best, word: store.streak('word').best,
       hl: store.best('hl-streak'), memory: store.best('memory-level'),
       timeline: store.best('timeline-rounds'), flags: store.best('flag-score'),
-      reflex: store.best('reflex-avg'), speed: store.best('speed-m'), snake: store.best('snake-score')
+      reflex: store.best('reflex-avg'), speed: store.best('speed-m'), snake: store.best('snake-score'),
+      g2048: store.best('g2048-score'), tetris: store.best('tetris-score'), minesweeper: store.best('minesweeper-best'),
+      flappy: store.best('flappy-score'), breakout: store.best('breakout-score'), whack: store.best('whack-score'), stack: store.best('stack-score')
     };
     const best = bestMap[k] || 0;
     const unit = k === 'reflex' ? 'ms' : k === 'speed' ? 'm' : '';

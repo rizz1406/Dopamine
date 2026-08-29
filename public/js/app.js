@@ -167,9 +167,22 @@ export const ui = {
 };
 
 function logo3d(cls, emoji){
+  if(cls==='reel') return `<div class="logo-3d reel-logo" aria-hidden="true"><div class="film-strip"></div><div class="film-reel"></div><div class="film-sprocket left"></div><div class="film-sprocket right"></div></div>`;
+  if(cls==='hl') return `<div class="logo-3d hl-logo" aria-hidden="true"><div class="scale-beam"></div><div class="scale-fulcrum"></div><div class="scale-pan left"></div><div class="scale-pan right"></div></div>`;
+  if(cls==='word') return `<div class="logo-3d word-logo" aria-hidden="true"><div class="letter-block a">W</div><div class="letter-block b">O</div><div class="letter-block c">R</div><div class="letter-block d">D</div></div>`;
+  if(cls==='memory') return `<div class="logo-3d memory-logo" aria-hidden="true"><div class="neuron core"></div><div class="neuron n1"></div><div class="neuron n2"></div><div class="neuron n3"></div><div class="neuron n4"></div></div>`;
+  if(cls==='timeline') return `<div class="logo-3d timeline-logo" aria-hidden="true"><div class="hourglass-top"></div><div class="hourglass-neck"></div><div class="hourglass-bottom"></div><div class="sand-pour"></div></div>`;
+  if(cls==='flags') return `<div class="logo-3d flags-logo" aria-hidden="true"><div class="flag-pole"></div><div class="flag-cloth"></div><div class="flag-base"></div></div>`;
+  if(cls==='speed') return `<div class="logo-3d speed-logo" aria-hidden="true"><div class="car-body"></div><div class="car-window"></div><div class="car-wheel front"></div><div class="car-wheel rear"></div><div class="speed-line s1"></div><div class="speed-line s2"></div></div>`;
+  if(cls==='snake') return `<div class="logo-3d snake-logo" aria-hidden="true"><div class="snake-seg head"></div><div class="snake-seg s1"></div><div class="snake-seg s2"></div><div class="snake-seg s3"></div><div class="snake-eyes"></div></div>`;
+  if(cls==='g2048') return `<div class="logo-3d g2048-logo" aria-hidden="true"><div class="tile t1">2</div><div class="tile t2">4</div><div class="tile t3">8</div><div class="tile t4">16</div></div>`;
+  if(cls==='reflex') return `<div class="logo-3d reflex-logo" aria-hidden="true"><div class="bolt main"></div><div class="bolt spark1"></div><div class="bolt spark2"></div><div class="bolt spark3"></div></div>`;
+  if(cls==='tetris') return `<div class="logo-3d tetris-logo" aria-hidden="true"><div class="tet-block a"></div><div class="tet-block b"></div><div class="tet-block c"></div><div class="tet-block d"></div><div class="tet-line"></div></div>`;
+  if(cls==='minesweeper') return `<div class="logo-3d minesweeper-logo" aria-hidden="true"><div class="mine-body"></div><div class="mine-spike s1"></div><div class="mine-spike s2"></div><div class="mine-spike s3"></div><div class="mine-spike s4"></div><div class="mine-fuse"></div><div class="mine-spark"></div></div>`;
   if(cls==='flappy') return `<div class="logo-3d flappy-logo" aria-hidden="true"><div class="bird-body"><div class="wing left"></div><div class="wing right"></div><div class="beak"></div><div class="eye"></div></div></div>`;
   if(cls==='breakout') return `<div class="logo-3d breakout-logo" aria-hidden="true"><div class="bricks"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="paddle"></div><div class="ball"></div></div>`;
   if(cls==='whack') return `<div class="logo-3d whack-logo" aria-hidden="true"><div class="hole"></div><div class="mole"></div><div class="hammer"></div></div>`;
+  if(cls==='stack') return `<div class="logo-3d stack-logo" aria-hidden="true"><div class="stack-block sb1"></div><div class="stack-block sb2"></div><div class="stack-block sb3"></div><div class="stack-block sb4"></div><div class="stack-falling"></div></div>`;
   return `<span class="card-emoji">${emoji}</span>`;
 }
 function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat }) {
@@ -219,10 +232,10 @@ function renderHub() {
     <section class="featured" aria-label="Featured games">
       <h3 class="hub-section-title">🔥 Featured</h3>
       <div class="featured-track" data-test="featured-track">
-        <a class="featured-card" href="/reel" data-nav><span>🎬</span><b>REEL</b><small>Daily</small></a>
-        <a class="featured-card" href="/stack" data-nav><span>🧊</span><b>STACK 3D</b><small>3D</small></a>
-        <a class="featured-card" href="/flappy" data-nav><span>🐦</span><b>FLAPPY 3D</b><small>3D</small></a>
-        <a class="featured-card" href="/tetris" data-nav><span>🧱</span><b>TETRIS</b><small>Puzzle</small></a>
+        <a class="featured-card" href="/reel" data-nav>${logo3d('reel','🎬')}<b>REEL</b><small>Daily</small></a>
+        <a class="featured-card" href="/stack" data-nav>${logo3d('stack','🧊')}<b>STACK 3D</b><small>3D</small></a>
+        <a class="featured-card" href="/flappy" data-nav>${logo3d('flappy','🐦')}<b>FLAPPY 3D</b><small>3D</small></a>
+        <a class="featured-card" href="/tetris" data-nav>${logo3d('tetris','🧱')}<b>TETRIS</b><small>Puzzle</small></a>
       </div>
     </section>
 

@@ -116,6 +116,7 @@ a { color: inherit; text-decoration: none; }
 .featured-card { flex: 0 0 148px; scroll-snap-align: start; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 12px; text-align: center; transition: transform .18s; }
 .featured-card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.18); }
 .featured-card span{ font-size: 1.8rem; display: block; margin-bottom: 6px; }
+.featured-card .logo-3d{ transform: scale(.75); margin-bottom: 2px; }
 .featured-card b{ display: block; font-size: .85rem; }
 .featured-card small{ color: var(--muted); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
 .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 12px; position: sticky; top: 64px; z-index: 4; background: linear-gradient(#0b0b12, rgba(11,11,18,.92)); backdrop-filter: blur(8px); scrollbar-width: none; }
@@ -347,6 +348,179 @@ a { color: inherit; text-decoration: none; }
 .game-card.whack:hover .mole { animation: molePop 500ms ease 120ms; }
 @keyframes hammer3d { 0%{transform:rotate(0)} 35%{transform:rotate(-52deg) translateY(-2px)} 100%{transform:rotate(0)} }
 @keyframes molePop { 0%{transform:translateY(10px)} 45%{transform:translateY(-4px)} 100%{transform:translateY(10px)} }
+
+/* REEL — film strip scrolling */
+.reel-logo .film-strip { width: 48px; height: 18px; background: #1a1a24; border-radius: 3px; position: absolute; left: 4px; top: 19px; border: 2px solid #444; }
+.reel-logo .film-reel { width: 22px; height: 22px; background: conic-gradient(#555 0 25%,#333 25% 50%,#555 50% 75%,#333 75% 100%); border-radius: 50%; position: absolute; right: 6px; top: 17px; border: 2px solid #666; }
+.reel-logo .film-sprocket { width: 5px; height: 5px; background: #555; border-radius: 1px; position: absolute; }
+.reel-logo .film-sprocket.left { left: 8px; top: 18px; }
+.reel-logo .film-sprocket.right { left: 8px; top: 32px; }
+.game-card.reel:hover .film-reel { animation: reelSpin 600ms linear infinite; }
+.game-card.reel:hover .film-strip { animation: filmScroll 1.2s linear infinite; }
+@keyframes reelSpin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+@keyframes filmScroll { 0%{background-position:0 0} 100%{background-position:48px 0} }
+
+/* HL — balance scale tipping */
+.hl-logo .scale-beam { width: 44px; height: 4px; background: #94a3b8; border-radius: 2px; position: absolute; left: 6px; top: 22px; transform-origin: 50% 50%; }
+.hl-logo .scale-fulcrum { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 10px solid #64748b; position: absolute; left: 20px; top: 26px; }
+.hl-logo .scale-pan { width: 16px; height: 10px; background: #cbd5e1; border-radius: 0 0 8px 8px; position: absolute; top: 26px; border-top: 2px solid #94a3b8; }
+.hl-logo .scale-pan.left { left: 4px; }
+.hl-logo .scale-pan.right { right: 4px; }
+.game-card.hl:hover .scale-beam { animation: scaleTilt 1.4s ease-in-out infinite; }
+.game-card.hl:hover .scale-pan.left { animation: panDrop 1.4s ease-in-out infinite; }
+.game-card.hl:hover .scale-pan.right { animation: panRise 1.4s ease-in-out infinite; }
+@keyframes scaleTilt { 0%,100%{transform:rotate(0)} 50%{transform:rotate(8deg)} }
+@keyframes panDrop { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+@keyframes panRise { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+
+/* WORD — letter blocks flipping */
+.word-logo .letter-block { width: 12px; height: 14px; background: #22c55e; color: #fff; font-size: 10px; font-weight: 900; border-radius: 2px; position: absolute; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,.3); }
+.word-logo .letter-block.a { left: 8px; top: 14px; }
+.word-logo .letter-block.b { left: 21px; top: 14px; background: #f59e0b; }
+.word-logo .letter-block.c { left: 34px; top: 14px; background: #ef4444; }
+.word-logo .letter-block.d { left: 8px; top: 32px; background: #a855f7; }
+.game-card.word:hover .letter-block.a { animation: letterFlip .4s ease 0s; }
+.game-card.word:hover .letter-block.b { animation: letterFlip .4s ease .1s; }
+.game-card.word:hover .letter-block.c { animation: letterFlip .4s ease .2s; }
+.game-card.word:hover .letter-block.d { animation: letterFlip .4s ease .3s; }
+@keyframes letterFlip { 0%{transform:rotateX(0)} 50%{transform:rotateX(90deg)} 100%{transform:rotateX(0)} }
+
+/* MEMORY — neurons pulsing */
+.memory-logo .neuron { background: #a855f7; border-radius: 50%; position: absolute; box-shadow: 0 0 8px rgba(168,85,247,.5); }
+.memory-logo .neuron.core { width: 16px; height: 16px; left: 20px; top: 20px; }
+.memory-logo .neuron.n1 { width: 8px; height: 8px; left: 8px; top: 10px; }
+.memory-logo .neuron.n2 { width: 8px; height: 8px; right: 8px; top: 10px; }
+.memory-logo .neuron.n3 { width: 8px; height: 8px; left: 8px; bottom: 12px; }
+.memory-logo .neuron.n4 { width: 8px; height: 8px; right: 8px; bottom: 12px; }
+.memory-logo .neuron::after { content: ''; position: absolute; width: 2px; background: #c084fc; border-radius: 1px; }
+.memory-logo .neuron.n1::after { width: 14px; height: 2px; top: 4px; left: 8px; transform: rotate(20deg); }
+.memory-logo .neuron.n2::after { width: 14px; height: 2px; top: 4px; right: 8px; transform: rotate(-20deg); }
+.memory-logo .neuron.n3::after { width: 14px; height: 2px; bottom: 4px; left: 8px; transform: rotate(-20deg); }
+.memory-logo .neuron.n4::after { width: 14px; height: 2px; bottom: 4px; right: 8px; transform: rotate(20deg); }
+.game-card.memory:hover .neuron.core { animation: neuronPulse 800ms ease infinite; }
+.game-card.memory:hover .neuron.n1 { animation: neuronPulse 800ms ease 100ms infinite; }
+.game-card.memory:hover .neuron.n2 { animation: neuronPulse 800ms ease 200ms infinite; }
+.game-card.memory:hover .neuron.n3 { animation: neuronPulse 800ms ease 300ms infinite; }
+.game-card.memory:hover .neuron.n4 { animation: neuronPulse 800ms ease 400ms infinite; }
+@keyframes neuronPulse { 0%,100%{transform:scale(1);opacity:.7} 50%{transform:scale(1.3);opacity:1} }
+
+/* TIMELINE — hourglass with sand */
+.timeline-logo .hourglass-top { width: 24px; height: 14px; background: #f59e0b; clip-path: polygon(0 0,100% 0,70% 100%,30% 100%); position: absolute; left: 16px; top: 8px; }
+.timeline-logo .hourglass-neck { width: 4px; height: 6px; background: #d97706; position: absolute; left: 26px; top: 21px; }
+.timeline-logo .hourglass-bottom { width: 24px; height: 14px; background: #f59e0b; clip-path: polygon(30% 0,70% 0,100% 100%,0 100%); position: absolute; left: 16px; top: 27px; }
+.timeline-logo .sand-pour { width: 2px; height: 0; background: #fbbf24; position: absolute; left: 27px; top: 22px; border-radius: 1px; }
+.game-card.timeline:hover .sand-pour { animation: sandPour 1.2s ease infinite; }
+.game-card.timeline:hover .hourglass-top { animation: hourglassWobble 1.2s ease infinite; }
+@keyframes sandPour { 0%{height:0;opacity:1} 50%{height:10px;opacity:1} 100%{height:0;opacity:0} }
+@keyframes hourglassWobble { 0%,100%{transform:rotate(0)} 25%{transform:rotate(3deg)} 75%{transform:rotate(-3deg)} }
+
+/* FLAGS — flag waving on pole */
+.flags-logo .flag-pole { width: 3px; height: 36px; background: #94a3b8; position: absolute; left: 10px; top: 8px; border-radius: 1px; }
+.flags-logo .flag-cloth { width: 24px; height: 18px; background: linear-gradient(135deg,#3b82f6,#1d4ed8); position: absolute; left: 13px; top: 8px; border-radius: 0 3px 3px 0; transform-origin: 0 50%; }
+.flags-logo .flag-cloth::after { content: ''; position: absolute; width: 8px; height: 8px; background: #fbbf24; border-radius: 50%; top: 5px; left: 8px; }
+.flags-logo .flag-base { width: 14px; height: 4px; background: #64748b; position: absolute; left: 4px; top: 44px; border-radius: 2px; }
+.game-card.flags:hover .flag-cloth { animation: flagWave 1s ease-in-out infinite; }
+@keyframes flagWave { 0%,100%{transform:skewY(0)} 25%{transform:skewY(3deg)} 75%{transform:skewY(-3deg)} }
+
+/* SPEED — car with spinning wheels */
+.speed-logo .car-body { width: 36px; height: 14px; background: #ef4444; border-radius: 4px 12px 3px 3px; position: absolute; left: 10px; top: 22px; }
+.speed-logo .car-window { width: 16px; height: 10px; background: #93c5fd; border-radius: 3px 8px 0 0; position: absolute; left: 20px; top: 14px; clip-path: polygon(15% 100%,0 0,100% 0,85% 100%); }
+.speed-logo .car-wheel { width: 10px; height: 10px; background: #1a1a24; border-radius: 50%; position: absolute; top: 32px; border: 2px solid #666; }
+.speed-logo .car-wheel.front { left: 12px; }
+.speed-logo .car-wheel.rear { left: 32px; }
+.speed-logo .speed-line { height: 2px; background: rgba(255,255,255,.4); position: absolute; left: 0; border-radius: 1px; }
+.speed-logo .speed-line.s1 { width: 12px; top: 24px; }
+.speed-logo .speed-line.s2 { width: 8px; top: 32px; }
+.game-card.speed:hover .car-wheel.front { animation: wheelSpin 300ms linear infinite; }
+.game-card.speed:hover .car-wheel.rear { animation: wheelSpin 300ms linear infinite; }
+.game-card.speed:hover .car-body { animation: carBounce 400ms ease infinite; }
+.game-card.speed:hover .speed-line.s1 { animation: speedLines .5s linear infinite; }
+.game-card.speed:hover .speed-line.s2 { animation: speedLines .5s linear infinite .15s; }
+@keyframes wheelSpin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+@keyframes carBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+@keyframes speedLines { 0%{transform:translateX(0);opacity:1} 100%{transform:translateX(-20px);opacity:0} }
+
+/* SNAKE — segments slithering */
+.snake-logo .snake-seg { width: 12px; height: 12px; background: #a3e635; border-radius: 3px; position: absolute; box-shadow: inset -2px -2px 0 rgba(0,0,0,.15); }
+.snake-logo .snake-seg.head { background: #65a30d; border-radius: 4px 8px 4px 4px; left: 8px; top: 20px; }
+.snake-logo .snake-seg.s1 { left: 22px; top: 20px; }
+.snake-logo .snake-seg.s2 { left: 36px; top: 20px; }
+.snake-logo .snake-seg.s3 { left: 36px; top: 34px; }
+.snake-logo .snake-eyes { width: 6px; height: 4px; background: #fff; border-radius: 50%; position: absolute; left: 14px; top: 18px; box-shadow: 8px 0 0 #fff; }
+.snake-logo .snake-eyes::after { content: ''; width: 3px; height: 3px; background: #000; border-radius: 50%; position: absolute; left: 1px; top: 1px; box-shadow: 8px 0 0 #000; }
+.game-card.snake:hover .snake-seg.head { animation: snakeHead .8s ease infinite; }
+.game-card.snake:hover .snake-seg.s1 { animation: snakeBody .8s ease .08s infinite; }
+.game-card.snake:hover .snake-seg.s2 { animation: snakeBody .8s ease .16s infinite; }
+.game-card.snake:hover .snake-seg.s3 { animation: snakeBody .8s ease .24s infinite; }
+@keyframes snakeHead { 0%,100%{transform:translate(0,0)} 25%{transform:translate(2px,-2px)} 75%{transform:translate(-2px,2px)} }
+@keyframes snakeBody { 0%,100%{transform:translate(0,0)} 25%{transform:translate(2px,0)} 75%{transform:translate(-2px,0)} }
+
+/* 2048 — tiles merging */
+.g2048-logo .tile { width: 16px; height: 16px; border-radius: 3px; position: absolute; font-size: 9px; font-weight: 900; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,.3); }
+.g2048-logo .tile.t1 { background: #94a3b8; left: 8px; top: 8px; }
+.g2048-logo .tile.t2 { background: #cbd5e1; left: 28px; top: 8px; }
+.g2048-logo .tile.t3 { background: #fbbf24; left: 8px; top: 28px; }
+.g2048-logo .tile.t4 { background: #f97316; left: 28px; top: 28px; }
+.game-card.g2048:hover .tile.t1 { animation: tileMerge .6s ease 0s; }
+.game-card.g2048:hover .tile.t2 { animation: tileMerge .6s ease .15s; }
+.game-card.g2048:hover .tile.t3 { animation: tileMerge .6s ease .3s; }
+.game-card.g2048:hover .tile.t4 { animation: tileMerge .6s ease .45s; }
+@keyframes tileMerge { 0%{transform:scale(1)} 40%{transform:scale(.7)} 70%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+/* REFLEX — lightning bolt with sparks */
+.reflex-logo .bolt { position: absolute; background: #facc15; }
+.reflex-logo .bolt.main { width: 10px; height: 32px; left: 23px; top: 10px; clip-path: polygon(60% 0,100% 0,40% 48%,70% 48%,0 100%,30% 50%,0 50%); }
+.reflex-logo .bolt.spark1 { width: 4px; height: 8px; left: 14px; top: 8px; border-radius: 2px; transform: rotate(-20deg); }
+.reflex-logo .bolt.spark2 { width: 4px; height: 6px; right: 10px; top: 12px; border-radius: 2px; transform: rotate(25deg); }
+.reflex-logo .bolt.spark3 { width: 3px; height: 5px; left: 36px; top: 34px; border-radius: 2px; transform: rotate(-10deg); }
+.game-card.reflex:hover .bolt.main { animation: boltFlash 500ms ease infinite; }
+.game-card.reflex:hover .bolt.spark1 { animation: sparkPop 500ms ease 100ms infinite; }
+.game-card.reflex:hover .bolt.spark2 { animation: sparkPop 500ms ease 200ms infinite; }
+.game-card.reflex:hover .bolt.spark3 { animation: sparkPop 500ms ease 300ms infinite; }
+@keyframes boltFlash { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.1)} }
+@keyframes sparkPop { 0%,100%{opacity:0;transform:scale(.5)} 50%{opacity:1;transform:scale(1.3)} }
+
+/* TETRIS — blocks falling */
+.tetris-logo .tet-block { width: 12px; height: 12px; position: absolute; border-radius: 2px; box-shadow: inset -2px -2px 0 rgba(0,0,0,.2); }
+.tetris-logo .tet-block.a { background: #22d3ee; left: 16px; top: 10px; }
+.tetris-logo .tet-block.b { background: #22d3ee; left: 28px; top: 10px; }
+.tetris-logo .tet-block.c { background: #22d3ee; left: 28px; top: 22px; }
+.tetris-logo .tet-block.d { background: #22d3ee; left: 40px; top: 22px; }
+.tetris-logo .tet-line { width: 48px; height: 2px; background: #f59e0b; position: absolute; left: 4px; bottom: 10px; border-radius: 1px; }
+.game-card.tetris:hover .tet-block.a { animation: tetFall 1s ease 0s infinite; }
+.game-card.tetris:hover .tet-block.b { animation: tetFall 1s ease .15s infinite; }
+.game-card.tetris:hover .tet-block.c { animation: tetFall 1s ease .3s infinite; }
+.game-card.tetris:hover .tet-block.d { animation: tetFall 1s ease .45s infinite; }
+.game-card.tetris:hover .tet-line { animation: lineClear 1s ease infinite; }
+@keyframes tetFall { 0%{transform:translateY(-8px);opacity:.6} 60%{transform:translateY(0);opacity:1} 80%{transform:translateY(0);opacity:1} 100%{transform:translateY(12px);opacity:0} }
+@keyframes lineClear { 0%,70%{opacity:1;transform:scaleX(1)} 80%{opacity:0;transform:scaleX(0)} 100%{opacity:0;transform:scaleX(0)} }
+
+/* MINESWEEPER — mine with spinning fuse */
+.minesweeper-logo .mine-body { width: 22px; height: 22px; background: #1a1a24; border-radius: 50%; position: absolute; left: 17px; top: 18px; }
+.minesweeper-logo .mine-spike { width: 4px; height: 14px; background: #1a1a24; position: absolute; border-radius: 2px; }
+.minesweeper-logo .mine-spike.s1 { left: 26px; top: 8px; transform: rotate(0); }
+.minesweeper-logo .mine-spike.s2 { left: 36px; top: 20px; transform: rotate(90deg); }
+.minesweeper-logo .mine-spike.s3 { left: 26px; top: 32px; transform: rotate(0); }
+.minesweeper-logo .mine-spike.s4 { left: 16px; top: 20px; transform: rotate(90deg); }
+.minesweeper-logo .mine-fuse { width: 2px; height: 8px; background: #78350f; position: absolute; left: 27px; top: 14px; border-radius: 1px; }
+.minesweeper-logo .mine-spark { width: 6px; height: 6px; background: #f59e0b; border-radius: 50%; position: absolute; left: 25px; top: 10px; box-shadow: 0 0 6px #f59e0b; }
+.game-card.minesweeper:hover .mine-spark { animation: sparkBlink 400ms ease infinite; }
+.game-card.minesweeper:hover .mine-body { animation: mineShake 400ms ease infinite; }
+@keyframes sparkBlink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.6)} }
+@keyframes mineShake { 0%,100%{transform:translate(0,0)} 25%{transform:translate(1px,-1px)} 75%{transform:translate(-1px,1px)} }
+
+/* STACK — stacking blocks with3D perspective */
+.stack-logo { perspective: 200px; }
+.stack-logo .stack-block { width: 30px; height: 10px; position: absolute; left: 13px; border-radius: 2px; box-shadow: inset -2px -2px 0 rgba(0,0,0,.2); }
+.stack-logo .stack-block.sb1 { background: #38bdf8; top: 38px; }
+.stack-logo .stack-block.sb2 { background: #a855f7; top: 28px; }
+.stack-logo .stack-block.sb3 { background: #facc15; top: 18px; }
+.stack-logo .stack-block.sb4 { background: #ef4444; top: 8px; }
+.stack-logo .stack-falling { width: 28px; height: 10px; background: #22c55e; position: absolute; left: 14px; top: 0; border-radius: 2px; opacity: 0; box-shadow: inset -2px -2px 0 rgba(0,0,0,.2); }
+.game-card.stack:hover .stack-falling { animation: stackDrop 1.2s ease infinite; }
+.game-card.stack:hover .stack-block { animation: stackSquish 1.2s ease infinite; }
+@keyframes stackDrop { 0%{transform:translateY(-20px) rotate(5deg);opacity:1} 50%{transform:translateY(0) rotate(0);opacity:1} 100%{transform:translateY(0);opacity:0} }
+@keyframes stackSquish { 0%,50%,100%{transform:scaleY(1)} 60%{transform:scaleY(.85)} 70%{transform:scaleY(1.05)} }
 
 /* ── shared game UI ── */
 .game-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; animation: rise .35s ease both; }

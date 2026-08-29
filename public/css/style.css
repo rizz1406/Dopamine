@@ -145,9 +145,9 @@ a { color: inherit; text-decoration: none; }
 .game-card:active.reel .card-emoji, .game-card:focus-visible.reel .card-emoji { animation: reel-clap .55s cubic-bezier(.34,1.56,.64,1); }
 .game-card:active.tetris .card-emoji, .game-card:focus-visible.tetris .card-emoji { animation: tetris-dynamic 750ms cubic-bezier(.34,1.56,.64,1); }
 .game-card:active.minesweeper .card-emoji, .game-card:focus-visible.minesweeper .card-emoji { animation: mine-dynamic 750ms ease; }
-.game-card:active.flappy .card-emoji, .game-card:focus-visible.flappy .card-emoji { animation: flappy-body 900ms cubic-bezier(.32,.72,.32,1); }
-.game-card:active.flappy .card-emoji::before, .game-card:focus-visible.flappy .card-emoji::before { animation: wing-left 180ms ease-in-out infinite; opacity: 1; }
-.game-card:active.flappy .card-emoji::after, .game-card:focus-visible.flappy .card-emoji::after { animation: wing-right 180ms ease-in-out infinite 90ms; opacity: 1; }
+.game-card:active.flappy .bird-body, .game-card:focus-visible.flappy .bird-body { animation: flappy-fly 900ms cubic-bezier(.32,.72,.32,1) forwards; }
+.game-card:active.flappy .wing.left, .game-card:focus-visible.flappy .wing.left { animation: wing-left 140ms ease-in-out infinite; }
+.game-card:active.flappy .wing.right, .game-card:focus-visible.flappy .wing.right { animation: wing-right 140ms ease-in-out infinite 70ms; }
 .game-card:active.breakout .card-emoji, .game-card:focus-visible.breakout .card-emoji { animation: breakout-dynamic 750ms cubic-bezier(.34,1.56,.64,1); }
 .game-card:active.whack .card-emoji, .game-card:focus-visible.whack .card-emoji { animation: whack-dynamic 650ms cubic-bezier(.34,1.56,.64,1); }
 .game-card:active.stack .card-emoji, .game-card:focus-visible.stack .card-emoji { animation: stack-dynamic 750ms cubic-bezier(.34,1.56,.64,1); }
@@ -278,12 +278,12 @@ a { color: inherit; text-decoration: none; }
 }
 .game-card.flappy .card-emoji::before { left: -14px; transform: rotateY(0) rotate(-12deg); }
 .game-card.flappy .card-emoji::after { right: -14px; transform: rotateY(0) rotate(12deg) scaleX(-1); }
-.game-card.flappy:hover .card-emoji { animation: flappy-body 900ms cubic-bezier(.32,.72,.32,1); }
-.game-card.flappy:hover .card-emoji::before { animation: wing-left 180ms ease-in-out infinite, flappy-trail 900ms ease 180ms; opacity: 1; }
-.game-card.flappy:hover .card-emoji::after { animation: wing-right 180ms ease-in-out infinite 90ms, flappy-trail 900ms ease 180ms; opacity: 1; }
-@keyframes flappy-body { 0%{transform:translate3d(0,0,0) rotate(-4deg)} 28%{transform:translate3d(14px,-18px,30px) rotateY(14deg) rotate(6deg)} 52%{transform:translate3d(30px,-8px,50px) rotateY(22deg) rotate(10deg)} 72%{transform:translate3d(50px,8px,20px) rotateY(10deg) rotate(16deg); opacity:.9} 100%{transform:translate3d(70px,16px,-10px) rotateY(-8deg) rotate(20deg) scale(.7); opacity:0} }
-@keyframes wing-left { 0%,100%{transform: rotateY(-28deg) rotate(-12deg)} 50%{transform: rotateY(42deg) rotate(-12deg)} }
-@keyframes wing-right { 0%,100%{transform: scaleX(-1) rotateY(-28deg) rotate(12deg)} 50%{transform: scaleX(-1) rotateY(42deg) rotate(12deg)} }
+.game-card.flappy:hover .bird-body { animation: flappy-fly 900ms cubic-bezier(.32,.72,.32,1) forwards; }
+.game-card.flappy:hover .wing.left { animation: wing-left 140ms ease-in-out infinite; }
+.game-card.flappy:hover .wing.right { animation: wing-right 140ms ease-in-out infinite 70ms; }
+@keyframes flappy-fly { 0%{transform:translate3d(0,0,0) rotate(-4deg) scale(1)} 30%{transform:translate3d(18px,-20px,30px) rotateY(16deg) rotate(8deg) scale(1.08)} 55%{transform:translate3d(36px,-10px,18px) rotateY(22deg) rotate(12deg) scale(1.02)} 100%{transform:translate3d(64px,14px,-12px) rotateY(-6deg) rotate(20deg) scale(.68); opacity:0} }
+@keyframes wing-left { 0%,100%{transform: rotateY(-28deg) rotate(-14deg)} 50%{transform: rotateY(46deg) rotate(-14deg)} }
+@keyframes wing-right { 0%,100%{transform: scaleX(-1) rotateY(-28deg) rotate(14deg)} 50%{transform: scaleX(-1) rotateY(46deg) rotate(14deg)} }
 @keyframes flappy-trail { 0%{opacity:0; transform:translateY(-50%) translateX(6px)} 35%{opacity:.6} 100%{opacity:0; transform:translateY(-50%) translateX(-14px)} }
 
 /* BREAKOUT: paddle hits, ball smashes bricks */
@@ -307,6 +307,46 @@ a { color: inherit; text-decoration: none; }
 .game-card.stack:hover .card-emoji::after { content: '✨'; position: absolute; left: 50%; top: -8px; font-size: .8rem; opacity: 0; animation: stack-spark 750ms ease 380ms; }
 @keyframes stack-dynamic { 0%{transform:translateX(-28px) translateY(-12px) scale(.9); opacity:0} 35%{transform:translateX(6px) translateY(2px) scale(1.08)} 55%{transform:translateX(-2px) translateY(-1px) scale(.98)} 100%{transform:translateX(0) translateY(0) scale(1)} }
 @keyframes stack-spark { 0%{opacity:0; transform:translate(-50%,0) scale(.4)} 45%{opacity:1; transform:translate(-50%,-8px) scale(1.2)} 100%{opacity:0; transform:translate(-50%,-16px) scale(.6)} }
+
+/* ── 3D LOGOS — real moving parts (replaces emoji) ── */
+.logo-3d { width: 56px; height: 56px; margin: 0 auto 14px; position: relative; perspective: 300px; transform-style: preserve-3d; }
+.logo-3d .wing, .logo-3d .ball, .logo-3d .brick, .logo-3d .hammer { position: absolute; }
+
+/* FLAPPY 3D BIRD */
+.flappy-logo .bird-body { width: 34px; height: 26px; background: #facc15; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; position: absolute; left: 11px; top: 15px; box-shadow: inset -6px -4px 0 rgba(0,0,0,.12); }
+.flappy-logo .wing { width: 18px; height: 12px; background: #eab308; border-radius: 50%; top: 50%; transform-origin: 85% 50%; }
+.flappy-logo .wing.left { left: -2px; transform: rotate(-18deg); }
+.flappy-logo .wing.right { right: -2px; transform: scaleX(-1) rotate(-18deg); transform-origin: 15% 50%; }
+.flappy-logo .beak { width: 0; height: 0; border-left: 10px solid #f97316; border-top: 6px solid transparent; border-bottom: 6px solid transparent; position: absolute; right: 6px; top: 50%; margin-top: -6px; }
+.flappy-logo .eye { width: 7px; height: 7px; background: #000; border-radius: 50%; position: absolute; right: 14px; top: 11px; box-shadow: 0 0 0 2px #fff; }
+.game-card.flappy:hover .wing.left { animation: wingFlapL 160ms ease-in-out infinite; }
+.game-card.flappy:hover .wing.right { animation: wingFlapR 160ms ease-in-out infinite 80ms; }
+.game-card.flappy:hover .bird-body { animation: birdBob 900ms ease infinite; }
+@keyframes wingFlapL { 0%,100%{transform: rotate(-18deg) rotateY(-28deg)} 50%{transform: rotate(-18deg) rotateY(38deg)} }
+@keyframes wingFlapR { 0%,100%{transform: scaleX(-1) rotate(-18deg) rotateY(-28deg)} 50%{transform: scaleX(-1) rotate(-18deg) rotateY(38deg)} }
+@keyframes birdBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+
+/* BREAKOUT 3D */
+.breakout-logo .paddle { width: 32px; height: 7px; background: #a3e635; border-radius: 3px; position: absolute; bottom: 6px; left: 12px; }
+.breakout-logo .ball { width: 10px; height: 10px; background: #fff; border-radius: 50%; left: 24px; top: 26px; box-shadow: 0 1px 6px rgba(0,0,0,.3); }
+.breakout-logo .bricks { position: absolute; top: 4px; left: 6px; display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+.breakout-logo .bricks i { width: 14px; height: 7px; border-radius: 2px; display: block; }
+.breakout-logo .bricks i:nth-child(1){background:#ef4444} .bricks i:nth-child(2){background:#f97316} .bricks i:nth-child(3){background:#facc15}
+.bricks i:nth-child(4){background:#22c55e} .bricks i:nth-child(5){background:#22d3ee} .bricks i:nth-child(6){background:#a855f7}
+.game-card.breakout:hover .ball { animation: breakoutBall3d 700ms ease infinite; }
+.game-card.breakout:hover .bricks i { animation: brickShake 700ms ease infinite; }
+@keyframes breakoutBall3d { 0%{transform:translate(0,0)} 30%{transform:translate(10px,-14px)} 60%{transform:translate(-8px,6px)} 100%{transform:translate(0,0)} }
+@keyframes brickShake { 0%,100%{transform:translate(0,0)} 50%{transform:translateY(-2px)} }
+
+/* WHACK 3D */
+.whack-logo .hole { width: 22px; height: 12px; background: #1a1a24; border-radius: 50%; position: absolute; bottom: 8px; left: 17px; box-shadow: inset 0 3px 6px rgba(0,0,0,.6); }
+.whack-logo .mole { width: 18px; height: 18px; background: #a16207; border-radius: 50% 50% 40% 40%; position: absolute; bottom: 14px; left: 19px; transform: translateY(10px); transition: transform .2s; }
+.whack-logo .hammer { width: 28px; height: 6px; background: #92400e; border-radius: 3px; position: absolute; top: 8px; right: 4px; transform-origin: 85% 50%; }
+.whack-logo .hammer::after { content: ''; width: 8px; height: 18px; background: #78350f; position: absolute; right: 4px; top: -6px; border-radius: 2px; }
+.game-card.whack:hover .hammer { animation: hammer3d 500ms ease; }
+.game-card.whack:hover .mole { animation: molePop 500ms ease 120ms; }
+@keyframes hammer3d { 0%{transform:rotate(0)} 35%{transform:rotate(-52deg) translateY(-2px)} 100%{transform:rotate(0)} }
+@keyframes molePop { 0%{transform:translateY(10px)} 45%{transform:translateY(-4px)} 100%{transform:translateY(10px)} }
 
 /* ── shared game UI ── */
 .game-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; animation: rise .35s ease both; }

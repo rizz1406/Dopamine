@@ -166,12 +166,18 @@ export const ui = {
   }
 };
 
+function logo3d(cls, emoji){
+  if(cls==='flappy') return `<div class="logo-3d flappy-logo" aria-hidden="true"><div class="bird-body"><div class="wing left"></div><div class="wing right"></div><div class="beak"></div><div class="eye"></div></div></div>`;
+  if(cls==='breakout') return `<div class="logo-3d breakout-logo" aria-hidden="true"><div class="bricks"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="paddle"></div><div class="ball"></div></div>`;
+  if(cls==='whack') return `<div class="logo-3d whack-logo" aria-hidden="true"><div class="hole"></div><div class="mole"></div><div class="hammer"></div></div>`;
+  return `<span class="card-emoji">${emoji}</span>`;
+}
 function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat }) {
   const st = store.streak(streakKey);
   const hot = st.current > 0;
   return `
     <a class="game-card ${cls || ''}" href="${href}" data-nav data-cat="${cat||'arcade'}" style="--glow:${glow}">
-      <span class="card-emoji">${emoji}</span>
+      ${logo3d(cls, emoji)}
       <h2>${name}</h2>
       <p>${desc}</p>
       <span class="streak-pill ${hot ? 'hot' : ''}">🔥 ${st.current} ${t('streak')}${daily ? ' · ' + t('today') + (store.hasPlayed(streakKey, dayNumber()) ? ' ✓' : '') : ''}</span>

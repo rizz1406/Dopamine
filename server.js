@@ -8,10 +8,13 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const DATA = join(ROOT, 'data');
 const PORT = process.env.PORT || 4173;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dopamine-admin';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  console.warn('⚠️  ADMIN_PASSWORD not set. Admin login disabled. Set it with: ADMIN_PASSWORD=your-secret node server.js');
+}
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048', 'tetris', 'minesweeper', 'flappy', 'breakout', 'whack', 'stack'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000], tetris: [0, 1000000], minesweeper: [0, 999], flappy: [0, 1000], breakout: [0, 100000], whack: [0, 1000], stack: [0, 10000] };
 
 // ── storage ───────────────────────────────────────────────
 let scores = {};   // { 'YYYY-MM-DD': { game: [{name, score, ts}] } }
@@ -182,6 +185,7 @@ async function handleApi(req, res, url) {
   }
 
   if (path === '/api/admin/login' && req.method === 'POST') {
+    if (!ADMIN_PASSWORD) return json(res, 503, { error: 'admin disabled' });
     if (rateLimited(ip, 'login', 10, 300000)) return json(res, 429, { error: 'too many attempts' });
     const body = await readBody(req);
     const pw = String(body.password || '');

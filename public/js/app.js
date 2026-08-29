@@ -7,30 +7,46 @@ import { shareTargets, brandIconSvg, BRANDS, nativeShare, hasNativeShare, shareI
 import { todaySummary, nextDailyHref } from './daily.js';
 import { events } from './analytics.js';
 import { t, getLang, setLang } from './i18n.js';
-import { renderReel } from './games/reel.js';
-import { renderHigherLower } from './games/higherlower.js';
-import { renderReflex } from './games/reflex.js';
-import { renderMemory } from './games/memory.js';
-import { renderTimeline } from './games/timeline.js';
-import { renderWord } from './games/word.js';
-import { renderFlagRush } from './games/flagrush.js';
-import { renderSpeed } from './games/speed.js';
-import { renderSnake } from './games/snake.js';
-import { render2048 } from './games/g2048.js';
-import { renderLeaderboard } from './games/leaderboard.js';
-import { renderStats } from './pages/stats.js';
 import { renderLegal, legalMeta } from './pages/legal.js';
-import { renderSEO } from './pages/seo.js';
-import { renderAdmin } from './games/admin.js';
+
+// Lazy load games for code splitting
+const lazy = (loader) => {
+  let mod = null;
+  return async (...args) => {
+    if (!mod) mod = await loader();
+    return mod.default ? mod.default(...args) : mod[Object.keys(mod)[0]](...args);
+  };
+};
+
+const renderReel = lazy(() => import('./games/reel.js'));
+const renderHigherLower = lazy(() => import('./games/higherlower.js'));
+const renderReflex = lazy(() => import('./games/reflex.js'));
+const renderMemory = lazy(() => import('./games/memory.js'));
+const renderTimeline = lazy(() => import('./games/timeline.js'));
+const renderWord = lazy(() => import('./games/word.js'));
+const renderFlagRush = lazy(() => import('./games/flagrush.js'));
+const renderSpeed = lazy(() => import('./games/speed.js'));
+const renderSnake = lazy(() => import('./games/snake.js'));
+const render2048 = lazy(() => import('./games/g2048.js'));
+const renderTetris = lazy(() => import('./games/tetris.js'));
+const renderMinesweeper = lazy(() => import('./games/minesweeper.js'));
+const renderFlappy = lazy(() => import('./games/flappy.js'));
+const renderBreakout = lazy(() => import('./games/breakout.js'));
+const renderWhack = lazy(() => import('./games/whack.js'));
+const renderStack = lazy(() => import('./games/stack.js'));
+const renderLeaderboard = lazy(() => import('./games/leaderboard.js'));
+const renderStats = lazy(() => import('./pages/stats.js'));
+const renderSEO = lazy(() => import('./pages/seo.js'));
+const renderAdmin = lazy(() => import('./games/admin.js'));
 
 const view = document.getElementById('view');
 const SITE = 'https://dopamine.games';
 
 // ── route table: path → { render, title, desc } ──
 const ROUTES = {
-  '/': { render: renderHub, title: 'DOPAMINE — Daily Arcade 🎮 | 9 Free Mini-Games', desc: 'Your daily dose of pointless brilliance. 9 free daily mini-games: emoji movie quiz, word guess, flag rush, car racing, snake and more. Same puzzles for everyone, new every day.' },
+  '/': { render: renderHub, title: 'DOPAMINE — Daily Arcade 🎮 | 16 Free Mini-Games', desc: 'Your daily dose of pointless brilliance. 16 free mini-games: emoji movie quiz, word guess, flag rush, car racing, snake and more. Same puzzles for everyone, new every day.' },
   '/reel': { render: renderReel, title: 'REEL — Guess the Movie from Emojis | Daily Puzzle', desc: 'Today\'s REEL puzzle: guess the movie from emojis in 4 tries with escalating hints. Same puzzle for everyone, new daily at 00:00 UTC. Free.' },
-  '/higher-lower': { render: renderHigherLower, title: 'Higher or Lower — Search Volume Game', desc: 'Which does the internet search more? Build the longest streak in this addictive daily guessing game. Free, no account needed.' },
+  '/hl': { render: renderHigherLower, title: 'Higher or Lower — Search Volume Game', desc: 'Which does the internet search more? Build the longest streak in this addictive daily guessing game. Free, no account needed.' },
   '/word': { render: renderWord, title: 'Word Guess — Daily 5-Letter Word Puzzle', desc: 'A new 5-letter word every day. 6 tries, color-coded hints, streaks and a shareable grid. The daily word puzzle for word nerds.' },
   '/memory': { render: renderMemory, title: 'Memory — Simon Pattern Game', desc: 'Watch the pattern, repeat it, go as far as your brain takes you. Free online memory game with global daily leaderboard.' },
   '/timeline': { render: renderTimeline, title: 'Timeline — Order Movies by Release Year', desc: 'Can you order 4 movies from oldest to newest? A daily movie trivia game with 3 strikes. Play free.' },
@@ -38,6 +54,12 @@ const ROUTES = {
   '/speed': { render: renderSpeed, title: 'Speed Rush — Free Car Dodging Racing Game', desc: 'Dodge highway traffic at insane speeds in this free browser racing game. One more try guaranteed.' },
   '/snake': { render: renderSnake, title: 'Snake — The Classic Free Browser Game', desc: 'The Snake game you love: eat apples, grow long, survive. Free in your browser, with global daily leaderboard.' },
   '/2048': { render: render2048, title: '2048 — Free Online Slide & Merge Puzzle', desc: 'The legendary 2048 number puzzle: slide tiles, merge equals, chase the 2048 tile. Free in your browser with a global leaderboard.' },
+  '/tetris': { render: renderTetris, title: 'Tetris — Free Online Stacking Puzzle', desc: 'Play Tetris free in your browser. Stack blocks, clear lines, chase the high score. Global daily leaderboard.' },
+  '/minesweeper': { render: renderMinesweeper, title: 'Minesweeper — Free Classic Logic Puzzle', desc: 'Classic Minesweeper free online. 3 difficulties, flag the mines, beat the clock. Global leaderboard.' },
+  '/flappy': { render: renderFlappy, title: 'Flappy Bird — Free Tap to Fly Game', desc: 'Flappy Bird free in your browser. Tap to fly, dodge pipes, beat your best. Global daily leaderboard.' },
+  '/breakout': { render: renderBreakout, title: 'Breakout — Free Brick Breaker Game', desc: 'Breakout free online. Bounce the ball, smash the bricks, clear the level. Global leaderboard.' },
+  '/whack': { render: renderWhack, title: 'Whack-a-Mole — Free Speed Tap Game', desc: 'Whack-a-Mole free online. 30 seconds, 9 holes, how many can you tap? Global leaderboard.' },
+  '/stack': { render: renderStack, title: 'Stack 3D — Free Tower Stack Game', desc: 'Stack 3D free online. Time the drop, build the tower. How high can you go? Global leaderboard.' },
   '/games-like-wordle': { render: renderSEO('games-like-wordle'), title: '10 Free Games Like Wordle — Daily Puzzle Games', desc: 'Love Wordle? Discover 10 free daily puzzle games like Wordle — emoji movie quizzes, flag quizzes, memory games and more. No signup.' },
   '/brain-games': { render: renderSEO('brain-games'), title: 'Free Brain Games — Train Memory, Reflexes & Logic Daily', desc: 'Free online brain games to train memory, reaction time and logic. Short daily challenges, a global leaderboard and streaks. No signup.' },
   '/reflex': { render: renderReflex, title: 'Reflex Test — How Fast Are You Really?', desc: 'A 5-round reaction time test with instant verdicts. Average under 250ms? You might be superhuman. Free.' },
@@ -195,7 +217,7 @@ function renderHub() {
         streakKey: 'reel', glow: 'rgba(244,114,182,.25)', daily: true, cls: 'reel'
       })}
       ${gameCard({
-        href: '/higher-lower', emoji: '⚖️', name: 'HIGHER OR LOWER',
+        href: '/hl', emoji: '⚖️', name: 'HIGHER OR LOWER',
         desc: 'What does the internet search more? Build an insane streak.',
         streakKey: 'hl', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'hl'
       })}
@@ -239,6 +261,36 @@ function renderHub() {
         desc: '5 clicks. One average. Are you superhuman or just sleepy?',
         streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex'
       })}
+      ${gameCard({
+        href: '/tetris', emoji: '🧱', name: 'TETRIS',
+        desc: 'Stack blocks, clear lines. The timeless stacking puzzle.',
+        streakKey: 'tetris', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'tetris'
+      })}
+      ${gameCard({
+        href: '/minesweeper', emoji: '💣', name: 'MINESWEEPER',
+        desc: 'Flag the mines, clear the board. Logic at its purest.',
+        streakKey: 'minesweeper', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'minesweeper'
+      })}
+      ${gameCard({
+        href: '/flappy', emoji: '🐦', name: 'FLAPPY',
+        desc: 'Tap to fly, dodge pipes. One more try guaranteed.',
+        streakKey: 'flappy', glow: 'rgba(250,204,21,.22)', daily: false, cls: 'flappy'
+      })}
+      ${gameCard({
+        href: '/breakout', emoji: '🎯', name: 'BREAKOUT',
+        desc: 'Bounce the ball, smash the bricks. Pure arcade joy.',
+        streakKey: 'breakout', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'breakout'
+      })}
+      ${gameCard({
+        href: '/whack', emoji: '🔨', name: 'WHACK-A-MOLE',
+        desc: '30 seconds, 9 holes. How fast can you hammer?',
+        streakKey: 'whack', glow: 'rgba(251,146,60,.22)', daily: false, cls: 'whack'
+      })}
+      ${gameCard({
+        href: '/stack', emoji: '🧊', name: 'STACK 3D',
+        desc: 'Time the drop, build the tower. How high can you get?',
+        streakKey: 'stack', glow: 'rgba(56,189,248,.22)', daily: false, cls: 'stack'
+      })}
     </section>
 
     <section class="hub-strip" data-test="streak-strip">
@@ -259,13 +311,15 @@ function renderHub() {
 
 let currentCleanup = null;
 
-function router() {
+async function router() {
   if (typeof currentCleanup === 'function') currentCleanup();
   currentCleanup = null;
   const { route } = resolveRoute();
   setMeta(route.title || ROUTES['/'].title, route.desc || ROUTES['/'].desc);
   events.pageView(location.pathname + location.hash);
-  route.render(view, cleanupFn => { currentCleanup = cleanupFn; });
+  view.innerHTML = '<div class="loading" aria-label="Loading..."><div class="spinner"></div></div>';
+  await new Promise(r => setTimeout(r, 10));
+  await route.render(view, cleanupFn => { currentCleanup = cleanupFn; });
   view.focus({ preventScroll: true });
   window.scrollTo({ top: 0 });
 }

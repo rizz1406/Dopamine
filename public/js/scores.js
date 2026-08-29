@@ -8,7 +8,8 @@ const NAME_KEY = 'dopamine:name';
 export const GAME_LABELS = {
   reel: '🎬 REEL', hl: '⚖️ Higher/Lower', word: '🔤 Word Guess',
   memory: '🧠 Memory', timeline: '⏳ Timeline', flags: '🏳️ Flag Rush', reflex: '⚡ Reflex',
-  speed: '🏎️ Speed Rush', snake: '🐍 Snake', g2048: '🔢 2048'
+  speed: '🏎️ Speed Rush', snake: '🐍 Snake', g2048: '🔢 2048',
+  tetris: '🧱 Tetris', minesweeper: '💣 Minesweeper', flappy: '🐦 Flappy', breakout: '🎯 Breakout', whack: '🔨 Whack-a-Mole', stack: '🧊 Stack 3D'
 };
 
 export function getName() {

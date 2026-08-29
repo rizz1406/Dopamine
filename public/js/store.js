@@ -6,7 +6,17 @@ function read() {
   try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
 }
 function write(db) {
-  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch {}
+  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (err) {
+    if (err.name === 'QuotaExceededError') {
+      console.warn('localStorage full. Clearing old data...');
+      try {
+        const data = JSON.parse(localStorage.getItem(KEY) || '{}');
+        // Keep only streaks and daily results
+        const trimmed = { streaks: data.streaks, daily: data.daily };
+        localStorage.setItem(KEY, JSON.stringify(trimmed));
+      } catch { /* give up */ }
+    }
+  }
 }
 
 export const store = {

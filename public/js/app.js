@@ -167,22 +167,165 @@ export const ui = {
 };
 
 function logo3d(cls, emoji){
-  if(cls==='reel') return `<div class="logo-3d reel-logo" aria-hidden="true"><div class="film-strip"></div><div class="film-reel"></div><div class="film-sprocket left"></div><div class="film-sprocket right"></div></div>`;
-  if(cls==='hl') return `<div class="logo-3d hl-logo" aria-hidden="true"><div class="scale-beam"></div><div class="scale-fulcrum"></div><div class="scale-pan left"></div><div class="scale-pan right"></div></div>`;
-  if(cls==='word') return `<div class="logo-3d word-logo" aria-hidden="true"><div class="letter-block a">W</div><div class="letter-block b">O</div><div class="letter-block c">R</div><div class="letter-block d">D</div></div>`;
-  if(cls==='memory') return `<div class="logo-3d memory-logo" aria-hidden="true"><div class="neuron core"></div><div class="neuron n1"></div><div class="neuron n2"></div><div class="neuron n3"></div><div class="neuron n4"></div></div>`;
-  if(cls==='timeline') return `<div class="logo-3d timeline-logo" aria-hidden="true"><div class="hourglass-top"></div><div class="hourglass-neck"></div><div class="hourglass-bottom"></div><div class="sand-pour"></div></div>`;
-  if(cls==='flags') return `<div class="logo-3d flags-logo" aria-hidden="true"><div class="flag-pole"></div><div class="flag-cloth"></div><div class="flag-base"></div></div>`;
-  if(cls==='speed') return `<div class="logo-3d speed-logo" aria-hidden="true"><div class="car-body"></div><div class="car-window"></div><div class="car-wheel front"></div><div class="car-wheel rear"></div><div class="speed-line s1"></div><div class="speed-line s2"></div></div>`;
-  if(cls==='snake') return `<div class="logo-3d snake-logo" aria-hidden="true"><div class="snake-seg head"></div><div class="snake-seg s1"></div><div class="snake-seg s2"></div><div class="snake-seg s3"></div><div class="snake-eyes"></div></div>`;
-  if(cls==='g2048') return `<div class="logo-3d g2048-logo" aria-hidden="true"><div class="tile t1">2</div><div class="tile t2">4</div><div class="tile t3">8</div><div class="tile t4">16</div></div>`;
-  if(cls==='reflex') return `<div class="logo-3d reflex-logo" aria-hidden="true"><div class="bolt main"></div><div class="bolt spark1"></div><div class="bolt spark2"></div><div class="bolt spark3"></div></div>`;
-  if(cls==='tetris') return `<div class="logo-3d tetris-logo" aria-hidden="true"><div class="tet-block a"></div><div class="tet-block b"></div><div class="tet-block c"></div><div class="tet-block d"></div><div class="tet-line"></div></div>`;
-  if(cls==='minesweeper') return `<div class="logo-3d minesweeper-logo" aria-hidden="true"><div class="mine-body"></div><div class="mine-spike s1"></div><div class="mine-spike s2"></div><div class="mine-spike s3"></div><div class="mine-spike s4"></div><div class="mine-fuse"></div><div class="mine-spark"></div></div>`;
-  if(cls==='flappy') return `<div class="logo-3d flappy-logo" aria-hidden="true"><div class="bird-body"><div class="wing left"></div><div class="wing right"></div><div class="beak"></div><div class="eye"></div></div></div>`;
-  if(cls==='breakout') return `<div class="logo-3d breakout-logo" aria-hidden="true"><div class="bricks"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="paddle"></div><div class="ball"></div></div>`;
-  if(cls==='whack') return `<div class="logo-3d whack-logo" aria-hidden="true"><div class="hole"></div><div class="mole"></div><div class="hammer"></div></div>`;
-  if(cls==='stack') return `<div class="logo-3d stack-logo" aria-hidden="true"><div class="stack-block sb1"></div><div class="stack-block sb2"></div><div class="stack-block sb3"></div><div class="stack-block sb4"></div><div class="stack-falling"></div></div>`;
+  const svg = (inner, cls='') => `<svg class="logo-svg ${cls}" viewBox="0 0 64 64" width="56" height="56" aria-hidden="true">${inner}</svg>`;
+  if(cls==='reel') return svg(`
+    <rect x="8" y="20" width="48" height="24" rx="3" fill="#1a1a24" stroke="#555" stroke-width="2"/>
+    <circle cx="44" cy="32" r="10" fill="#333" stroke="#666" stroke-width="2"/>
+    <circle cx="44" cy="32" r="4" fill="#555"/>
+    <path d="M44 22 L44 26 M44 38 L44 42 M34 32 L38 32 M50 32 L54 32" stroke="#666" stroke-width="1.5" stroke-linecap="round"/>
+    <rect x="12" y="24" width="5" height="4" rx="1" fill="#555"/>
+    <rect x="12" y="30" width="5" height="4" rx="1" fill="#555"/>
+    <rect x="12" y="36" width="5" height="4" rx="1" fill="#555"/>
+    <circle class="reel-dot" cx="16" cy="26" r="1" fill="#facc15"/>
+  `, 'reel-logo')`;
+  if(cls==='hl') return svg(`
+    <line x1="32" y1="28" x2="32" y2="50" stroke="#64748b" stroke-width="3" stroke-linecap="round"/>
+    <polygon points="28,50 36,50 32,54" fill="#64748b"/>
+    <g class="hl-beam">
+      <line x1="12" y1="28" x2="52" y2="28" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="12" y1="28" x2="12" y2="36" stroke="#94a3b8" stroke-width="1.5"/>
+      <path d="M6,36 Q6,42 12,42 Q18,42 18,36 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+      <line x1="52" y1="28" x2="52" y2="36" stroke="#94a3b8" stroke-width="1.5"/>
+      <path d="M46,36 Q46,42 52,42 Q58,42 58,36 Z" fill="#cbd5e1" stroke="#94a3b8" stroke-width="1"/>
+    </g>
+  `, 'hl-logo')`;
+  if(cls==='word') return svg(`
+    <rect class="w-block" x="8" y="12" width="14" height="16" rx="3" fill="#22c55e"/>
+    <text x="15" y="24" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">W</text>
+    <rect class="w-block" x="25" y="12" width="14" height="16" rx="3" fill="#f59e0b"/>
+    <text x="32" y="24" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">O</text>
+    <rect class="w-block" x="42" y="12" width="14" height="16" rx="3" fill="#ef4444"/>
+    <text x="49" y="24" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">R</text>
+    <rect class="w-block" x="17" y="34" width="14" height="16" rx="3" fill="#a855f7"/>
+    <text x="24" y="46" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">D</text>
+  `, 'word-logo')`;
+  if(cls==='memory') return svg(`
+    <line x1="32" y1="32" x2="12" y2="16" stroke="#c084fc" stroke-width="1.5" opacity=".5"/>
+    <line x1="32" y1="32" x2="52" y2="16" stroke="#c084fc" stroke-width="1.5" opacity=".5"/>
+    <line x1="32" y1="32" x2="12" y2="48" stroke="#c084fc" stroke-width="1.5" opacity=".5"/>
+    <line x1="32" y1="32" x2="52" y2="48" stroke="#c084fc" stroke-width="1.5" opacity=".5"/>
+    <circle class="mem-n" cx="32" cy="32" r="7" fill="#a855f7"/>
+    <circle class="mem-n n1" cx="12" cy="16" r="5" fill="#c084fc"/>
+    <circle class="mem-n n2" cx="52" cy="16" r="5" fill="#c084fc"/>
+    <circle class="mem-n n3" cx="12" cy="48" r="5" fill="#c084fc"/>
+    <circle class="mem-n n4" cx="52" cy="48" r="5" fill="#c084fc"/>
+  `, 'memory-logo')`;
+  if(cls==='timeline') return svg(`
+    <path d="M22,12 L42,12 L36,30 L28,30 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+    <path d="M28,34 L36,34 L42,52 L22,52 Z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+    <rect x="30" y="30" width="4" height="4" fill="#d97706"/>
+    <line class="tl-sand" x1="32" y1="30" x2="32" y2="34" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="32" cy="50" rx="6" ry="2" fill="#fbbf24" opacity=".6"/>
+  `, 'timeline-logo')`;
+  if(cls==='flags') return svg(`
+    <line x1="16" y1="10" x2="16" y2="54" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+    <ellipse cx="16" cy="54" rx="6" ry="2" fill="#64748b"/>
+    <path class="flag-wave" d="M16,10 L48,14 L48,32 L16,28 Z" fill="#3b82f6">
+      <animate attributeName="d" dur="1.5s" repeatCount="indefinite"
+        values="M16,10 L48,14 L48,32 L16,28 Z;M16,10 L46,16 L48,30 L16,28 Z;M16,10 L48,14 L48,32 L16,28 Z"/>
+    </path>
+    <circle cx="32" cy="21" r="4" fill="#fbbf24"/>
+  `, 'flags-logo')`;
+  if(cls==='speed') return svg(`
+    <path class="sp-body" d="M14,34 L18,26 L46,26 L52,34 L52,40 L14,40 Z" fill="#ef4444" stroke="#b91c1c" stroke-width="1"/>
+    <path d="M24,26 L28,18 L40,18 L44,26 Z" fill="#93c5fd" stroke="#60a5fa" stroke-width="1"/>
+    <circle class="sp-wh" cx="24" cy="42" r="5" fill="#1a1a24" stroke="#666" stroke-width="2"/>
+    <circle cx="24" cy="42" r="2" fill="#888"/>
+    <circle class="sp-wh" cx="44" cy="42" r="5" fill="#1a1a24" stroke="#666" stroke-width="2"/>
+    <circle cx="44" cy="42" r="2" fill="#888"/>
+    <line class="sp-line" x1="4" y1="30" x2="12" y2="30" stroke="#fff" stroke-width="2" opacity=".4" stroke-linecap="round"/>
+    <line class="sp-line" x1="2" y1="36" x2="10" y2="36" stroke="#fff" stroke-width="2" opacity=".3" stroke-linecap="round"/>
+  `, 'speed-logo')`;
+  if(cls==='snake') return svg(`
+    <circle class="sk-eye" cx="16" cy="22" r="2" fill="#fff"/>
+    <circle cx="16" cy="22" r="1" fill="#000"/>
+    <circle class="sk-eye" cx="22" cy="22" r="2" fill="#fff"/>
+    <circle cx="22" cy="22" r="1" fill="#000"/>
+    <rect class="sk-seg" x="10" y="28" width="10" height="10" rx="3" fill="#65a30d"/>
+    <rect class="sk-seg" x="18" y="28" width="10" height="10" rx="3" fill="#84cc16"/>
+    <rect class="sk-seg" x="26" y="28" width="10" height="10" rx="3" fill="#a3e635"/>
+    <rect class="sk-seg" x="34" y="28" width="10" height="10" rx="3" fill="#bef264"/>
+    <rect class="sk-seg" x="34" y="38" width="10" height="10" rx="3" fill="#a3e635"/>
+    <rect class="sk-seg" x="42" y="38" width="10" height="10" rx="3" fill="#84cc16"/>
+    <circle cx="50" cy="44" r="3" fill="#ef4444"/>
+  `, 'snake-logo')`;
+  if(cls==='g2048') return svg(`
+    <rect class="g-tile" x="8" y="8" width="22" height="22" rx="4" fill="#94a3b8"/>
+    <text x="19" y="24" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">2</text>
+    <rect class="g-tile" x="34" y="8" width="22" height="22" rx="4" fill="#cbd5e1"/>
+    <text x="45" y="24" font-size="14" font-weight="900" fill="#334155" text-anchor="middle" font-family="sans-serif">4</text>
+    <rect class="g-tile" x="8" y="34" width="22" height="22" rx="4" fill="#fbbf24"/>
+    <text x="19" y="50" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">8</text>
+    <rect class="g-tile" x="34" y="34" width="22" height="22" rx="4" fill="#f97316"/>
+    <text x="45" y="50" font-size="11" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">16</text>
+  `, 'g2048-logo')`;
+  if(cls==='reflex') return svg(`
+    <polygon class="rf-bolt" points="30,4 38,24 28,24 36,60 22,30 32,30 24,4" fill="#facc15" stroke="#eab308" stroke-width="1"/>
+    <circle class="rf-spark" cx="14" cy="16" r="3" fill="#fde047" opacity=".7"/>
+    <circle class="rf-spark" cx="50" cy="20" r="2.5" fill="#fde047" opacity=".6"/>
+    <circle class="rf-spark" cx="48" cy="46" r="2" fill="#fde047" opacity=".5"/>
+  `, 'reflex-logo')`;
+  if(cls==='tetris') return svg(`
+    <rect class="t-blk" x="20" y="4" width="12" height="12" rx="2" fill="#22d3ee"/>
+    <rect class="t-blk" x="32" y="4" width="12" height="12" rx="2" fill="#06b6d4"/>
+    <rect class="t-blk" x="32" y="16" width="12" height="12" rx="2" fill="#0891b2"/>
+    <rect class="t-blk" x="44" y="16" width="12" height="12" rx="2" fill="#22d3ee"/>
+    <rect x="8" y="52" width="48" height="3" rx="1.5" fill="#f59e0b"/>
+  `, 'tetris-logo')`;
+  if(cls==='minesweeper') return svg(`
+    <circle class="m-body" cx="32" cy="32" r="12" fill="#1a1a24"/>
+    <line x1="32" y1="16" x2="32" y2="12" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
+    <line x1="32" y1="48" x2="32" y2="52" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
+    <line x1="16" y1="32" x2="12" y2="32" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
+    <line x1="48" y1="32" x2="52" y2="32" stroke="#1a1a24" stroke-width="3" stroke-linecap="round"/>
+    <line x1="21" y1="21" x2="17" y2="17" stroke="#1a1a24" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="43" y1="21" x2="47" y2="17" stroke="#1a1a24" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="21" y1="43" x2="17" y2="47" stroke="#1a1a24" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="43" y1="43" x2="47" y2="47" stroke="#1a1a24" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="32" cy="26" r="2" fill="#fff"/>
+    <circle cx="28" cy="32" r="2" fill="#fff"/>
+    <circle cx="36" cy="32" r="2" fill="#fff"/>
+    <circle cx="32" cy="38" r="2" fill="#fff"/>
+    <circle class="m-spark" cx="32" cy="10" r="4" fill="#f59e0b"/>
+  `, 'minesweeper-logo')`;
+  if(cls==='flappy') return svg(`
+    <ellipse class="f-body" cx="30" cy="32" rx="16" ry="12" fill="#facc15" stroke="#eab308" stroke-width="1"/>
+    <ellipse class="f-wing" cx="22" cy="28" rx="8" ry="5" fill="#eab308" transform="rotate(-20,22,28)"/>
+    <polygon points="46,30 56,34 46,36" fill="#f97316"/>
+    <circle cx="38" cy="28" r="3.5" fill="#fff"/>
+    <circle cx="39" cy="28" r="2" fill="#1a1a24"/>
+    <path d="M26,40 Q30,44 34,40" stroke="#eab308" stroke-width="1.5" fill="none"/>
+  `, 'flappy-logo')`;
+  if(cls==='breakout') return svg(`
+    <rect x="12" y="8" width="12" height="6" rx="2" fill="#ef4444"/>
+    <rect x="26" y="8" width="12" height="6" rx="2" fill="#f97316"/>
+    <rect x="40" y="8" width="12" height="6" rx="2" fill="#facc15"/>
+    <rect x="12" y="16" width="12" height="6" rx="2" fill="#22c55e"/>
+    <rect x="26" y="16" width="12" height="6" rx="2" fill="#22d3ee"/>
+    <rect x="40" y="16" width="12" height="6" rx="2" fill="#a855f7"/>
+    <rect class="b-paddle" x="20" y="48" width="24" height="6" rx="3" fill="#a3e635"/>
+    <circle class="b-ball" cx="32" cy="38" r="5" fill="#fff" stroke="#ccc" stroke-width="1"/>
+  `, 'breakout-logo')`;
+  if(cls==='whack') return svg(`
+    <ellipse cx="32" cy="46" rx="14" ry="6" fill="#1a1a24"/>
+    <ellipse class="w-mole" cx="32" cy="40" rx="10" ry="10" fill="#a16207" stroke="#854d0e" stroke-width="1"/>
+    <circle cx="28" cy="37" r="2" fill="#fff"/>
+    <circle cx="36" cy="37" r="2" fill="#fff"/>
+    <circle cx="28" cy="37" r="1" fill="#1a1a24"/>
+    <circle cx="36" cy="37" r="1" fill="#1a1a24"/>
+    <ellipse cx="32" cy="42" rx="3" ry="2" fill="#713f12"/>
+    <g class="w-hammer">
+      <rect x="42" y="10" width="12" height="6" rx="2" fill="#78350f"/>
+      <rect x="46" y="14" width="4" height="20" rx="2" fill="#92400e"/>
+    </g>
+  `, 'whack-logo')`;
+  if(cls==='stack') return svg(`
+    <rect x="12" y="48" width="40" height="8" rx="2" fill="#38bdf8"/>
+    <rect x="14" y="38" width="36" height="8" rx="2" fill="#a855f7"/>
+    <rect x="16" y="28" width="32" height="8" rx="2" fill="#facc14"/>
+    <rect x="18" y="18" width="28" height="8" rx="2" fill="#ef4444"/>
+    <rect class="st-fall" x="10" y="6" width="28" height="8" rx="2" fill="#22c55e" opacity=".8"/>
+  `, 'stack-logo')`;
   return `<span class="card-emoji">${emoji}</span>`;
 }
 function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat }) {
@@ -196,6 +339,91 @@ function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat })
       <span class="streak-pill ${hot ? 'hot' : ''}">🔥 ${st.current} ${t('streak')}${daily ? ' · ' + t('today') + (store.hasPlayed(streakKey, dayNumber()) ? ' ✓' : '') : ''}</span>
       <span class="play-hint">${t('play')} →</span>
     </a>`;
+}
+
+function initLogoAnimations() {
+  if (typeof anime === 'undefined') return;
+  document.querySelectorAll('.game-card').forEach(card => {
+    const svg = card.querySelector('.logo-svg');
+    if (!svg) return;
+    card.addEventListener('mouseenter', () => {
+      const cls = [...svg.classList].find(c => c !== 'logo-svg');
+      animateLogo(svg, cls);
+    });
+  });
+  document.querySelectorAll('.featured-card').forEach(card => {
+    const svg = card.querySelector('.logo-svg');
+    if (!svg) return;
+    card.addEventListener('mouseenter', () => {
+      const cls = [...svg.classList].find(c => c !== 'logo-svg');
+      animateLogo(svg, cls);
+    });
+  });
+}
+
+function animateLogo(svg, cls) {
+  if (!svg || typeof anime === 'undefined') return;
+  const dur = 800;
+  const ease = 'easeInOutSine';
+  switch(cls) {
+    case 'reel-logo':
+      anime({ targets: svg.querySelector('.reel-dot'), cx: [16,40,40,16,16], cy: [26,26,38,38,26], duration: dur*1.5, easing: ease, loop: false });
+      anime({ targets: svg.querySelector('circle:nth-child(2)'), rotate: '1turn', transformOrigin: '50% 50%', duration: dur, easing: 'linear', loop: false });
+      break;
+    case 'hl-logo':
+      anime({ targets: svg.querySelector('.hl-beam'), rotate: [0,8,-8,0], duration: dur*1.5, easing: ease });
+      break;
+    case 'word-logo':
+      anime({ targets: svg.querySelectorAll('.w-block'), rotateX: [0,360,0], duration: dur, delay: anime.stagger(100), easing });
+      break;
+    case 'memory-logo':
+      anime({ targets: svg.querySelectorAll('.mem-n'), scale: [1,1.4,1], duration: dur, delay: anime.stagger(80), easing });
+      break;
+    case 'timeline-logo':
+      anime({ targets: svg.querySelector('.tl-sand'), y1: [30,34], y2: [30,34], opacity: [1,0,1], duration: dur, easing, loop: 2 });
+      break;
+    case 'flags-logo':
+      anime({ targets: svg.querySelector('.flag-wave'), skewX: [0,3,-3,0], duration: dur, easing });
+      break;
+    case 'speed-logo':
+      anime({ targets: svg.querySelectorAll('.sp-wh'), rotate: '2turn', duration: dur, easing: 'linear' });
+      anime({ targets: svg.querySelectorAll('.sp-line'), x: [-20,0], opacity: [0.4,0], duration: 400, delay: anime.stagger(100), loop: 2 });
+      anime({ targets: svg.querySelector('.sp-body'), translateY: [0,-2,0], duration: 300, easing });
+      break;
+    case 'snake-logo':
+      anime({ targets: svg.querySelectorAll('.sk-seg'), translateY: [0,-4,4,0], duration: dur, delay: anime.stagger(60), easing });
+      anime({ targets: svg.querySelectorAll('.sk-eye'), scale: [1,0.6,1], duration: 400, easing });
+      break;
+    case 'g2048-logo':
+      anime({ targets: svg.querySelectorAll('.g-tile'), scale: [1,0.7,1.1,1], duration: dur, delay: anime.stagger(100), easing });
+      break;
+    case 'reflex-logo':
+      anime({ targets: svg.querySelector('.rf-bolt'), scale: [1,1.2,1], opacity: [1,0.6,1], duration: 300, easing, loop: 2 });
+      anime({ targets: svg.querySelectorAll('.rf-spark'), scale: [0.5,1.5,0.5], opacity: [0.3,1,0.3], duration: 300, delay: anime.stagger(80), easing, loop: 2 });
+      break;
+    case 'tetris-logo':
+      anime({ targets: svg.querySelectorAll('.t-blk'), translateY: [0,36], duration: dur, delay: anime.stagger(120), easing: 'easeInQuad' });
+      break;
+    case 'minesweeper-logo':
+      anime({ targets: svg.querySelector('.m-spark'), scale: [1,1.5,1], opacity: [1,0.5,1], duration: 300, easing, loop: 2 });
+      anime({ targets: svg.querySelector('.m-body'), translateX: [0,2,-2,0], duration: 200, easing, loop: 1 });
+      break;
+    case 'flappy-logo':
+      anime({ targets: svg.querySelector('.f-wing'), rotate: [-20,20,-20], duration: 300, easing });
+      anime({ targets: svg.querySelector('.f-body'), translateY: [0,-4,0], duration: 600, easing });
+      break;
+    case 'breakout-logo':
+      anime({ targets: svg.querySelector('.b-ball'), cx: [32,20,44,32], cy: [38,24,24,38], duration: dur, easing });
+      anime({ targets: svg.querySelector('.b-paddle'), x: [20,24,16,20], duration: dur, easing });
+      break;
+    case 'whack-logo':
+      anime({ targets: svg.querySelector('.w-hammer'), rotate: [0,-45,0], transformOrigin: '100% 100%', duration: 400, easing });
+      anime({ targets: svg.querySelector('.w-mole'), translateY: [0,-8,0], duration: 500, delay: 100, easing });
+      break;
+    case 'stack-logo':
+      anime({ targets: svg.querySelector('.st-fall'), y: [6,18], duration: dur, easing: 'easeInQuad' });
+      break;
+  }
 }
 
 function renderHub() {
@@ -358,6 +586,7 @@ function renderHub() {
       sfx.click();
     });
   });
+  setTimeout(initLogoAnimations, 50);
 }
 
 let currentCleanup = null;

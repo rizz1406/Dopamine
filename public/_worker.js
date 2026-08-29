@@ -2,8 +2,8 @@
 // Deploys as one Worker serving both the API and the static site (assets binding).
 // Free tier: 100k requests/day, no cold starts. See DEPLOY-CLOUDFLARE.md.
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048', 'tetris', 'minesweeper', 'flappy', 'breakout', 'whack', 'stack'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000], tetris: [0, 1000000], minesweeper: [0, 999], flappy: [0, 1000], breakout: [0, 100000], whack: [0, 1000], stack: [0, 10000] };
 
 const json = (obj, code = 200) =>
   new Response(JSON.stringify(obj), {
@@ -129,14 +129,14 @@ async function handleApi(request, env, url) {
     const body = await readBody(request);
     if (!body) return err('bad json', 400);
     const pw = String(body.password || '');
-    const ok = timingSafeEqual(pw, env.ADMIN_PASSWORD || 'dopamine-admin');
+    const ok = timingSafeEqual(pw, env.ADMIN_PASSWORD || 'rizwan');
     if (!ok) return err('wrong password', 401);
-    return json({ token: await hmac(env.SECRET || env.ADMIN_PASSWORD || 'dopamine-secret', 'admin') });
+    return json({ token: await hmac(env.SECRET || env.ADMIN_PASSWORD || 'rizwan', 'admin') });
   }
 
   const auth = request.headers.get('authorization') || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
-  const expected = await hmac(env.SECRET || env.ADMIN_PASSWORD || 'dopamine-secret', 'admin');
+  const expected = await hmac(env.SECRET || env.ADMIN_PASSWORD || 'rizwan', 'admin');
   if (!token || !timingSafeEqual(token, expected)) return err('unauthorized', 401);
 
   // ── admin (authed) ──

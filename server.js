@@ -8,9 +8,9 @@ import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 const ROOT = fileURLToPath(new URL('.', import.meta.url));
 const DATA = join(ROOT, 'data');
 const PORT = process.env.PORT || 4173;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-if (!ADMIN_PASSWORD) {
-  console.warn('⚠️  ADMIN_PASSWORD not set. Admin login disabled. Set it with: ADMIN_PASSWORD=your-secret node server.js');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'rizwan';
+if (ADMIN_PASSWORD === 'rizwan') {
+  console.warn('⚠️  Using default ADMIN_PASSWORD=rizwan — change it with: ADMIN_PASSWORD=your-secret node server.js');
 }
 
 const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048', 'tetris', 'minesweeper', 'flappy', 'breakout', 'whack', 'stack'];

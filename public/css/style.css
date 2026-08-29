@@ -110,6 +110,18 @@ a { color: inherit; text-decoration: none; }
   canvas { max-width: 100% !important; height: auto !important; }
   .race-controls .race-btn { min-width: 48px; min-height: 48px; font-size: 1.2rem; }
 }
+.featured { margin: 16px 0 8px; }
+.featured-track { display: flex; gap: 12px; overflow-x: auto; padding: 8px 2px 12px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.featured-track::-webkit-scrollbar{ display:none; }
+.featured-card { flex: 0 0 148px; scroll-snap-align: start; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 12px; text-align: center; transition: transform .18s; }
+.featured-card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.18); }
+.featured-card span{ font-size: 1.8rem; display: block; margin-bottom: 6px; }
+.featured-card b{ display: block; font-size: .85rem; }
+.featured-card small{ color: var(--muted); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+.filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 12px; position: sticky; top: 64px; z-index: 4; background: linear-gradient(#0b0b12, rgba(11,11,18,.92)); backdrop-filter: blur(8px); scrollbar-width: none; }
+.filter-bar::-webkit-scrollbar{ display:none; }
+.filter-btn { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-weight: 600; font-size: .82rem; cursor: pointer; transition: all .18s; }
+.filter-btn.active{ background: var(--violet); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(124,58,237,.35); }
 @media (hover: none){
   .game-card::after { display: none; }
 }

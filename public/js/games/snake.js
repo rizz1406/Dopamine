@@ -37,11 +37,10 @@ export function renderSnake(view, registerCleanup) {
         <canvas id="snake-cv" data-test="canvas" width="${W}" height="${W}" style="max-width:100%;border-radius:16px;display:block;margin:0 auto"></canvas>
         <div class="race-overlay" id="snake-overlay" data-test="overlay"></div>
       </div>
-      <div class="race-controls" data-test="controls">
-        <button class="race-btn" data-test="btn-left" aria-label="Left">◀</button>
-        <button class="race-btn" data-test="btn-up" aria-label="Up">▲</button>
-        <button class="race-btn" data-test="btn-down" aria-label="Down">▼</button>
-        <button class="race-btn" data-test="btn-right" aria-label="Right">▶</button>
+      <div class="race-controls dpad" data-test="controls" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:220px;margin:14px auto 0">
+        <span></span><button class="race-btn" data-test="btn-up" aria-label="Up" style="min-height:56px;font-size:1.4rem">▲</button><span></span>
+        <button class="race-btn" data-test="btn-left" aria-label="Left" style="min-height:56px;font-size:1.4rem">◀</button><button class="race-btn" data-test="btn-down" aria-label="Down" style="min-height:56px;font-size:1.4rem">▼</button><button class="race-btn" data-test="btn-right" aria-label="Right" style="min-height:56px;font-size:1.4rem">▶</button>
+        <span></span><span style="font-size:.7rem;opacity:.6;align-self:center">Swipe on board too</span><span></span>
       </div>
     </section>`;
 
@@ -127,6 +126,16 @@ export function renderSnake(view, registerCleanup) {
     if (m) { e.preventDefault(); turn(m[0], m[1]); }
   }
   document.addEventListener('keydown', onKey);
+  // swipe on canvas
+  let ts=null;
+  cv.addEventListener('touchstart', e=>{ ts={x:e.touches[0].clientX, y:e.touches[0].clientY}; }, {passive:true});
+  cv.addEventListener('touchend', e=>{
+    if(!ts) return; const dx=e.changedTouches[0].clientX-ts.x, dy=e.changedTouches[0].clientY-ts.y;
+    if(Math.abs(dx)>Math.abs(dy)){ if(dx>22) turn(1,0); else if(dx<-22) turn(-1,0); }
+    else { if(dy>22) turn(0,1); else if(dy<-22) turn(0,-1); }
+    ts=null;
+  }, {passive:true});
+  cv.style.touchAction='none';
   registerCleanup(() => {
     document.removeEventListener('keydown', onKey);
     clearTimeout(state.timer);

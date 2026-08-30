@@ -168,322 +168,494 @@ export const ui = {
   }
 };
 
-function logo3d(cls, emoji){
-  const svg = (defs, inner, cls='') => `<svg class="logo-svg ${cls}" viewBox="0 0 64 64" aria-hidden="true"><defs>${defs}</defs>${inner}</svg>`;
-  const gid = (id,stops) => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${stops[0]}"/><stop offset="100%" stop-color="${stops[1]}"/></linearGradient>`;
-  const rg = (id,stops) => `<radialGradient id="${id}" cx="35%" cy="35%"><stop offset="0%" stop-color="${stops[0]}"/><stop offset="100%" stop-color="${stops[1]}"/></radialGradient>`;
+function logo3d(cls, emoji, size = 'normal'){
+  const isMini = size === 'mini';
+  const wrapCls = isMini ? 'logo-emblem mini' : 'logo-emblem';
 
-  if(cls==='reel') return svg(
-    rg('rm','#f472b6,#ec4899')+gid('rs1','#f472b6,#db2777')+gid('rs2','#ec4899,#be185d'),
-    `<rect x="6" y="18" width="52" height="28" rx="4" fill="url(#rs1)" stroke="#db2777" stroke-width="1.5"/>
-     <rect x="6" y="18" width="52" height="14" rx="4" fill="#f9a8d4" opacity=".35"/>
-     <circle cx="42" cy="32" r="11" fill="url(#rm)" stroke="#ec4899" stroke-width="1.5"/>
-     <circle cx="42" cy="32" r="6" fill="#be185d"/>
-     <circle cx="42" cy="32" r="2" fill="#f9a8d4"/>
-     <circle cx="42" cy="32" r="1" fill="#fce7f3"/>
-     <circle class="reel-dot" cx="18" cy="26" r="1.5" fill="#facc15"/>
-     <rect x="12" y="23" width="5" height="4" rx="1" fill="#ec4899"/>
-     <rect x="12" y="30" width="5" height="4" rx="1" fill="#ec4899"/>
-     <rect x="12" y="37" width="5" height="4" rx="1" fill="#ec4899"/>`, 'reel-logo');
+  const gLinear = (id, c1, c2, x1=0, y1=0, x2=1, y2=1) =>
+    `<linearGradient id="${id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></linearGradient>`;
+  const gRadial = (id, c1, c2, cx='35%', cy='30%', r='65%') =>
+    `<radialGradient id="${id}" cx="${cx}" cy="${cy}" r="${r}"><stop offset="0%" stop-color="${c1}"/><stop offset="100%" stop-color="${c2}"/></radialGradient>`;
 
-  if(cls==='hl') return svg(
-    gid('hs1','#22d3ee,#0891b2')+rg('hp','#67e8f9,#22d3ee'),
-    `<line x1="32" y1="28" x2="32" y2="50" stroke="url(#hs1)" stroke-width="3.5" stroke-linecap="round"/>
-     <polygon points="27,50 37,50 32,56" fill="#06b6d4"/>
-     <g class="hl-beam"><line x1="10" y1="28" x2="54" y2="28" stroke="url(#hs1)" stroke-width="3" stroke-linecap="round"/>
-     <line x1="12" y1="28" x2="12" y2="38" stroke="#22d3ee" stroke-width="1.5"/>
-     <path d="M4,38 Q4,46 12,46 Q20,46 20,38 Z" fill="url(#hp)" stroke="#22d3ee" stroke-width="1"/>
-     <line x1="52" y1="28" x2="52" y2="38" stroke="#22d3ee" stroke-width="1.5"/>
-     <path d="M44,38 Q44,46 52,46 Q60,46 60,38 Z" fill="url(#hp)" stroke="#22d3ee" stroke-width="1"/>
-     <ellipse cx="12" cy="44" rx="7" ry="2" fill="#67e8f9" opacity=".5"/>
-     <ellipse cx="52" cy="44" rx="7" ry="2" fill="#67e8f9" opacity=".5"/></g>`, 'hl-logo');
+  const svgWrap = (c1, c2, glow, defs, content) => `
+    <div class="${wrapCls} emblem-${cls}" style="--c1:${c1};--c2:${c2};--glow:${glow}">
+      <div class="emblem-backdrop"></div>
+      <svg class="emblem-svg" viewBox="0 0 64 64" width="100%" height="100%" aria-hidden="true">
+        <defs>
+          <filter id="drop-${cls}" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-color="rgba(0,0,0,0.45)" />
+          </filter>
+          ${defs}
+        </defs>
+        ${content}
+      </svg>
+    </div>`;
 
-  if(cls==='word') return svg(
-    gid('wg','#22c55e,#16a34a')+gid('wo','#f59e0b,#d97706')+gid('wr','#ef4444,#dc2626')+gid('wp','#a855f7,#9333ea'),
-    `<rect class="w-block" x="7" y="10" width="16" height="18" rx="3" fill="url(#wg)"/>
-     <rect x="7" y="10" width="16" height="9" rx="3" fill="#86efac" opacity=".4"/>
-     <text x="15" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">W</text>
-     <rect class="w-block" x="25" y="10" width="16" height="18" rx="3" fill="url(#wo)"/>
-     <rect x="25" y="10" width="16" height="9" rx="3" fill="#fcd34d" opacity=".4"/>
-     <text x="33" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">O</text>
-     <rect class="w-block" x="43" y="10" width="16" height="18" rx="3" fill="url(#wr)"/>
-     <rect x="43" y="10" width="16" height="9" rx="3" fill="#fca5a5" opacity=".4"/>
-     <text x="51" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">R</text>
-     <rect class="w-block" x="16" y="34" width="16" height="18" rx="3" fill="url(#wp)"/>
-     <rect x="16" y="34" width="16" height="9" rx="3" fill="#c4b5fd" opacity=".4"/>
-     <text x="24" y="48" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">D</text>`, 'word-logo');
+  if(cls === 'reel') {
+    return svgWrap('#ff2d75', '#8b5cf6', 'rgba(255,45,117,0.45)',
+      gLinear('r-body', '#2d3748', '#1a202c') +
+      gLinear('r-stripe', '#fef08a', '#facc15') +
+      gLinear('r-film', '#f472b6', '#db2777') +
+      gRadial('r-star', '#ffffff', '#fbbf24', '50%', '50%') +
+      gRadial('r-lens', '#fbcfe8', '#db2777'),
+      `<g filter="url(#drop-${cls})">
+        <!-- 3D Clapperboard Body -->
+        <path d="M10,24 L54,24 C56,24 57,25.5 57,27.5 L57,51 C57,53 55.5,54 53.5,54 L10.5,54 C8.5,54 7,53 7,51 L7,27.5 C7,25.5 8,24 10,24 Z" fill="url(#r-body)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <!-- Bottom Section Grid Lines -->
+        <line x1="12" y1="38" x2="52" y2="38" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+        <line x1="28" y1="38" x2="28" y2="50" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+        <!-- Star Emblem -->
+        <circle cx="20" cy="45" r="5" fill="url(#r-film)"/>
+        <polygon points="20,41 21.3,44 24.5,44.2 22,46.2 22.8,49.2 20,47.5 17.2,49.2 18,46.2 15.5,44.2 18.7,44" fill="url(#r-star)"/>
+        <!-- Angled Clapper Top Stick -->
+        <g transform="rotate(-12 10 24)">
+          <rect x="7" y="14" width="50" height="10" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+          <path d="M14,14 L20,14 L14,24 L8,24 Z" fill="url(#r-stripe)"/>
+          <path d="M26,14 L32,14 L26,24 L20,24 Z" fill="url(#r-stripe)"/>
+          <path d="M38,14 L44,14 L38,24 L32,24 Z" fill="url(#r-stripe)"/>
+          <path d="M50,14 L56,14 L50,24 L44,24 Z" fill="url(#r-stripe)"/>
+        </g>
+        <!-- Rolling 3D Film Reel on Top Right -->
+        <circle cx="44" cy="44" r="7" fill="url(#r-lens)" stroke="#f472b6" stroke-width="1.5"/>
+        <circle cx="44" cy="44" r="2.5" fill="#1e293b"/>
+        <circle cx="44" cy="39.5" r="1" fill="#fff"/>
+        <circle cx="44" cy="48.5" r="1" fill="#fff"/>
+        <circle cx="39.5" cy="44" r="1" fill="#fff"/>
+        <circle cx="48.5" cy="44" r="1" fill="#fff"/>
+      </g>`
+    );
+  }
 
-  if(cls==='memory') return svg(
-    rg('mn1','#c084fc,#a855f7')+rg('mn2','#d8b4fe,#a855f7')+gid('mc','#c084fc,#a855f7'),
-    `<line x1="32" y1="32" x2="12" y2="16" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
-     <line x1="32" y1="32" x2="52" y2="16" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
-     <line x1="32" y1="32" x2="12" y2="48" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
-     <line x1="32" y1="32" x2="52" y2="48" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
-     <circle class="mem-n" cx="32" cy="32" r="8" fill="url(#mn1)"/>
-     <circle cx="30" cy="30" r="3" fill="#e9d5ff" opacity=".6"/>
-     <circle class="mem-n n1" cx="12" cy="16" r="5.5" fill="url(#mn2)"/>
-     <circle class="mem-n n2" cx="52" cy="16" r="5.5" fill="url(#mn2)"/>
-     <circle class="mem-n n3" cx="12" cy="48" r="5.5" fill="url(#mn2)"/>
-     <circle class="mem-n n4" cx="52" cy="48" r="5.5" fill="url(#mn2)"/>
-     <circle cx="10" cy="14" r="2" fill="#e9d5ff" opacity=".6"/>
-     <circle cx="50" cy="14" r="2" fill="#e9d5ff" opacity=".6"/>`, 'memory-logo');
+  if(cls === 'hl') {
+    return svgWrap('#00f0ff', '#3b82f6', 'rgba(0,240,255,0.45)',
+      gLinear('hl-metal', '#e2e8f0', '#64748b') +
+      gLinear('hl-gold', '#fef08a', '#eab308') +
+      gLinear('hl-up', '#4ade80', '#16a34a') +
+      gLinear('hl-dn', '#f87171', '#dc2626') +
+      gRadial('hl-glow', '#67e8f9', '#0284c7'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Scale Base & Central Column -->
+        <path d="M22,54 L42,54 L38,50 L26,50 Z" fill="url(#hl-gold)"/>
+        <line x1="32" y1="18" x2="32" y2="50" stroke="url(#hl-metal)" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="32" cy="18" r="4" fill="url(#hl-gold)" stroke="#fff" stroke-width="1"/>
+        <!-- Tilting Crossbar -->
+        <g transform="rotate(-8 32 18)">
+          <rect x="8" y="16.5" width="48" height="3" rx="1.5" fill="url(#hl-metal)"/>
+          <!-- Left Plate (Higher - Green Arrow) -->
+          <line x1="12" y1="18" x2="12" y2="28" stroke="url(#hl-metal)" stroke-width="1.5"/>
+          <path d="M5,28 Q12,36 19,28 Z" fill="url(#hl-glow)" stroke="#38bdf8" stroke-width="1"/>
+          <!-- 3D Up Arrow -->
+          <polygon points="12,18 16,24 13.5,24 13.5,27 10.5,27 10.5,24 8,24" fill="url(#hl-up)" stroke="#fff" stroke-width="0.8"/>
+          <!-- Right Plate (Lower - Red Arrow) -->
+          <line x1="52" y1="18" x2="52" y2="34" stroke="url(#hl-metal)" stroke-width="1.5"/>
+          <path d="M45,34 Q52,42 59,34 Z" fill="url(#hl-glow)" stroke="#38bdf8" stroke-width="1"/>
+          <!-- 3D Down Arrow -->
+          <polygon points="52,34 48,28 50.5,28 50.5,25 53.5,25 53.5,28 56,28" fill="url(#hl-dn)" stroke="#fff" stroke-width="0.8"/>
+        </g>
+      </g>`
+    );
+  }
 
-  if(cls==='timeline') return svg(
-    gid('tg','#fbbf24,#f59e0b')+gid('tb','#f59e0b,#d97706')+rg('ts','#fef9c3,#fbbf24'),
-    `<path d="M22,10 L42,10 L35,30 L29,30 Z" fill="url(#tg)" stroke="#f59e0b" stroke-width="1"/>
-     <path d="M22,10 L42,10 L38,10 L26,10 Z" fill="#fde68a" opacity=".6"/>
-     <path d="M29,34 L35,34 L42,54 L22,54 Z" fill="url(#tb)" stroke="#d97706" stroke-width="1"/>
-     <path d="M22,54 L42,54 L38,54 L26,54 Z" fill="#fbbf24" opacity=".5"/>
-     <rect x="30" y="30" width="4" height="4" rx="1" fill="#b45309"/>
-     <line class="tl-sand" x1="32" y1="30" x2="32" y2="34" stroke="#fcd34d" stroke-width="2" stroke-linecap="round"/>
-     <ellipse cx="32" cy="52" rx="7" ry="2.5" fill="url(#ts)" opacity=".8"/>`, 'timeline-logo');
+  if(cls === 'word') {
+    return svgWrap('#10b981', '#f59e0b', 'rgba(16,185,129,0.45)',
+      gLinear('w-g-top', '#4ade80', '#22c55e') +
+      gLinear('w-g-side', '#16a34a', '#15803d') +
+      gLinear('w-y-top', '#fde047', '#eab308') +
+      gLinear('w-y-side', '#ca8a04', '#a16207') +
+      gLinear('w-r-top', '#fb7185', '#e11d48') +
+      gLinear('w-r-side', '#be123c', '#9f1239') +
+      gLinear('w-p-top', '#c084fc', '#9333ea') +
+      gLinear('w-p-side', '#7e22ce', '#6b21a8'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Cube W (Top-Left) -->
+        <g transform="translate(10, 10)">
+          <rect x="0" y="0" width="19" height="19" rx="3.5" fill="url(#w-g-top)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <path d="M0,15 L0,19 C0,21 1.5,22.5 3.5,22.5 L15.5,22.5 C17.5,22.5 19,21 19,19 L19,15 Z" fill="url(#w-g-side)"/>
+          <text x="9.5" y="14" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif">W</text>
+        </g>
+        <!-- Cube O (Top-Right) -->
+        <g transform="translate(35, 10)">
+          <rect x="0" y="0" width="19" height="19" rx="3.5" fill="url(#w-y-top)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <path d="M0,15 L0,19 C0,21 1.5,22.5 3.5,22.5 L15.5,22.5 C17.5,22.5 19,21 19,19 L19,15 Z" fill="url(#w-y-side)"/>
+          <text x="9.5" y="14" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif">O</text>
+        </g>
+        <!-- Cube R (Bottom-Left) -->
+        <g transform="translate(10, 34)">
+          <rect x="0" y="0" width="19" height="19" rx="3.5" fill="url(#w-r-top)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <path d="M0,15 L0,19 C0,21 1.5,22.5 3.5,22.5 L15.5,22.5 C17.5,22.5 19,21 19,19 L19,15 Z" fill="url(#w-r-side)"/>
+          <text x="9.5" y="14" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif">R</text>
+        </g>
+        <!-- Cube D (Bottom-Right) -->
+        <g transform="translate(35, 34)">
+          <rect x="0" y="0" width="19" height="19" rx="3.5" fill="url(#w-p-top)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <path d="M0,15 L0,19 C0,21 1.5,22.5 3.5,22.5 L15.5,22.5 C17.5,22.5 19,21 19,19 L19,15 Z" fill="url(#w-p-side)"/>
+          <text x="9.5" y="14" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif">D</text>
+        </g>
+      </g>`
+    );
+  }
 
-  if(cls==='flags') return svg(
-    gid('fp','#94a3b8,#64748b')+rg('fb','#64748b,#475569')+gid('fc1','#3b82f6,#2563eb')+gid('fc2','#60a5fa,#3b82f6'),
-    `<line x1="16" y1="8" x2="16" y2="54" stroke="url(#fp)" stroke-width="3" stroke-linecap="round"/>
-     <ellipse cx="16" cy="55" rx="7" ry="3" fill="url(#fb)"/>
-     <path class="flag-wave" d="M16,8 L50,12 L50,34 L16,30 Z" fill="url(#fc1)">
-       <animate attributeName="d" dur="1.5s" repeatCount="indefinite"
-         values="M16,8 L50,12 L50,34 L16,30 Z;M16,8 L48,14 L50,32 L16,30 Z;M16,8 L50,12 L50,34 L16,30 Z"/>
-     </path>
-     <path d="M16,8 L50,12 L50,20 L16,16 Z" fill="url(#fc2)" opacity=".4"/>
-     <circle cx="34" cy="21" r="4.5" fill="#fbbf24"/>
-     <circle cx="33" cy="20" r="1.5" fill="#fef3c7" opacity=".7"/>`, 'flags-logo');
+  if(cls === 'memory') {
+    return svgWrap('#a855f7', '#ec4899', 'rgba(168,85,247,0.45)',
+      gRadial('m-core', '#ffffff', '#a855f7') +
+      gLinear('m-pad-v', '#c084fc', '#7c3aed') +
+      gLinear('m-pad-c', '#67e8f9', '#0891b2') +
+      gLinear('m-pad-p', '#f472b6', '#db2777') +
+      gLinear('m-pad-l', '#bef264', '#65a30d'),
+      `<g filter="url(#drop-${cls})">
+        <!-- 4 Simon Quadrant Pads -->
+        <path d="M12,12 A22,22 0 0,1 30,12 L30,28 L12,28 Z" fill="url(#m-pad-v)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="4"/>
+        <path d="M34,12 A22,22 0 0,1 52,12 L52,28 L34,28 Z" fill="url(#m-pad-c)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="4"/>
+        <path d="M12,34 L30,34 L30,50 A22,22 0 0,1 12,50 Z" fill="url(#m-pad-p)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="4"/>
+        <path d="M34,34 L52,34 L52,50 A22,22 0 0,1 34,50 Z" fill="url(#m-pad-l)" stroke="rgba(255,255,255,0.3)" stroke-width="1" rx="4"/>
+        <!-- Central Glossy Sphere -->
+        <circle cx="32" cy="31" r="9" fill="#1e1b4b" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <circle cx="32" cy="31" r="5" fill="url(#m-core)"/>
+        <circle cx="30" cy="29" r="1.8" fill="#fff"/>
+      </g>`
+    );
+  }
 
-  if(cls==='speed') return svg(
-    rg('sc','#ef4444,#dc2626')+gid('sg','#60a5fa,#3b82f6')+rg('sw','#e5e7eb,#9ca3af'),
-    `<path class="sp-body" d="M12,36 L16,26 L48,26 L54,36 L54,42 L12,42 Z" fill="url(#sc)" stroke="#dc2626" stroke-width="1"/>
-     <path d="M12,36 L54,36 L48,36 L16,36 Z" fill="#fca5a5" opacity=".3"/>
-     <path d="M24,26 L28,16 L42,16 L46,26 Z" fill="url(#sg)" stroke="#3b82f6" stroke-width="1"/>
-     <path d="M24,26 L46,26 L44,26 L26,26 Z" fill="#bfdbfe" opacity=".5"/>
-     <circle class="sp-wh" cx="22" cy="44" r="5.5" fill="url(#sw)" stroke="#d1d5db" stroke-width="2"/>
-     <circle cx="22" cy="44" r="2" fill="#f3f4f6"/>
-     <circle class="sp-wh" cx="46" cy="44" r="5.5" fill="url(#sw)" stroke="#d1d5db" stroke-width="2"/>
-     <circle cx="46" cy="44" r="2" fill="#f3f4f6"/>
-     <line class="sp-line" x1="2" y1="32" x2="10" y2="32" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/>
-     <line class="sp-line" x1="0" y1="38" x2="8" y2="38" stroke="#fff" stroke-width="1.5" opacity=".35" stroke-linecap="round"/>`, 'speed-logo');
+  if(cls === 'timeline') {
+    return svgWrap('#f59e0b', '#dc2626', 'rgba(245,158,11,0.45)',
+      gLinear('t-brass', '#fef08a', '#b45309') +
+      gRadial('t-glass', 'rgba(255,255,255,0.6)', 'rgba(255,255,255,0.05)') +
+      gLinear('t-sand', '#fde047', '#f59e0b'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Brass Top/Bottom Caps -->
+        <path d="M16,10 L48,10 C50,10 50,13 48,13 L16,13 C14,13 14,10 16,10 Z" fill="url(#t-brass)" stroke="#fff" stroke-width="0.6"/>
+        <path d="M16,51 L48,51 C50,51 50,54 48,54 L16,54 C14,54 14,51 16,51 Z" fill="url(#t-brass)" stroke="#fff" stroke-width="0.6"/>
+        <!-- Brass Connecting Pillars -->
+        <line x1="18" y1="13" x2="18" y2="51" stroke="url(#t-brass)" stroke-width="2.5"/>
+        <line x1="46" y1="13" x2="46" y2="51" stroke="url(#t-brass)" stroke-width="2.5"/>
+        <!-- Glass Bulbs -->
+        <path d="M22,13 L42,13 Q42,28 34,32 Q42,36 42,51 L22,51 Q22,36 30,32 Q22,28 22,13 Z" fill="url(#t-glass)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        <!-- Top Sand Pyramid -->
+        <path d="M24,15 L40,15 L32,27 Z" fill="url(#t-sand)"/>
+        <!-- Flowing Stream -->
+        <line x1="32" y1="27" x2="32" y2="44" stroke="#fef08a" stroke-width="2" stroke-dasharray="2 1"/>
+        <!-- Bottom Sand Mound -->
+        <path d="M24,49 Q32,41 40,49 Z" fill="url(#t-sand)"/>
+      </g>`
+    );
+  }
 
-  if(cls==='snake') return svg(
-    rg('sk1','#22c55e,#16a34a')+rg('sk2','#4ade80,#22c55e')+rg('sk3','#86efac,#4ade80')+rg('sk4','#bbf7d0,#86efac'),
-    `<rect class="sk-seg" x="8" y="24" width="12" height="12" rx="4" fill="url(#sk1)"/>
-     <rect x="8" y="24" width="12" height="6" rx="4" fill="#86efac" opacity=".4"/>
-     <rect class="sk-seg" x="18" y="24" width="12" height="12" rx="4" fill="url(#sk2)"/>
-     <rect class="sk-seg" x="28" y="24" width="12" height="12" rx="4" fill="url(#sk3)"/>
-     <rect class="sk-seg" x="38" y="24" width="12" height="12" rx="4" fill="url(#sk4)"/>
-     <rect class="sk-seg" x="38" y="34" width="12" height="12" rx="4" fill="url(#sk3)"/>
-     <rect class="sk-seg" x="48" y="34" width="10" height="12" rx="4" fill="url(#sk2)"/>
-     <circle class="sk-eye" cx="14" cy="22" r="2.5" fill="#fff"/>
-     <circle cx="15" cy="22" r="1.2" fill="#000"/>
-     <circle class="sk-eye" cx="22" cy="22" r="2.5" fill="#fff"/>
-     <circle cx="23" cy="22" r="1.2" fill="#000"/>
-     <ellipse cx="52" cy="42" rx="3.5" ry="3" fill="#ef4444"/>
-     <ellipse cx="51" cy="41" rx="1" ry=".8" fill="#fca5a5" opacity=".7"/>`, 'snake-logo');
+  if(cls === 'flags') {
+    return svgWrap('#3b82f6', '#06b6d4', 'rgba(59,130,246,0.45)',
+      gLinear('f-pole', '#fef08a', '#ca8a04') +
+      gLinear('f-flag1', '#3b82f6', '#1d4ed8') +
+      gLinear('f-flag2', '#60a5fa', '#2563eb') +
+      gRadial('f-globe', '#60a5fa', '#1e3a8a'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Golden Pole & Finial -->
+        <line x1="18" y1="8" x2="18" y2="54" stroke="url(#f-pole)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="18" cy="8" r="3.5" fill="url(#f-pole)" stroke="#fff" stroke-width="0.8"/>
+        <!-- 3D Mini Globe Pedestal Base -->
+        <ellipse cx="18" cy="54" rx="8" ry="3.5" fill="#1e293b" stroke="url(#f-pole)" stroke-width="1"/>
+        <!-- Waving 3D Banner Flag -->
+        <path d="M18,12 Q34,6 48,14 Q36,22 18,18 Z" fill="url(#f-flag1)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <path d="M18,18 Q36,22 48,14 L48,34 Q34,26 18,34 Z" fill="url(#f-flag2)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+        <!-- Golden Star on Flag -->
+        <polygon points="34,22 35.5,25 38.5,25.3 36,27.3 36.8,30.3 34,28.6 31.2,30.3 32,27.3 29.5,25.3 32.5,25" fill="#facc15"/>
+      </g>`
+    );
+  }
 
-  if(cls==='g2048') return svg(
-    gid('gt1','#a78bfa,#7c3aed')+gid('gt2','#c084fc,#a855f7')+gid('gt3','#fbbf24,#f59e0b')+gid('gt4','#f97316,#ea580c'),
-    `<rect class="g-tile" x="6" y="6" width="24" height="24" rx="5" fill="url(#gt1)"/>
-     <rect x="6" y="6" width="24" height="12" rx="5" fill="#c4b5fd" opacity=".4"/>
-     <text x="18" y="23" font-size="15" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">2</text>
-     <rect class="g-tile" x="34" y="6" width="24" height="24" rx="5" fill="url(#gt2)"/>
-     <rect x="34" y="6" width="24" height="12" rx="5" fill="#e9d5ff" opacity=".4"/>
-     <text x="46" y="23" font-size="15" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">4</text>
-     <rect class="g-tile" x="6" y="34" width="24" height="24" rx="5" fill="url(#gt3)"/>
-     <rect x="6" y="34" width="24" height="12" rx="5" fill="#fde68a" opacity=".4"/>
-     <text x="18" y="51" font-size="15" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">8</text>
-     <rect class="g-tile" x="34" y="34" width="24" height="24" rx="5" fill="url(#gt4)"/>
-     <rect x="34" y="34" width="24" height="12" rx="5" fill="#fdba74" opacity=".4"/>
-     <text x="46" y="51" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">16</text>`, 'g2048-logo');
+  if(cls === 'speed') {
+    return svgWrap('#ef4444', '#f97316', 'rgba(239,68,68,0.45)',
+      gLinear('sp-car', '#ff334b', '#991b1b') +
+      gLinear('sp-glass', '#38bdf8', '#0284c7') +
+      gRadial('sp-wheel', '#475569', '#0f172a') +
+      gLinear('sp-flame', '#fde047', '#ef4444'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Nitro Flames Behind -->
+        <path d="M4,34 Q10,32 14,35 Q10,38 4,37 Z" fill="url(#sp-flame)"/>
+        <path d="M6,38 Q11,37 14,39 Q11,41 6,40 Z" fill="url(#sp-flame)"/>
+        <!-- 3D Sleek Car Body -->
+        <path d="M12,34 L18,24 C20,20 23,19 28,19 L42,19 C47,19 50,22 52,26 L58,34 C60,37 60,42 57,43 L15,43 C12,43 10,39 12,34 Z" fill="url(#sp-car)" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+        <!-- Aerodynamic Cyan Windshield -->
+        <path d="M26,21 L40,21 L48,32 L20,32 Z" fill="url(#sp-glass)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+        <path d="M24,23 L28,23 L23,31 L20,31 Z" fill="rgba(255,255,255,0.5)"/>
+        <!-- Headlights -->
+        <polygon points="56,36 59,36 58,39 55,39" fill="#fef08a"/>
+        <!-- Alloy Wheels -->
+        <circle cx="23" cy="43" r="6" fill="url(#sp-wheel)" stroke="#94a3b8" stroke-width="1.5"/>
+        <circle cx="23" cy="43" r="2.5" fill="#f1f5f9"/>
+        <circle cx="49" cy="43" r="6" fill="url(#sp-wheel)" stroke="#94a3b8" stroke-width="1.5"/>
+        <circle cx="49" cy="43" r="2.5" fill="#f1f5f9"/>
+      </g>`
+    );
+  }
 
-  if(cls==='reflex') return svg(
-    rg('rb','#facc15,#eab308')+rg('rk','#fde047,#facc15'),
-    `<polygon class="rf-bolt" points="32,2 40,26 30,26 38,62 20,32 30,32 22,2" fill="url(#rb)" stroke="#eab308" stroke-width="1"/>
-     <polygon points="32,2 36,26 32,26 36,62 22,32 28,32 24,2" fill="#fef9c3" opacity=".35"/>
-     <circle class="rf-spark" cx="12" cy="14" r="3.5" fill="url(#rk)" opacity=".9"/>
-     <circle cx="11" cy="13" r="1.2" fill="#fefce8" opacity=".7"/>
-     <circle class="rf-spark" cx="52" cy="18" r="3" fill="url(#rk)" opacity=".8"/>
-     <circle class="rf-spark" cx="50" cy="48" r="2.5" fill="url(#rk)" opacity=".7"/>`, 'reflex-logo');
+  if(cls === 'snake') {
+    return svgWrap('#22c55e', '#84cc16', 'rgba(34,197,94,0.45)',
+      gRadial('sn-body', '#86efac', '#15803d') +
+      gRadial('sn-head', '#a7f3d0', '#16a34a') +
+      gRadial('sn-apple', '#f87171', '#b91c1c') +
+      gLinear('sn-leaf', '#bef264', '#4d7c0f'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Snake Body Spheres (S-Curve) -->
+        <circle cx="16" cy="42" r="5.5" fill="url(#sn-body)" stroke="#15803d" stroke-width="0.8"/>
+        <circle cx="23" cy="40" r="5.8" fill="url(#sn-body)" stroke="#15803d" stroke-width="0.8"/>
+        <circle cx="28" cy="33" r="6.2" fill="url(#sn-body)" stroke="#15803d" stroke-width="0.8"/>
+        <circle cx="24" cy="24" r="6.5" fill="url(#sn-body)" stroke="#15803d" stroke-width="0.8"/>
+        <!-- Head with Cute Eyes -->
+        <ellipse cx="17" cy="18" rx="8" ry="7" fill="url(#sn-head)" stroke="#15803d" stroke-width="1"/>
+        <circle cx="14" cy="15" r="3" fill="#ffffff"/>
+        <circle cx="14.5" cy="15" r="1.5" fill="#0f172a"/>
+        <circle cx="14" cy="14" r="0.6" fill="#ffffff"/>
+        <circle cx="20" cy="16" r="2.5" fill="#ffffff"/>
+        <circle cx="20.5" cy="16" r="1.2" fill="#0f172a"/>
+        <!-- Tongue -->
+        <path d="M9,20 L5,20 L3,18 M5,20 L3,22" stroke="#ef4444" stroke-width="1.2" stroke-linecap="round"/>
+        <!-- 3D Shiny Apple -->
+        <circle cx="48" cy="36" r="7.5" fill="url(#sn-apple)" stroke="#991b1b" stroke-width="1"/>
+        <circle cx="45.5" cy="33.5" r="2" fill="#fca5a5" opacity="0.8"/>
+        <path d="M48,29 Q52,24 54,26 Q50,29 48,29 Z" fill="url(#sn-leaf)"/>
+      </g>`
+    );
+  }
 
-  if(cls==='tetris') return svg(
-    gid('tb1','#22d3ee,#06b6d4')+gid('tb2','#67e8f9,#22d3ee')+rg('tb3','#0891b2,#155e75'),
-    `<rect class="t-blk" x="18" y="2" width="14" height="14" rx="2" fill="url(#tb1)"/>
-     <rect x="18" y="2" width="14" height="7" rx="2" fill="#a5f3fc" opacity=".45"/>
-     <rect class="t-blk" x="32" y="2" width="14" height="14" rx="2" fill="url(#tb2)"/>
-     <rect x="32" y="2" width="14" height="7" rx="2" fill="#cffafe" opacity=".4"/>
-     <rect class="t-blk" x="32" y="16" width="14" height="14" rx="2" fill="url(#tb3)"/>
-     <rect x="32" y="16" width="14" height="7" rx="2" fill="#67e8f9" opacity=".35"/>
-     <rect class="t-blk" x="46" y="16" width="14" height="14" rx="2" fill="url(#tb1)"/>
-     <rect x="46" y="16" width="14" height="7" rx="2" fill="#a5f3fc" opacity=".4"/>
-     <rect x="6" y="50" width="52" height="4" rx="2" fill="#f59e0b"/>
-     <rect x="6" y="50" width="52" height="2" rx="2" fill="#fbbf24" opacity=".5"/>`, 'tetris-logo');
+  if(cls === 'g2048') {
+    return svgWrap('#f59e0b', '#9333ea', 'rgba(245,158,11,0.45)',
+      gLinear('g-gold-top', '#fef08a', '#eab308') +
+      gLinear('g-gold-side', '#ca8a04', '#78350f') +
+      gLinear('g-purp-top', '#c084fc', '#9333ea') +
+      gLinear('g-purp-side', '#6b21a8', '#3b0764') +
+      gRadial('g-crown', '#fff', '#eab308'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Smaller Back Tile (8) -->
+        <g transform="translate(32, 10)">
+          <rect x="0" y="0" width="22" height="22" rx="4" fill="url(#g-purp-top)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+          <path d="M0,17 L0,22 C0,24 1.5,25.5 3.5,25.5 L18.5,25.5 C20.5,25.5 22,24 22,22 L22,17 Z" fill="url(#g-purp-side)"/>
+          <text x="11" y="16" font-size="13" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">8</text>
+        </g>
+        <!-- Big Master Tile (2048) -->
+        <g transform="translate(10, 24)">
+          <rect x="0" y="0" width="44" height="26" rx="5" fill="url(#g-gold-top)" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+          <path d="M0,20 L0,26 C0,29 2,30.5 5,30.5 L39,30.5 C42,30.5 44,29 44,26 L44,20 Z" fill="url(#g-gold-side)"/>
+          <text x="22" y="18" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle" font-family="sans-serif" letter-spacing="-0.5">2048</text>
+        </g>
+        <!-- Golden Crown on Top -->
+        <polygon points="22,18 25,23 32,15 39,23 42,18 40,26 24,26" fill="url(#g-crown)" stroke="#b45309" stroke-width="0.8"/>
+      </g>`
+    );
+  }
 
-  if(cls==='minesweeper') return svg(
-    rg('mb','#6b7280,#374151')+rg('mf','#fbbf24,#f59e0b'),
-    `<circle class="m-body" cx="32" cy="32" r="13" fill="url(#mb)"/>
-     <circle cx="28" cy="28" r="4" fill="#9ca3af" opacity=".4"/>
-     <line x1="32" y1="15" x2="32" y2="10" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="32" y1="49" x2="32" y2="54" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="15" y1="32" x2="10" y2="32" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="49" y1="32" x2="54" y2="32" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="20" y1="20" x2="16" y2="16" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
-     <line x1="44" y1="20" x2="48" y2="16" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
-     <line x1="20" y1="44" x2="16" y2="48" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
-     <line x1="44" y1="44" x2="48" y2="48" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
-     <circle cx="32" cy="26" r="2.5" fill="#e5e7eb"/>
-     <circle cx="27" cy="32" r="2.5" fill="#e5e7eb"/>
-     <circle cx="37" cy="32" r="2.5" fill="#e5e7eb"/>
-     <circle cx="32" cy="38" r="2.5" fill="#e5e7eb"/>
-     <circle class="m-spark" cx="32" cy="8" r="5" fill="url(#mf)"/>
-     <circle cx="31" cy="6" r="2" fill="#fef9c3" opacity=".8"/>`, 'minesweeper-logo');
+  if(cls === 'reflex') {
+    return svgWrap('#eab308', '#f97316', 'rgba(234,179,8,0.45)',
+      gLinear('rf-bolt-l', '#ffffff', '#fde047') +
+      gLinear('rf-bolt-r', '#eab308', '#c2410c') +
+      gRadial('rf-aura', 'rgba(254,240,138,0.6)', 'transparent'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Energy Aura -->
+        <circle cx="32" cy="32" r="22" fill="url(#rf-aura)"/>
+        <!-- 3D Beveled Lightning Bolt -->
+        <polygon points="34,6 18,34 31,34 26,58 48,26 35,26" fill="url(#rf-bolt-r)" stroke="#9a3412" stroke-width="1"/>
+        <polygon points="34,6 26,34 33,34 26,58 35,26 31,26" fill="url(#rf-bolt-l)"/>
+        <!-- Electric Spark Diamonds -->
+        <polygon points="12,18 14,21 12,24 10,21" fill="#fef08a"/>
+        <polygon points="50,44 52,47 50,50 48,47" fill="#fef08a"/>
+        <polygon points="48,14 51,17 48,20 45,17" fill="#38bdf8"/>
+      </g>`
+    );
+  }
 
-  if(cls==='flappy') return svg(
-    rg('fb','#facc15,#eab308')+rg('fw','#fde047,#f59e0b'),
-    `<ellipse class="f-body" cx="30" cy="34" rx="18" ry="14" fill="url(#fb)" stroke="#eab308" stroke-width="1"/>
-     <ellipse cx="26" cy="28" rx="10" ry="7" fill="#fef9c3" opacity=".4"/>
-     <ellipse class="f-wing" cx="20" cy="30" rx="10" ry="6" fill="url(#fw)" transform="rotate(-20,20,30)"/>
-     <polygon points="48,30 60,35 48,38" fill="#ea580c"/>
-     <polygon points="48,30 56,35 48,32" fill="#fb923c" opacity=".5"/>
-     <circle cx="40" cy="28" r="4.5" fill="#fff"/>
-     <circle cx="41.5" cy="27.5" r="2.5" fill="#1a1a24"/>
-     <circle cx="42.5" cy="26.5" r="1" fill="#fff"/>
-     <path d="M24,42 Q30,47 36,42" stroke="#ca8a04" stroke-width="1.5" fill="none"/>`, 'flappy-logo');
+  if(cls === 'tetris') {
+    return svgWrap('#06b6d4', '#8b5cf6', 'rgba(6,182,212,0.45)',
+      gLinear('t-cyan-top', '#67e8f9', '#06b6d4') +
+      gLinear('t-cyan-side', '#0891b2', '#164e63') +
+      gLinear('t-mag-top', '#f472b6', '#c026d3') +
+      gLinear('t-mag-side', '#9333ea', '#581c87') +
+      gLinear('t-amb-top', '#fde047', '#f59e0b') +
+      gLinear('t-amb-side', '#d97706', '#78350f'),
+      `<g filter="url(#drop-${cls})">
+        <!-- T-Block (Cyan) -->
+        <g transform="translate(14, 12)">
+          <rect x="0" y="0" width="12" height="12" rx="2" fill="url(#t-cyan-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+          <rect x="12" y="0" width="12" height="12" rx="2" fill="url(#t-cyan-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+          <rect x="24" y="0" width="12" height="12" rx="2" fill="url(#t-cyan-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+          <rect x="12" y="12" width="12" height="12" rx="2" fill="url(#t-cyan-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+        </g>
+        <!-- L-Block (Magenta) -->
+        <g transform="translate(26, 26)">
+          <rect x="0" y="0" width="12" height="12" rx="2" fill="url(#t-mag-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+          <rect x="0" y="12" width="12" height="12" rx="2" fill="url(#t-mag-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+          <rect x="12" y="12" width="12" height="12" rx="2" fill="url(#t-mag-top)" stroke="rgba(255,255,255,0.4)" stroke-width="0.8"/>
+        </g>
+        <!-- Grid Laser Platform -->
+        <rect x="8" y="52" width="48" height="3" rx="1.5" fill="#facc15"/>
+      </g>`
+    );
+  }
 
-  if(cls==='breakout') return svg(
-    gid('br','#ef4444,#dc2626')+gid('bo','#f97316,#ea580c')+gid('by','#fbbf24,#f59e0b')+gid('bg','#22c55e,#16a34a')+gid('bc','#22d3ee,#06b6d4')+gid('bp','#a855f7,#9333ea')+rg('bb','#e5e7eb,#d1d5db'),
-    `<rect x="8" y="4" width="15" height="8" rx="2" fill="url(#br)"/>
-     <rect x="8" y="4" width="15" height="4" rx="2" fill="#fca5a5" opacity=".5"/>
-     <rect x="25" y="4" width="15" height="8" rx="2" fill="url(#bo)"/>
-     <rect x="25" y="4" width="15" height="4" rx="2" fill="#fdba74" opacity=".45"/>
-     <rect x="42" y="4" width="15" height="8" rx="2" fill="url(#by)"/>
-     <rect x="42" y="4" width="15" height="4" rx="2" fill="#fde68a" opacity=".45"/>
-     <rect x="8" y="14" width="15" height="8" rx="2" fill="url(#bg)"/>
-     <rect x="8" y="14" width="15" height="4" rx="2" fill="#86efac" opacity=".4"/>
-     <rect x="25" y="14" width="15" height="8" rx="2" fill="url(#bc)"/>
-     <rect x="25" y="14" width="15" height="4" rx="2" fill="#67e8f9" opacity=".4"/>
-     <rect x="42" y="14" width="15" height="8" rx="2" fill="url(#bp)"/>
-     <rect x="42" y="14" width="15" height="4" rx="2" fill="#c4b5fd" opacity=".4"/>
-     <rect class="b-paddle" x="18" y="50" width="28" height="7" rx="3.5" fill="#a3e635"/>
-     <rect x="18" y="50" width="28" height="3.5" rx="3.5" fill="#d9f99d" opacity=".5"/>
-     <circle class="b-ball" cx="32" cy="40" r="6" fill="url(#bb)"/>
-     <circle cx="30" cy="38" r="2" fill="#fff" opacity=".6"/>`, 'breakout-logo');
+  if(cls === 'minesweeper') {
+    return svgWrap('#64748b', '#ef4444', 'rgba(239,68,68,0.45)',
+      gRadial('mn-steel', '#cbd5e1', '#1e293b') +
+      gRadial('mn-fuse', '#fef08a', '#ea580c') +
+      gLinear('mn-spike', '#e2e8f0', '#475569'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Protruding Spikes/Horns -->
+        <line x1="32" y1="16" x2="32" y2="8" stroke="url(#mn-spike)" stroke-width="4" stroke-linecap="round"/>
+        <line x1="32" y1="48" x2="32" y2="56" stroke="url(#mn-spike)" stroke-width="4" stroke-linecap="round"/>
+        <line x1="16" y1="32" x2="8" y2="32" stroke="url(#mn-spike)" stroke-width="4" stroke-linecap="round"/>
+        <line x1="48" y1="32" x2="56" y2="32" stroke="url(#mn-spike)" stroke-width="4" stroke-linecap="round"/>
+        <line x1="20" y1="20" x2="14" y2="14" stroke="url(#mn-spike)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="44" y1="20" x2="50" y2="14" stroke="url(#mn-spike)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="20" y1="44" x2="14" y2="50" stroke="url(#mn-spike)" stroke-width="3" stroke-linecap="round"/>
+        <line x1="44" y1="44" x2="50" y2="50" stroke="url(#mn-spike)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Steel Mine Sphere -->
+        <circle cx="32" cy="32" r="16" fill="url(#mn-steel)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+        <!-- Digital Hazard Skull / Warning -->
+        <polygon points="32,23 39,35 25,35" fill="#ef4444" stroke="#fff" stroke-width="0.8"/>
+        <text x="32" y="33" font-size="9" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">!</text>
+        <!-- Sparking Fuse Top -->
+        <circle cx="32" cy="7" r="4.5" fill="url(#mn-fuse)"/>
+        <circle cx="32" cy="7" r="2" fill="#fff"/>
+      </g>`
+    );
+  }
 
-  if(cls==='whack') return svg(
-    rg('wm','#f59e0b,#d97706')+rg('wh','#78350f,#451a03')+rg('whh','#92400e,#713f12'),
-    `<ellipse cx="32" cy="48" rx="16" ry="7" fill="#1a1a24"/>
-     <ellipse cx="32" cy="48" rx="12" ry="4" fill="#374151"/>
-     <ellipse class="w-mole" cx="32" cy="40" rx="11" ry="11" fill="url(#wm)" stroke="#d97706" stroke-width="1"/>
-     <ellipse cx="28" cy="30" rx="4" ry="5" fill="#b45309" opacity=".35"/>
-     <circle cx="27" cy="36" r="3" fill="#fff"/>
-     <circle cx="37" cy="36" r="3" fill="#fff"/>
-     <circle cx="28" cy="36" r="1.5" fill="#1a1a24"/>
-     <circle cx="38" cy="36" r="1.5" fill="#1a1a24"/>
-     <ellipse cx="32" cy="42" rx="3.5" ry="2.5" fill="#713f12"/>
-     <g class="w-hammer">
-       <rect x="44" y="6" width="14" height="8" rx="3" fill="url(#wh)"/>
-       <rect x="44" y="6" width="14" height="4" rx="3" fill="#a16207" opacity=".4"/>
-       <rect x="48" y="12" width="6" height="24" rx="3" fill="url(#whh)"/>
-       <rect x="48" y="12" width="3" height="24" rx="3" fill="#b45309" opacity=".4"/>
-     </g>`, 'whack-logo');
+  if(cls === 'flappy') {
+    return svgWrap('#f59e0b', '#ec4899', 'rgba(245,158,11,0.45)',
+      gRadial('fl-body', '#fef08a', '#ea580c') +
+      gRadial('fl-belly', '#fde047', '#f43f5e') +
+      gLinear('fl-wing', '#fb7185', '#be123c') +
+      gLinear('fl-cloud', '#ffffff', '#e2e8f0'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Floating Cloud Base -->
+        <path d="M14,50 Q18,44 24,46 Q30,40 38,44 Q46,42 50,50 Z" fill="url(#fl-cloud)" opacity="0.85"/>
+        <!-- Bird Body -->
+        <ellipse cx="32" cy="30" rx="16" ry="13" fill="url(#fl-body)" stroke="#c2410c" stroke-width="1"/>
+        <ellipse cx="28" cy="34" rx="10" ry="7" fill="url(#fl-belly)" opacity="0.7"/>
+        <!-- Flapping Wing -->
+        <path d="M22,28 Q12,24 16,38 Q26,36 28,30 Z" fill="url(#fl-wing)" stroke="#9f1239" stroke-width="1"/>
+        <!-- Beak -->
+        <polygon points="46,28 56,33 46,37" fill="#ea580c" stroke="#9a3412" stroke-width="0.8"/>
+        <!-- Cute Cartoon Eye -->
+        <circle cx="40" cy="25" r="4.5" fill="#ffffff" stroke="#9a3412" stroke-width="0.8"/>
+        <circle cx="41.5" cy="24.5" r="2.2" fill="#0f172a"/>
+        <circle cx="42.5" cy="23.5" r="0.9" fill="#ffffff"/>
+      </g>`
+    );
+  }
 
-  if(cls==='stack') return svg(
-    rg('sa','#38bdf8,#0ea5e9')+rg('sb','#a855f7,#9333ea')+rg('sc2','#facc15,#eab308')+rg('sd','#ef4444,#dc2626')+rg('se','#22c55e,#16a34a'),
-    `<rect x="10" y="50" width="44" height="10" rx="3" fill="url(#sa)"/>
-     <rect x="10" y="50" width="44" height="5" rx="3" fill="#7dd3fc" opacity=".4"/>
-     <rect x="12" y="38" width="40" height="10" rx="3" fill="url(#sb)"/>
-     <rect x="12" y="38" width="40" height="5" rx="3" fill="#c4b5fd" opacity=".4"/>
-     <rect x="14" y="26" width="36" height="10" rx="3" fill="url(#sc2)"/>
-     <rect x="14" y="26" width="36" height="5" rx="3" fill="#fde68a" opacity=".4"/>
-     <rect x="16" y="14" width="32" height="10" rx="3" fill="url(#sd)"/>
-     <rect x="16" y="14" width="32" height="5" rx="3" fill="#fca5a5" opacity=".4"/>
-     <rect class="st-fall" x="8" y="2" width="32" height="10" rx="3" fill="url(#se)" opacity=".9"/>
-     <rect x="8" y="2" width="32" height="5" rx="3" fill="#86efac" opacity=".4"/>`, 'stack-logo');
+  if(cls === 'breakout') {
+    return svgWrap('#ec4899', '#06b6d4', 'rgba(236,72,153,0.45)',
+      gLinear('bk-r', '#fb7185', '#e11d48') +
+      gLinear('bk-y', '#fde047', '#d97706') +
+      gLinear('bk-g', '#4ade80', '#15803d') +
+      gLinear('bk-b', '#38bdf8', '#0284c7') +
+      gRadial('bk-ball', '#ffffff', '#38bdf8') +
+      gLinear('bk-pad', '#a3e635', '#4d7c0f'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Layer 1 Bricks -->
+        <rect x="8" y="10" width="14" height="7" rx="2" fill="url(#bk-r)" stroke="rgba(255,255,255,0.4)" stroke-width="0.6"/>
+        <rect x="25" y="10" width="14" height="7" rx="2" fill="url(#bk-y)" stroke="rgba(255,255,255,0.4)" stroke-width="0.6"/>
+        <rect x="42" y="10" width="14" height="7" rx="2" fill="url(#bk-g)" stroke="rgba(255,255,255,0.4)" stroke-width="0.6"/>
+        <!-- Layer 2 Bricks -->
+        <rect x="16" y="19" width="14" height="7" rx="2" fill="url(#bk-b)" stroke="rgba(255,255,255,0.4)" stroke-width="0.6"/>
+        <rect x="33" y="19" width="14" height="7" rx="2" fill="url(#bk-r)" stroke="rgba(255,255,255,0.4)" stroke-width="0.6"/>
+        <!-- Bouncing Energy Ball -->
+        <circle cx="28" cy="35" r="5" fill="url(#bk-ball)" stroke="#fff" stroke-width="1"/>
+        <line x1="28" y1="35" x2="22" y2="44" stroke="rgba(56,189,248,0.5)" stroke-width="2" stroke-dasharray="2 2"/>
+        <!-- Paddle at Bottom -->
+        <rect x="14" y="48" width="36" height="7" rx="3.5" fill="url(#bk-pad)" stroke="#fff" stroke-width="1"/>
+      </g>`
+    );
+  }
 
-  return `<span class="card-emoji">${emoji}</span>`;
+  if(cls === 'whack') {
+    return svgWrap('#f59e0b', '#b45309', 'rgba(245,158,11,0.45)',
+      gRadial('wh-fur', '#d97706', '#78350f') +
+      gLinear('wh-hat', '#fde047', '#ca8a04') +
+      gLinear('wh-ham', '#e2e8f0', '#475569') +
+      gLinear('wh-wood', '#92400e', '#451a03'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Hole Mound -->
+        <ellipse cx="28" cy="50" rx="18" ry="6" fill="#1e1b4b" stroke="#78350f" stroke-width="1.5"/>
+        <!-- Mole Body Peeking -->
+        <ellipse cx="28" cy="40" rx="12" ry="12" fill="url(#wh-fur)"/>
+        <!-- Eyes & Snout -->
+        <circle cx="24" cy="38" r="2.2" fill="#fff"/>
+        <circle cx="24.5" cy="38" r="1.1" fill="#000"/>
+        <circle cx="32" cy="38" r="2.2" fill="#fff"/>
+        <circle cx="32.5" cy="38" r="1.1" fill="#000"/>
+        <ellipse cx="28" cy="42" rx="3.5" ry="2.2" fill="#fb7185"/>
+        <!-- Builder's Hardhat -->
+        <path d="M18,34 Q28,24 38,34 Z" fill="url(#wh-hat)" stroke="#fff" stroke-width="0.8"/>
+        <!-- Swinging 3D Hammer Top Right -->
+        <g transform="rotate(-30 46 20)">
+          <rect x="42" y="8" width="14" height="24" rx="2" fill="url(#wh-ham)" stroke="#fff" stroke-width="0.8"/>
+          <rect x="47" y="32" width="4" height="22" rx="2" fill="url(#wh-wood)"/>
+          <polygon points="38,12 40,8 44,11" fill="#fde047"/>
+          <polygon points="56,12 59,8 57,14" fill="#fde047"/>
+        </g>
+      </g>`
+    );
+  }
+
+  if(cls === 'stack') {
+    return svgWrap('#38bdf8', '#6366f1', 'rgba(56,189,248,0.45)',
+      gLinear('st-1', '#38bdf8', '#0284c7') +
+      gLinear('st-2', '#a855f7', '#7e22ce') +
+      gLinear('st-3', '#facc15', '#ca8a04') +
+      gLinear('st-4', '#f43f5e', '#be123c') +
+      gRadial('st-star', '#fff', '#fde047'),
+      `<g filter="url(#drop-${cls})">
+        <!-- Isometric Tower Slabs -->
+        <g transform="translate(10, 44)">
+          <path d="M0,4 L22,0 L44,4 L22,8 Z" fill="#7dd3fc"/>
+          <path d="M0,4 L22,8 L22,12 L0,8 Z" fill="url(#st-1)"/>
+          <path d="M44,4 L22,8 L22,12 L44,8 Z" fill="#0369a1"/>
+        </g>
+        <g transform="translate(12, 34)">
+          <path d="M0,4 L20,0 L40,4 L20,8 Z" fill="#c084fc"/>
+          <path d="M0,4 L20,8 L20,12 L0,8 Z" fill="url(#st-2)"/>
+          <path d="M40,4 L20,8 L20,12 L40,8 Z" fill="#581c87"/>
+        </g>
+        <g transform="translate(14, 24)">
+          <path d="M0,4 L18,0 L36,4 L18,8 Z" fill="#fef08a"/>
+          <path d="M0,4 L18,8 L18,12 L0,8 Z" fill="url(#st-3)"/>
+          <path d="M36,4 L18,8 L18,12 L36,8 Z" fill="#854d0e"/>
+        </g>
+        <!-- Top Sliding Coral Slab -->
+        <g transform="translate(8, 14)">
+          <path d="M0,4 L18,0 L36,4 L18,8 Z" fill="#fda4af"/>
+          <path d="M0,4 L18,8 L18,12 L0,8 Z" fill="url(#st-4)"/>
+          <path d="M36,4 L18,8 L18,12 L36,8 Z" fill="#881337"/>
+        </g>
+        <!-- Apex Gold Star -->
+        <polygon points="32,4 34,9 39,9.5 35,13 36.5,18 32,15 27.5,18 29,13 25,9.5 30,9" fill="url(#st-star)"/>
+      </g>`
+    );
+  }
+
+  return `<div class="${wrapCls}"><span class="card-emoji">${emoji}</span></div>`;
 }
+
 function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat }) {
   const st = store.streak(streakKey);
   const hot = st.current > 0;
+  const tagLabel = daily ? 'DAILY' : (cat === '3d' ? '3D' : cat.toUpperCase());
   return `
     <a class="game-card ${cls || ''}" href="${href}" data-nav data-cat="${cat||'arcade'}" style="--glow:${glow}">
-      ${logo3d(cls, emoji)}
-      <h2>${name}</h2>
-      <p>${desc}</p>
-      <span class="streak-pill ${hot ? 'hot' : ''}">🔥 ${st.current} ${t('streak')}${daily ? ' · ' + t('today') + (store.hasPlayed(streakKey, dayNumber()) ? ' ✓' : '') : ''}</span>
-      <span class="play-hint">${t('play')} →</span>
+      <div class="card-tag-pill ${daily ? 'daily' : (cat === '3d' ? 'tag-3d' : '')}">${tagLabel}</div>
+      <div class="card-emblem-slot">
+        ${logo3d(cls, emoji)}
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">${name}</h2>
+        <p class="card-desc">${desc}</p>
+        <div class="card-action-bar">
+          <span class="streak-pill ${hot ? 'hot' : ''}">🔥 ${st.current} ${t('streak')}${daily ? ' · ' + t('today') + (store.hasPlayed(streakKey, dayNumber()) ? ' ✓' : '') : ''}</span>
+          <span class="card-play-btn">PLAY <span class="play-arrow">▶</span></span>
+        </div>
+      </div>
     </a>`;
 }
 
-function initLogoAnimations() {
-  if (typeof anime === 'undefined') return;
-  document.querySelectorAll('.logo-svg').forEach(svg => {
-    const cls = [...svg.classList].find(c => c !== 'logo-svg');
-    if (cls) animateLogo(svg, cls);
-  });
-}
-
-function animateLogo(svg, cls) {
-  if (!svg || typeof anime === 'undefined') return;
-  const dur = 800;
-  const easing = 'easeInOutSine';
-  switch(cls) {
-    case 'reel-logo':
-      anime({ targets: svg.querySelector('.reel-dot'), cx: [16,40,40,16,16], cy: [26,26,38,38,26], duration: dur*1.5, easing, loop: true });
-      anime({ targets: svg.querySelector('circle:nth-child(2)'), rotate: '1turn', transformOrigin: '50% 50%', duration: dur, easing: 'linear', loop: true });
-      break;
-    case 'hl-logo':
-      anime({ targets: svg.querySelector('.hl-beam'), rotate: [0,8,-8,0], duration: dur*1.5, easing });
-      break;
-    case 'word-logo':
-      anime({ targets: svg.querySelectorAll('.w-block'), rotateX: [0,360,0], duration: dur, delay: anime.stagger(100), easing });
-      break;
-    case 'memory-logo':
-      anime({ targets: svg.querySelectorAll('.mem-n'), scale: [1,1.4,1], duration: dur, delay: anime.stagger(80), easing });
-      break;
-    case 'timeline-logo':
-      anime({ targets: svg.querySelector('.tl-sand'), y1: [30,34], y2: [30,34], opacity: [1,0,1], duration: dur, easing, loop: true });
-      break;
-    case 'flags-logo':
-      anime({ targets: svg.querySelector('.flag-wave'), skewX: [0,3,-3,0], duration: dur, easing });
-      break;
-    case 'speed-logo':
-      anime({ targets: svg.querySelectorAll('.sp-wh'), rotate: '2turn', duration: dur, easing: 'linear' });
-      anime({ targets: svg.querySelectorAll('.sp-line'), x: [-20,0], opacity: [0.4,0], duration: 400, delay: anime.stagger(100), loop: true });
-      anime({ targets: svg.querySelector('.sp-body'), translateY: [0,-2,0], duration: 300, easing });
-      break;
-    case 'snake-logo':
-      anime({ targets: svg.querySelectorAll('.sk-seg'), translateY: [0,-4,4,0], duration: dur, delay: anime.stagger(60), easing });
-      anime({ targets: svg.querySelectorAll('.sk-eye'), scale: [1,0.6,1], duration: 400, easing });
-      break;
-    case 'g2048-logo':
-      anime({ targets: svg.querySelectorAll('.g-tile'), scale: [1,0.7,1.1,1], duration: dur, delay: anime.stagger(100), easing });
-      break;
-    case 'reflex-logo':
-      anime({ targets: svg.querySelector('.rf-bolt'), scale: [1,1.2,1], opacity: [1,0.6,1], duration: 300, easing, loop: true });
-      anime({ targets: svg.querySelectorAll('.rf-spark'), scale: [0.5,1.5,0.5], opacity: [0.3,1,0.3], duration: 300, delay: anime.stagger(80), easing, loop: true });
-      break;
-    case 'tetris-logo':
-      anime({ targets: svg.querySelectorAll('.t-blk'), translateY: [0,36], duration: dur, delay: anime.stagger(120), easing: 'easeInQuad' });
-      break;
-    case 'minesweeper-logo':
-      anime({ targets: svg.querySelector('.m-spark'), scale: [1,1.5,1], opacity: [1,0.5,1], duration: 300, easing, loop: true });
-      anime({ targets: svg.querySelector('.m-body'), translateX: [0,2,-2,0], duration: 200, easing, loop: true });
-      break;
-    case 'flappy-logo':
-      anime({ targets: svg.querySelector('.f-wing'), rotate: [-20,20,-20], duration: 300, easing });
-      anime({ targets: svg.querySelector('.f-body'), translateY: [0,-4,0], duration: 600, easing });
-      break;
-    case 'breakout-logo':
-      anime({ targets: svg.querySelector('.b-ball'), cx: [32,20,44,32], cy: [38,24,24,38], duration: dur, easing });
-      anime({ targets: svg.querySelector('.b-paddle'), x: [20,24,16,20], duration: dur, easing });
-      break;
-    case 'whack-logo':
-      anime({ targets: svg.querySelector('.w-hammer'), rotate: [0,-45,0], transformOrigin: '100% 100%', duration: 400, easing });
-      anime({ targets: svg.querySelector('.w-mole'), translateY: [0,-8,0], duration: 500, delay: 100, easing });
-      break;
-    case 'stack-logo':
-      anime({ targets: svg.querySelector('.st-fall'), y: [6,18], duration: dur, easing: 'easeInQuad' });
-      break;
-  }
-}
+// Removed old anime.js logo animations - now using pure CSS emblem animations
 
 function renderHub() {
   const day = dayNumber();
@@ -519,10 +691,10 @@ function renderHub() {
     <section class="featured" aria-label="Featured games">
       <h3 class="hub-section-title">🔥 Featured</h3>
       <div class="featured-track" data-test="featured-track">
-        <a class="featured-card" href="/reel" data-nav>${logo3d('reel','🎬')}<b>REEL</b><small>Daily</small></a>
-        <a class="featured-card" href="/stack" data-nav>${logo3d('stack','🧊')}<b>STACK 3D</b><small>3D</small></a>
-        <a class="featured-card" href="/flappy" data-nav>${logo3d('flappy','🐦')}<b>FLAPPY 3D</b><small>3D</small></a>
-        <a class="featured-card" href="/tetris" data-nav>${logo3d('tetris','🧱')}<b>TETRIS</b><small>Puzzle</small></a>
+        <a class="featured-card" href="/reel" data-nav>${logo3d('reel','🎬','mini')}<b>REEL</b><small>Daily</small></a>
+        <a class="featured-card" href="/stack" data-nav>${logo3d('stack','🧊','mini')}<b>STACK 3D</b><small>3D</small></a>
+        <a class="featured-card" href="/flappy" data-nav>${logo3d('flappy','🐦','mini')}<b>FLAPPY 3D</b><small>3D</small></a>
+        <a class="featured-card" href="/tetris" data-nav>${logo3d('tetris','🧱','mini')}<b>TETRIS</b><small>Puzzle</small></a>
       </div>
     </section>
 
@@ -645,8 +817,6 @@ function renderHub() {
       sfx.click();
     });
   });
-
-  setTimeout(initLogoAnimations, 50);
 }
 
 let currentCleanup = null;

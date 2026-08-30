@@ -144,162 +144,127 @@ a { color: inherit; text-decoration: none; }
 .featured { margin: 16px 0 8px; }
 .featured-track { display: flex; gap: 12px; overflow-x: auto; padding: 8px 2px 12px; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; overscroll-behavior-x: contain; scroll-padding: 0 16px; }
 .featured-track::-webkit-scrollbar{ display:none; }
-.featured-card { flex: 0 0 148px; scroll-snap-align: start; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 12px; text-align: center; transition: transform .18s; -webkit-user-select: none; user-select: none; }
-.featured-card:hover{ transform: translateY(-3px); border-color: rgba(255,255,255,.18); }
-.featured-card span{ font-size: 1.8rem; display: block; margin-bottom: 6px; }
-.featured-card .logo-3d{ transform: scale(.75); margin-bottom: 2px; }
-.featured-card b{ display: block; font-size: .85rem; }
-.featured-card small{ color: var(--muted); font-size: .7rem; letter-spacing: .06em; text-transform: uppercase; }
+.featured-card { flex: 0 0 148px; scroll-snap-align: start; background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border: 1px solid var(--border); border-radius: 16px; padding: 16px 12px; text-align: center; transition: transform .18s, border-color .18s, box-shadow .18s; -webkit-user-select: none; user-select: none; text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; }
+.featured-card:hover{ transform: translateY(-4px); border-color: rgba(255,255,255,.2); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+.featured-card .logo-emblem.mini { margin-bottom: 8px; }
+.featured-card b{ display: block; font-size: .8rem; font-weight: 900; margin-top: 4px; }
+.featured-card small{ color: var(--muted); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
 .filter-bar { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 12px; position: sticky; top: 64px; z-index: 4; background: linear-gradient(#0b0b12, rgba(11,11,18,.92)); backdrop-filter: blur(8px); scrollbar-width: none; }
 .filter-bar::-webkit-scrollbar{ display:none; }
 .filter-btn { flex: 0 0 auto; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--muted); font-weight: 600; font-size: .82rem; cursor: pointer; transition: all .18s; }
 .filter-btn.active{ background: var(--violet); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(124,58,237,.35); }
+
+/* ── NEW GAME CARD LAYOUT ── */
+.card-tag-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 3;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.6);
+  color: var(--amber);
+  border: 1px solid rgba(251,191,36,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+.card-tag-pill.daily { background: rgba(16,185,129,0.18); color: var(--lime); border-color: rgba(163,230,53,0.4); }
+.card-tag-pill.tag-3d { background: rgba(56,189,248,0.18); color: var(--cyan); border-color: rgba(56,189,248,0.4); }
+
+.card-emblem-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 20px 18px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.15) 100%);
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 22px;
+}
+
+.card-title {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  letter-spacing: .01em;
+  margin-bottom: 6px;
+  background: linear-gradient(90deg, #fff, var(--muted));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-desc {
+  flex: 1;
+  color: var(--muted);
+  font-size: .85rem;
+  line-height: 1.55;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  transition: all .2s ease;
+}
+.streak-pill.hot {
+  background: rgba(251,191,36,0.15);
+  border-color: rgba(251,191,36,0.4);
+  color: var(--amber);
+}
+
+.card-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .7rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: linear-gradient(94deg, var(--violet), #a855f7);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.card-play-btn:hover { transform: translateX(2px); box-shadow: 0 6px 20px rgba(124,58,237,0.55); }
+.play-arrow { transition: transform .2s ease; }
+.card-play-btn:hover .play-arrow { transform: translateX(3px); }
+
+/* Remove old emoji hover animations - not needed with new emblems */
 @media (hover: none){
   .game-card::after { display: none; }
 }
-.game-card {
-  position: relative; overflow: hidden;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 26px 24px 22px;
-  cursor: pointer; text-align: left; color: var(--text); width: 100%;
-  transition: transform .22s cubic-bezier(.34,1.56,.64,1), border-color .22s, box-shadow .22s;
-  animation: rise .5s ease both;
-}
-.game-card:nth-child(2) { animation-delay: .06s; }
-.game-card:nth-child(3) { animation-delay: .12s; }
-.game-card:nth-child(4) { animation-delay: .18s; }
-.game-card:nth-child(5) { animation-delay: .24s; }
-.game-card:nth-child(6) { animation-delay: .30s; }
-.game-card:nth-child(7) { animation-delay: .36s; }
-.game-card:hover, .game-card:active, .game-card:focus-visible { transform: translateY(-6px) scale(1.02); border-color: rgba(255,255,255,.22); box-shadow: 0 18px 44px rgba(0,0,0,.45); }
-.game-card:hover .card-emoji, .game-card:active .card-emoji, .game-card:focus-visible .card-emoji { animation-play-state: running; }
-/* touch devices: also trigger per-game anims on active */
-.game-card:active.reel .card-emoji, .game-card:focus-visible.reel .card-emoji { animation: reel-clap .55s cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.tetris .card-emoji, .game-card:focus-visible.tetris .card-emoji { animation: tetris-dynamic 750ms cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.minesweeper .card-emoji, .game-card:focus-visible.minesweeper .card-emoji { animation: mine-dynamic 750ms ease; }
-.game-card:active.flappy .bird-body, .game-card:focus-visible.flappy .bird-body { animation: flappy-fly 900ms cubic-bezier(.32,.72,.32,1) forwards; }
-.game-card:active.flappy .wing.left, .game-card:focus-visible.flappy .wing.left { animation: wing-left 140ms ease-in-out infinite; }
-.game-card:active.flappy .wing.right, .game-card:focus-visible.flappy .wing.right { animation: wing-right 140ms ease-in-out infinite 70ms; }
-.game-card:active.breakout .card-emoji, .game-card:focus-visible.breakout .card-emoji { animation: breakout-dynamic 750ms cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.whack .card-emoji, .game-card:focus-visible.whack .card-emoji { animation: whack-dynamic 650ms cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.stack .card-emoji, .game-card:focus-visible.stack .card-emoji { animation: stack-dynamic 750ms cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.reel .card-emoji, .game-card:focus-visible.reel .card-emoji { animation: reel-dynamic 700ms cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.hl .card-emoji, .game-card:focus-visible.hl .card-emoji { animation: hl-dynamic 900ms ease; }
-.game-card:active.memory .card-emoji, .game-card:focus-visible.memory .card-emoji { animation: memory-dynamic 900ms ease; }
-.game-card:active.timeline .card-emoji, .game-card:focus-visible.timeline .card-emoji { animation: timeline-dynamic 900ms cubic-bezier(.68,-0.4,.27,1.4); }
-.game-card:active.flags .card-emoji, .game-card:focus-visible.flags .card-emoji { animation: flag-dynamic 800ms ease; }
-.game-card:active.word .card-emoji, .game-card:focus-visible.word .card-emoji { animation: word-dynamic 800ms ease; }
-.game-card:active.reflex .card-emoji, .game-card:focus-visible.reflex .card-emoji { animation: reflex-dynamic 700ms ease; }
-.game-card:active.speed .card-emoji, .game-card:focus-visible.speed .card-emoji { animation: speed-dynamic 650ms cubic-bezier(.34,1.56,.64,1); }
-.game-card:active.snake .card-emoji, .game-card:focus-visible.snake .card-emoji { animation: snake-dynamic 900ms ease-in-out; }
-.game-card:active.g2048 .card-emoji, .game-card:focus-visible.g2048 .card-emoji { animation: g2048-dynamic 600ms cubic-bezier(.34,1.56,.64,1); }
-.game-card::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(340px 190px at 80% -20%, var(--glow, transparent), transparent);
-  pointer-events: none;
-}
-/* shine sweep across card on hover */
-.game-card::after {
-  content: ''; position: absolute; top: 0; left: -80%; width: 55%; height: 100%;
-  background: linear-gradient(105deg, transparent, rgba(255,255,255,.09), transparent);
-  transform: skewX(-18deg); transition: none; pointer-events: none;
-}
-.game-card:hover::after { animation: shine-sweep .8s ease .05s; }
-@keyframes shine-sweep { to { left: 130%; } }
-.card-emoji {
-  display: inline-block; font-size: 2.6rem; margin-bottom: 14px;
-  filter: drop-shadow(0 6px 16px rgba(0,0,0,.4));
-  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
-}
-.game-card h2 { font-family: var(--display); font-size: 1.3rem; letter-spacing: .02em; margin-bottom: 6px; }
-.game-card p { color: var(--muted); font-size: .9rem; line-height: 1.5; min-height: 2.7em; }
-.streak-pill {
-  display: inline-flex; align-items: center; gap: 6px; margin-top: 16px;
-  font-size: .76rem; font-weight: 700; letter-spacing: .05em;
-  padding: 6px 12px; border-radius: 999px;
-  background: var(--surface-2); border: 1px solid var(--border);
-}
-.streak-pill.hot { background: rgba(251, 191, 36, .12); border-color: rgba(251,191,36,.35); color: var(--amber); }
-.play-hint { float: right; color: var(--muted); font-size: .85rem; transition: transform .2s; }
-.game-card:hover .play-hint { transform: translateX(4px); color: var(--text); }
-
-/* ── per-game DYNAMIC hover animations ── */
-.game-card { overflow: visible; }
-.game-card .card-emoji { animation-play-state: paused; display: inline-block; position: relative; will-change: transform; }
-.game-card:hover { overflow: visible; z-index: 2; }
-
-/* REEL: clapper snaps + film fly-out */
-.game-card.reel:hover .card-emoji { animation: reel-dynamic 700ms cubic-bezier(.34,1.56,.64,1); }
-.game-card.reel:hover .card-emoji::after { content: '🎞️'; position: absolute; left: 50%; top: 50%; font-size: 1rem; opacity: 0; animation: film-fly 700ms ease 120ms; }
-@keyframes reel-dynamic { 0%{transform:rotate(0) scale(1)} 18%{transform:rotate(-26deg) translateY(-6px) scale(1.05)} 38%{transform:rotate(12deg) translateY(2px)} 60%{transform:rotate(-6deg) scale(1.02)} 100%{transform:rotate(0) scale(1)} }
-@keyframes film-fly { 0%{opacity:0; transform:translate(-50%,-50%) scale(.5) rotate(0)} 30%{opacity:1} 100%{opacity:0; transform:translate(60px,-40px) scale(1.2) rotate(28deg)} }
-
-/* HIGHER OR LOWER: scales tip + arrow burst */
-.game-card.hl:hover .card-emoji { animation: hl-dynamic 900ms ease; }
-.game-card.hl:hover .card-emoji::before { content: '⬆️'; position: absolute; right: -14px; top: -8px; font-size: .9rem; opacity: 0; animation: hl-arrow 900ms ease 200ms; }
-.game-card.hl:hover .card-emoji::after { content: '⬇️'; position: absolute; right: -14px; bottom: -8px; font-size: .9rem; opacity: 0; animation: hl-arrow 900ms ease 360ms; }
-@keyframes hl-dynamic { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-14deg) translateY(2px) scale(1.06)} 50%{transform:rotate(14deg) translateY(-2px)} 75%{transform:rotate(-6deg)} }
-@keyframes hl-arrow { 0%{opacity:0; transform:translateY(8px) scale(.6)} 30%{opacity:1; transform:translateY(0) scale(1.1)} 100%{opacity:0; transform:translateY(-12px) scale(.8)} }
-
-/* MEMORY: brain explodes sparkles */
-.game-card.memory:hover .card-emoji { animation: memory-dynamic 900ms ease; position: relative; }
-.game-card.memory:hover .card-emoji::before, .game-card.memory:hover .card-emoji::after { content: '✦'; position: absolute; font-size: 1.05rem; color: var(--amber); opacity: 0; }
-.game-card.memory:hover .card-emoji::before { top: -8px; right: -14px; animation: mem-spark 900ms ease 100ms; }
-.game-card.memory:hover .card-emoji::after { bottom: -6px; left: -14px; color: var(--cyan); font-size: .85rem; animation: mem-spark 900ms ease 280ms; }
-@keyframes memory-dynamic { 0%{transform:scale(1)} 30%{transform:scale(1.18) rotate(-3deg); filter:drop-shadow(0 0 16px rgba(251,191,36,.7))} 60%{transform:scale(.96) rotate(2deg)} 100%{transform:scale(1)} }
-@keyframes mem-spark { 0%{opacity:0; transform:translate(0,0) scale(0) rotate(0)} 40%{opacity:1; transform:translate(10px,-14px) scale(1.3) rotate(30deg)} 100%{opacity:0; transform:translate(18px,-26px) scale(0) rotate(60deg)} }
-
-/* TIMELINE: hourglass sand pour + years slide */
-.game-card.timeline:hover .card-emoji { animation: timeline-dynamic 900ms cubic-bezier(.68,-0.4,.27,1.4); }
-@keyframes timeline-dynamic { 0%{transform:rotateY(0) rotate(0)} 45%{transform:rotateY(90deg) rotate(180deg) scale(.82)} 100%{transform:rotateY(180deg) rotate(360deg) scale(1)} }
-
-/* FLAG RUSH: flag waves + mini flags burst */
-.game-card.flags:hover .card-emoji { animation: flag-dynamic 800ms ease; transform-origin: 0 50%; }
-.game-card.flags:hover .card-emoji::after { content: '🎌✦'; position: absolute; left: 50%; top: -10px; font-size: .7rem; opacity: 0; animation: flag-confetti 800ms ease 220ms; }
-@keyframes flag-dynamic { 0%,100%{transform:skew(0,0)} 25%{transform:skewY(7deg) skewX(-5deg) scale(1.06)} 50%{transform:skewY(-6deg) skewX(5deg)} 75%{transform:skewY(3deg)} }
-@keyframes flag-confetti { 0%{opacity:0; transform:translate(-50%,0) scale(.5)} 40%{opacity:1} 100%{opacity:0; transform:translate(-50%,-28px) scale(1.2)} }
-
-/* WORD: tiles flip and scatter */
-.game-card.word:hover .card-emoji { animation: word-dynamic 800ms ease; }
-@keyframes word-dynamic { 0%,100%{transform:rotateX(0)} 28%{transform:rotateX(70deg) translateY(-6px) scale(1.06)} 52%{transform:rotateX(-12deg) translateY(2px)} 78%{transform:rotateX(6deg)} }
-
-/* REFLEX: lightning zigzag strike */
-.game-card.reflex:hover .card-emoji { animation: reflex-dynamic 700ms ease; position: relative; }
-.game-card.reflex:hover .card-emoji::after { content: '⚡'; position: absolute; left: 50%; top: 50%; font-size: 1.4rem; opacity: 0; filter: blur(0); animation: reflex-bolt 700ms ease 80ms; }
-@keyframes reflex-dynamic { 0%,100%{transform:scale(1); filter:brightness(1)} 12%{transform:scale(1.2) translateY(-2px); filter:brightness(1.8) drop-shadow(0 0 18px rgba(163,230,53,.9))} 28%{transform:scale(.96)} 45%{transform:scale(1.12)} }
-@keyframes reflex-bolt { 0%{opacity:0; transform:translate(-50%,-50%) scale(.3) rotate(-12deg)} 20%{opacity:1; transform:translate(-50%,-50%) scale(1.3) rotate(6deg)} 100%{opacity:0; transform:translate(-50%,-50%) scale(.6) rotate(0)} }
-
-/* SPEED RUSH: car launches off with streak */
-.game-card.speed:hover .card-emoji { animation: speed-dynamic 650ms cubic-bezier(.34,1.56,.64,1); position: relative; }
-.game-card.speed:hover .card-emoji::after { content: '💨🔥'; position: absolute; left: -28px; top: 50%; font-size: .95rem; opacity: 0; animation: speed-streak 650ms ease 120ms; }
-@keyframes speed-dynamic { 0%{transform:translateX(0) skewX(0)} 38%{transform:translateX(22px) skewX(-12deg) scale(1.06)} 62%{transform:translateX(-6px) skewX(4deg)} 100%{transform:translateX(0)} }
-@keyframes speed-streak { 0%{opacity:0; transform:translateY(-50%) translateX(12px)} 35%{opacity:1} 100%{opacity:0; transform:translateY(-50%) translateX(-18px)} }
-
-/* SNAKE: slithers out, eats apple */
-.game-card.snake:hover .card-emoji { animation: snake-dynamic 900ms ease-in-out; position: relative; }
-.game-card.snake:hover .card-emoji::after { content: '🍎'; position: absolute; right: -16px; top: 50%; font-size: 1rem; opacity: 0; animation: snake-apple 900ms ease 260ms; }
-@keyframes snake-dynamic { 0%,100%{transform:rotate(0) translate(0,0)} 25%{transform:rotate(-10deg) translate(-6px,-5px) scale(1.05)} 50%{transform:rotate(7deg) translate(8px,2px)} 75%{transform:rotate(-4deg) translate(-2px,3px)} }
-@keyframes snake-apple { 0%{opacity:0; transform:translateY(-50%) scale(.5)} 40%{opacity:1; transform:translateY(-50%) scale(1.15)} 100%{opacity:0; transform:translateY(-50%) scale(.7) translateX(6px)} }
-
-/* 2048: tiles slam and explode */
-.game-card.g2048:hover .card-emoji { animation: g2048-dynamic 600ms cubic-bezier(.34,1.56,.64,1); }
-.game-card.g2048:hover .card-emoji::after { content: '💥'; position: absolute; left: 50%; top: -6px; font-size: .85rem; opacity: 0; animation: g2048-boom 600ms ease 180ms; }
-@keyframes g2048-dynamic { 0%,100%{transform:scale(1)} 35%{transform:scale(1.28) rotate(-5deg); filter:drop-shadow(0 0 16px rgba(168,85,247,.8))} 65%{transform:scale(.92) rotate(2deg)} }
-@keyframes g2048-boom { 0%{opacity:0; transform:translate(-50%,0) scale(.4)} 40%{opacity:1; transform:translate(-50%,-8px) scale(1.2)} 100%{opacity:0; transform:translate(-50%,-18px) scale(.6)} }
-
-/* TETRIS: block falls, thuds, line clears with flash */
-.game-card.tetris:hover .card-emoji { animation: tetris-dynamic 750ms cubic-bezier(.34,1.56,.64,1); position: relative; }
-.game-card.tetris:hover .card-emoji::after { content: '✦✦'; position: absolute; left: 50%; top: 50%; font-size: .65rem; letter-spacing: 6px; color: var(--cyan); opacity: 0; animation: tetris-clear 750ms ease 380ms; }
-@keyframes tetris-dynamic { 0%{transform:translateY(-30px) rotate(-8deg) scale(.8); opacity:0} 35%{transform:translateY(4px) rotate(2deg) scale(1.12)} 55%{transform:translateY(-3px) scale(.98)} 75%{transform:translateY(1px)} 100%{transform:translateY(0) scale(1)} }
-@keyframes tetris-clear { 0%{opacity:0; transform:translate(-50%,-50%) scale(.5)} 40%{opacity:1; transform:translate(-50%,-50%) scale(1.15)} 100%{opacity:0; transform:translate(-50%,-50%) scale(.7)} }
-
-/* MINESWEEPER: flag plants then bomb explodes */
-.game-card.minesweeper:hover .card-emoji { animation: mine-dynamic 750ms ease; position: relative; }
-.game-card.minesweeper:hover .card-emoji::before { content: '🚩'; position: absolute; right: -10px; top: -8px; font-size: 1rem; opacity: 0; animation: mine-flag 750ms ease 120ms; }
-.game-card.minesweeper:hover { animation: mine-cardflash 750ms ease 420ms; }
-@keyframes mine-dynamic { 0%,100%{transform:translate(0,0) scale(1)} 18%{transform:translate(-3px,2px) scale(1.06) rotate(-6deg)} 36%{transform:translate(3px,-2px) scale(1.1) rotate(6deg)} 52%{transform:translate(0,0) scale(1)} 62%{transform:scale(1.08); filter:drop-shadow(0 0 14px rgba(239,68,68,.85)) brightness(1.3)} 78%{transform:scale(.94)} }
-@keyframes mine-flag { 0%{opacity:0; transform:translateY(-10px) scale(.5) rotate(-12deg)} 40%{opacity:1; transform:translateY(0) scale(1.1) rotate(4deg)} 100%{opacity:0} }
-@keyframes mine-cardflash { 50%{box-shadow:0 0 36px rgba(239,68,68,.5); background:rgba(239,68,68,.08)} }
+/* Removed old per-game hover emoji animations - new emblem system handles animations via CSS */
 
 /* FLAPPY: bird with true 3D flapping wings + flight */
 .game-card.flappy { perspective: 600px; }
@@ -341,25 +306,65 @@ a { color: inherit; text-decoration: none; }
 @keyframes stack-spark { 0%{opacity:0; transform:translate(-50%,0) scale(.4)} 45%{opacity:1; transform:translate(-50%,-8px) scale(1.2)} 100%{opacity:0; transform:translate(-50%,-16px) scale(.6)} }
 
 /* ── SVG LOGOS — anime.js animated ── */
-.logo-svg {
-  width: clamp(80px, 14vw, 130px);
-  height: clamp(80px, 14vw, 130px);
-  margin: 0 auto 16px;
+.logo-emblem {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.4),
+    0 0 0 1px rgba(255,255,255,0.12),
+    0 8px 24px rgba(0,0,0,0.35),
+    0 0 0 1px var(--glow);
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
+}
+.logo-emblem.mini {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+}
+.emblem-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+.emblem-svg {
+  position: relative;
+  z-index: 1;
   display: block;
-  filter: drop-shadow(0 0 18px rgba(255,255,255,.12)) drop-shadow(0 4px 12px rgba(0,0,0,.35));
-  transition: filter .3s ease, transform .3s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
 }
-.game-card:hover .logo-svg {
-  filter: drop-shadow(0 0 24px rgba(255,255,255,.2)) drop-shadow(0 6px 20px rgba(0,0,0,.5));
-  transform: scale(1.08);
+.logo-emblem:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    0 0 0 1px rgba(255,255,255,0.18),
+    0 16px 40px rgba(0,0,0,0.45),
+    0 0 24px var(--glow),
+    0 0 0 1px var(--glow);
 }
-.featured-card .logo-svg {
-  width: clamp(56px, 10vw, 80px);
-  height: clamp(56px, 10vw, 80px);
-  margin-bottom: 6px;
-  filter: drop-shadow(0 0 12px rgba(255,255,255,.15));
+.logo-emblem.mini:hover {
+  transform: translateY(-2px) scale(1.03);
 }
-.card-emoji { font-size: 2.4rem; display: block; margin-bottom: 10px; }
+
+@keyframes emblemFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+.logo-emblem {
+  animation: emblemFloat 4s ease-in-out infinite;
+}
+.logo-emblem:nth-child(2n) { animation-delay: 0.5s; }
+.logo-emblem:nth-child(3n) { animation-delay: 1s; }
+.logo-emblem:nth-child(4n) { animation-delay: 1.5s; }
+.logo-emblem:nth-child(5n) { animation-delay: 2s; }
+.logo-emblem:nth-child(6n) { animation-delay: 2.5s; }
+.logo-emblem:nth-child(7n) { animation-delay: 3s; }
+.logo-emblem:nth-child(8n) { animation-delay: 3.5s; }
 
 /* ── shared game UI ── */
 .game-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; animation: rise .35s ease both; }

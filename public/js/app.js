@@ -435,14 +435,14 @@ function initLogoAnimations() {
 function animateLogo(svg, cls) {
   if (!svg || typeof anime === 'undefined') return;
   const dur = 800;
-  const ease = 'easeInOutSine';
+  const easing = 'easeInOutSine';
   switch(cls) {
     case 'reel-logo':
-      anime({ targets: svg.querySelector('.reel-dot'), cx: [16,40,40,16,16], cy: [26,26,38,38,26], duration: dur*1.5, easing: ease, loop: false });
+      anime({ targets: svg.querySelector('.reel-dot'), cx: [16,40,40,16,16], cy: [26,26,38,38,26], duration: dur*1.5, easing, loop: false });
       anime({ targets: svg.querySelector('circle:nth-child(2)'), rotate: '1turn', transformOrigin: '50% 50%', duration: dur, easing: 'linear', loop: false });
       break;
     case 'hl-logo':
-      anime({ targets: svg.querySelector('.hl-beam'), rotate: [0,8,-8,0], duration: dur*1.5, easing: ease });
+      anime({ targets: svg.querySelector('.hl-beam'), rotate: [0,8,-8,0], duration: dur*1.5, easing });
       break;
     case 'word-logo':
       anime({ targets: svg.querySelectorAll('.w-block'), rotateX: [0,360,0], duration: dur, delay: anime.stagger(100), easing });

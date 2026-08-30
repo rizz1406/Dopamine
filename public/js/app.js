@@ -414,21 +414,9 @@ function gameCard({ href, emoji, name, desc, streakKey, glow, daily, cls, cat })
 
 function initLogoAnimations() {
   if (typeof anime === 'undefined') return;
-  document.querySelectorAll('.game-card').forEach(card => {
-    const svg = card.querySelector('.logo-svg');
-    if (!svg) return;
-    card.addEventListener('mouseenter', () => {
-      const cls = [...svg.classList].find(c => c !== 'logo-svg');
-      animateLogo(svg, cls);
-    });
-  });
-  document.querySelectorAll('.featured-card').forEach(card => {
-    const svg = card.querySelector('.logo-svg');
-    if (!svg) return;
-    card.addEventListener('mouseenter', () => {
-      const cls = [...svg.classList].find(c => c !== 'logo-svg');
-      animateLogo(svg, cls);
-    });
+  document.querySelectorAll('.logo-svg').forEach(svg => {
+    const cls = [...svg.classList].find(c => c !== 'logo-svg');
+    if (cls) animateLogo(svg, cls);
   });
 }
 
@@ -438,8 +426,8 @@ function animateLogo(svg, cls) {
   const easing = 'easeInOutSine';
   switch(cls) {
     case 'reel-logo':
-      anime({ targets: svg.querySelector('.reel-dot'), cx: [16,40,40,16,16], cy: [26,26,38,38,26], duration: dur*1.5, easing, loop: false });
-      anime({ targets: svg.querySelector('circle:nth-child(2)'), rotate: '1turn', transformOrigin: '50% 50%', duration: dur, easing: 'linear', loop: false });
+      anime({ targets: svg.querySelector('.reel-dot'), cx: [16,40,40,16,16], cy: [26,26,38,38,26], duration: dur*1.5, easing, loop: true });
+      anime({ targets: svg.querySelector('circle:nth-child(2)'), rotate: '1turn', transformOrigin: '50% 50%', duration: dur, easing: 'linear', loop: true });
       break;
     case 'hl-logo':
       anime({ targets: svg.querySelector('.hl-beam'), rotate: [0,8,-8,0], duration: dur*1.5, easing });
@@ -451,14 +439,14 @@ function animateLogo(svg, cls) {
       anime({ targets: svg.querySelectorAll('.mem-n'), scale: [1,1.4,1], duration: dur, delay: anime.stagger(80), easing });
       break;
     case 'timeline-logo':
-      anime({ targets: svg.querySelector('.tl-sand'), y1: [30,34], y2: [30,34], opacity: [1,0,1], duration: dur, easing, loop: 2 });
+      anime({ targets: svg.querySelector('.tl-sand'), y1: [30,34], y2: [30,34], opacity: [1,0,1], duration: dur, easing, loop: true });
       break;
     case 'flags-logo':
       anime({ targets: svg.querySelector('.flag-wave'), skewX: [0,3,-3,0], duration: dur, easing });
       break;
     case 'speed-logo':
       anime({ targets: svg.querySelectorAll('.sp-wh'), rotate: '2turn', duration: dur, easing: 'linear' });
-      anime({ targets: svg.querySelectorAll('.sp-line'), x: [-20,0], opacity: [0.4,0], duration: 400, delay: anime.stagger(100), loop: 2 });
+      anime({ targets: svg.querySelectorAll('.sp-line'), x: [-20,0], opacity: [0.4,0], duration: 400, delay: anime.stagger(100), loop: true });
       anime({ targets: svg.querySelector('.sp-body'), translateY: [0,-2,0], duration: 300, easing });
       break;
     case 'snake-logo':
@@ -469,15 +457,15 @@ function animateLogo(svg, cls) {
       anime({ targets: svg.querySelectorAll('.g-tile'), scale: [1,0.7,1.1,1], duration: dur, delay: anime.stagger(100), easing });
       break;
     case 'reflex-logo':
-      anime({ targets: svg.querySelector('.rf-bolt'), scale: [1,1.2,1], opacity: [1,0.6,1], duration: 300, easing, loop: 2 });
-      anime({ targets: svg.querySelectorAll('.rf-spark'), scale: [0.5,1.5,0.5], opacity: [0.3,1,0.3], duration: 300, delay: anime.stagger(80), easing, loop: 2 });
+      anime({ targets: svg.querySelector('.rf-bolt'), scale: [1,1.2,1], opacity: [1,0.6,1], duration: 300, easing, loop: true });
+      anime({ targets: svg.querySelectorAll('.rf-spark'), scale: [0.5,1.5,0.5], opacity: [0.3,1,0.3], duration: 300, delay: anime.stagger(80), easing, loop: true });
       break;
     case 'tetris-logo':
       anime({ targets: svg.querySelectorAll('.t-blk'), translateY: [0,36], duration: dur, delay: anime.stagger(120), easing: 'easeInQuad' });
       break;
     case 'minesweeper-logo':
-      anime({ targets: svg.querySelector('.m-spark'), scale: [1,1.5,1], opacity: [1,0.5,1], duration: 300, easing, loop: 2 });
-      anime({ targets: svg.querySelector('.m-body'), translateX: [0,2,-2,0], duration: 200, easing, loop: 1 });
+      anime({ targets: svg.querySelector('.m-spark'), scale: [1,1.5,1], opacity: [1,0.5,1], duration: 300, easing, loop: true });
+      anime({ targets: svg.querySelector('.m-body'), translateX: [0,2,-2,0], duration: 200, easing, loop: true });
       break;
     case 'flappy-logo':
       anime({ targets: svg.querySelector('.f-wing'), rotate: [-20,20,-20], duration: 300, easing });

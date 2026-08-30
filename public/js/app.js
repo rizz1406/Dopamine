@@ -6,7 +6,7 @@ import { applyAdsConfig, initServerConfig } from './ads.js';
 import { shareTargets, brandIconSvg, BRANDS, nativeShare, hasNativeShare, shareImageCard } from './share.js';
 import { todaySummary, nextDailyHref } from './daily.js';
 import { events } from './analytics.js';
-import { t, getLang, setLang, LANGUAGES, translateAll, getAIHint, announceScore, checkUsername } from './i18n.js';
+import { t, getAIHint, announceScore, checkUsername } from './i18n.js';
 import { renderLegal, legalMeta } from './pages/legal.js';
 import { generateBackground, generateMusic, generateSoundEffect, generateRecap, analyzeSentiment, generatePixelArt, removeBackground, styleTransfer } from './hf-api.js';
 import { GAME_LABELS } from './scores.js';
@@ -174,99 +174,99 @@ function logo3d(cls, emoji){
   const rg = (id,stops) => `<radialGradient id="${id}" cx="35%" cy="35%"><stop offset="0%" stop-color="${stops[0]}"/><stop offset="100%" stop-color="${stops[1]}"/></radialGradient>`;
 
   if(cls==='reel') return svg(
-    rg('rm','#6b7280,#1f2937')+gid('rs1','#4b5563,#1f2937')+gid('rs2','#374151,#111827'),
-    `<rect x="6" y="18" width="52" height="28" rx="4" fill="url(#rs1)" stroke="#374151" stroke-width="1.5"/>
-     <rect x="6" y="18" width="52" height="14" rx="4" fill="url(#rs2)" opacity=".4"/>
-     <circle cx="42" cy="32" r="11" fill="url(#rm)" stroke="#4b5563" stroke-width="1.5"/>
-     <circle cx="42" cy="32" r="6" fill="#374151"/>
-     <circle cx="42" cy="32" r="2" fill="#6b7280"/>
-     <circle cx="42" cy="32" r="1" fill="#9ca3af"/>
+    rg('rm','#f472b6,#ec4899')+gid('rs1','#f472b6,#db2777')+gid('rs2','#ec4899,#be185d'),
+    `<rect x="6" y="18" width="52" height="28" rx="4" fill="url(#rs1)" stroke="#db2777" stroke-width="1.5"/>
+     <rect x="6" y="18" width="52" height="14" rx="4" fill="#f9a8d4" opacity=".35"/>
+     <circle cx="42" cy="32" r="11" fill="url(#rm)" stroke="#ec4899" stroke-width="1.5"/>
+     <circle cx="42" cy="32" r="6" fill="#be185d"/>
+     <circle cx="42" cy="32" r="2" fill="#f9a8d4"/>
+     <circle cx="42" cy="32" r="1" fill="#fce7f3"/>
      <circle class="reel-dot" cx="18" cy="26" r="1.5" fill="#facc15"/>
-     <rect x="12" y="23" width="5" height="4" rx="1" fill="#374151"/>
-     <rect x="12" y="30" width="5" height="4" rx="1" fill="#374151"/>
-     <rect x="12" y="37" width="5" height="4" rx="1" fill="#374151"/>`, 'reel-logo');
+     <rect x="12" y="23" width="5" height="4" rx="1" fill="#ec4899"/>
+     <rect x="12" y="30" width="5" height="4" rx="1" fill="#ec4899"/>
+     <rect x="12" y="37" width="5" height="4" rx="1" fill="#ec4899"/>`, 'reel-logo');
 
   if(cls==='hl') return svg(
-    gid('hs1','#94a3b8,#475569')+rg('hp','#cbd5e1,#64748b'),
+    gid('hs1','#22d3ee,#0891b2')+rg('hp','#67e8f9,#22d3ee'),
     `<line x1="32" y1="28" x2="32" y2="50" stroke="url(#hs1)" stroke-width="3.5" stroke-linecap="round"/>
-     <polygon points="27,50 37,50 32,56" fill="#475569"/>
+     <polygon points="27,50 37,50 32,56" fill="#06b6d4"/>
      <g class="hl-beam"><line x1="10" y1="28" x2="54" y2="28" stroke="url(#hs1)" stroke-width="3" stroke-linecap="round"/>
-     <line x1="12" y1="28" x2="12" y2="38" stroke="#64748b" stroke-width="1.5"/>
-     <path d="M4,38 Q4,46 12,46 Q20,46 20,38 Z" fill="url(#hp)" stroke="#64748b" stroke-width="1"/>
-     <line x1="52" y1="28" x2="52" y2="38" stroke="#64748b" stroke-width="1.5"/>
-     <path d="M44,38 Q44,46 52,46 Q60,46 60,38 Z" fill="url(#hp)" stroke="#64748b" stroke-width="1"/>
-     <ellipse cx="12" cy="44" rx="7" ry="2" fill="#94a3b8" opacity=".3"/>
-     <ellipse cx="52" cy="44" rx="7" ry="2" fill="#94a3b8" opacity=".3"/></g>`, 'hl-logo');
+     <line x1="12" y1="28" x2="12" y2="38" stroke="#22d3ee" stroke-width="1.5"/>
+     <path d="M4,38 Q4,46 12,46 Q20,46 20,38 Z" fill="url(#hp)" stroke="#22d3ee" stroke-width="1"/>
+     <line x1="52" y1="28" x2="52" y2="38" stroke="#22d3ee" stroke-width="1.5"/>
+     <path d="M44,38 Q44,46 52,46 Q60,46 60,38 Z" fill="url(#hp)" stroke="#22d3ee" stroke-width="1"/>
+     <ellipse cx="12" cy="44" rx="7" ry="2" fill="#67e8f9" opacity=".5"/>
+     <ellipse cx="52" cy="44" rx="7" ry="2" fill="#67e8f9" opacity=".5"/></g>`, 'hl-logo');
 
   if(cls==='word') return svg(
-    gid('wg','#16a34a,#15803d')+gid('wo','#d97706,#b45309')+gid('wr','#dc2626,#b91c1c')+gid('wp','#9333ea,#7e22ce'),
+    gid('wg','#22c55e,#16a34a')+gid('wo','#f59e0b,#d97706')+gid('wr','#ef4444,#dc2626')+gid('wp','#a855f7,#9333ea'),
     `<rect class="w-block" x="7" y="10" width="16" height="18" rx="3" fill="url(#wg)"/>
-     <rect x="7" y="10" width="16" height="9" rx="3" fill="#22c55e" opacity=".3"/>
+     <rect x="7" y="10" width="16" height="9" rx="3" fill="#86efac" opacity=".4"/>
      <text x="15" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">W</text>
      <rect class="w-block" x="25" y="10" width="16" height="18" rx="3" fill="url(#wo)"/>
-     <rect x="25" y="10" width="16" height="9" rx="3" fill="#fbbf24" opacity=".3"/>
+     <rect x="25" y="10" width="16" height="9" rx="3" fill="#fcd34d" opacity=".4"/>
      <text x="33" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">O</text>
      <rect class="w-block" x="43" y="10" width="16" height="18" rx="3" fill="url(#wr)"/>
-     <rect x="43" y="10" width="16" height="9" rx="3" fill="#ef4444" opacity=".3"/>
+     <rect x="43" y="10" width="16" height="9" rx="3" fill="#fca5a5" opacity=".4"/>
      <text x="51" y="24" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">R</text>
      <rect class="w-block" x="16" y="34" width="16" height="18" rx="3" fill="url(#wp)"/>
-     <rect x="16" y="34" width="16" height="9" rx="3" fill="#a855f7" opacity=".3"/>
+     <rect x="16" y="34" width="16" height="9" rx="3" fill="#c4b5fd" opacity=".4"/>
      <text x="24" y="48" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">D</text>`, 'word-logo');
 
   if(cls==='memory') return svg(
-    rg('mn1','#c084fc,#7c3aed')+rg('mn2','#a855f7,#7c3aed')+gid('mc','#c084fc,#7c3aed'),
-    `<line x1="32" y1="32" x2="12" y2="16" stroke="url(#mc)" stroke-width="2" opacity=".6"/>
-     <line x1="32" y1="32" x2="52" y2="16" stroke="url(#mc)" stroke-width="2" opacity=".6"/>
-     <line x1="32" y1="32" x2="12" y2="48" stroke="url(#mc)" stroke-width="2" opacity=".6"/>
-     <line x1="32" y1="32" x2="52" y2="48" stroke="url(#mc)" stroke-width="2" opacity=".6"/>
+    rg('mn1','#c084fc,#a855f7')+rg('mn2','#d8b4fe,#a855f7')+gid('mc','#c084fc,#a855f7'),
+    `<line x1="32" y1="32" x2="12" y2="16" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
+     <line x1="32" y1="32" x2="52" y2="16" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
+     <line x1="32" y1="32" x2="12" y2="48" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
+     <line x1="32" y1="32" x2="52" y2="48" stroke="url(#mc)" stroke-width="2" opacity=".7"/>
      <circle class="mem-n" cx="32" cy="32" r="8" fill="url(#mn1)"/>
-     <circle cx="30" cy="30" r="3" fill="#e9d5ff" opacity=".4"/>
+     <circle cx="30" cy="30" r="3" fill="#e9d5ff" opacity=".6"/>
      <circle class="mem-n n1" cx="12" cy="16" r="5.5" fill="url(#mn2)"/>
      <circle class="mem-n n2" cx="52" cy="16" r="5.5" fill="url(#mn2)"/>
      <circle class="mem-n n3" cx="12" cy="48" r="5.5" fill="url(#mn2)"/>
      <circle class="mem-n n4" cx="52" cy="48" r="5.5" fill="url(#mn2)"/>
-     <circle cx="10" cy="14" r="2" fill="#e9d5ff" opacity=".4"/>
-     <circle cx="50" cy="14" r="2" fill="#e9d5ff" opacity=".4"/>`, 'memory-logo');
+     <circle cx="10" cy="14" r="2" fill="#e9d5ff" opacity=".6"/>
+     <circle cx="50" cy="14" r="2" fill="#e9d5ff" opacity=".6"/>`, 'memory-logo');
 
   if(cls==='timeline') return svg(
-    gid('tg','#fbbf24,#d97706')+gid('tb','#f59e0b,#b45309')+rg('ts','#fef3c7,#f59e0b'),
-    `<path d="M22,10 L42,10 L35,30 L29,30 Z" fill="url(#tg)" stroke="#d97706" stroke-width="1"/>
-     <path d="M22,10 L42,10 L38,10 L26,10 Z" fill="#fde68a" opacity=".5"/>
-     <path d="M29,34 L35,34 L42,54 L22,54 Z" fill="url(#tb)" stroke="#b45309" stroke-width="1"/>
-     <path d="M22,54 L42,54 L38,54 L26,54 Z" fill="#d97706" opacity=".4"/>
-     <rect x="30" y="30" width="4" height="4" rx="1" fill="#92400e"/>
+    gid('tg','#fbbf24,#f59e0b')+gid('tb','#f59e0b,#d97706')+rg('ts','#fef9c3,#fbbf24'),
+    `<path d="M22,10 L42,10 L35,30 L29,30 Z" fill="url(#tg)" stroke="#f59e0b" stroke-width="1"/>
+     <path d="M22,10 L42,10 L38,10 L26,10 Z" fill="#fde68a" opacity=".6"/>
+     <path d="M29,34 L35,34 L42,54 L22,54 Z" fill="url(#tb)" stroke="#d97706" stroke-width="1"/>
+     <path d="M22,54 L42,54 L38,54 L26,54 Z" fill="#fbbf24" opacity=".5"/>
+     <rect x="30" y="30" width="4" height="4" rx="1" fill="#b45309"/>
      <line class="tl-sand" x1="32" y1="30" x2="32" y2="34" stroke="#fcd34d" stroke-width="2" stroke-linecap="round"/>
-     <ellipse cx="32" cy="52" rx="7" ry="2.5" fill="url(#ts)" opacity=".7"/>`, 'timeline-logo');
+     <ellipse cx="32" cy="52" rx="7" ry="2.5" fill="url(#ts)" opacity=".8"/>`, 'timeline-logo');
 
   if(cls==='flags') return svg(
-    gid('fp','#94a3b8,#475569')+rg('fb','#475569,#1e293b')+gid('fc1','#3b82f6,#1d4ed8')+gid('fc2','#60a5fa,#2563eb'),
+    gid('fp','#94a3b8,#64748b')+rg('fb','#64748b,#475569')+gid('fc1','#3b82f6,#2563eb')+gid('fc2','#60a5fa,#3b82f6'),
     `<line x1="16" y1="8" x2="16" y2="54" stroke="url(#fp)" stroke-width="3" stroke-linecap="round"/>
      <ellipse cx="16" cy="55" rx="7" ry="3" fill="url(#fb)"/>
      <path class="flag-wave" d="M16,8 L50,12 L50,34 L16,30 Z" fill="url(#fc1)">
        <animate attributeName="d" dur="1.5s" repeatCount="indefinite"
          values="M16,8 L50,12 L50,34 L16,30 Z;M16,8 L48,14 L50,32 L16,30 Z;M16,8 L50,12 L50,34 L16,30 Z"/>
      </path>
-     <path d="M16,8 L50,12 L50,20 L16,16 Z" fill="url(#fc2)" opacity=".3"/>
+     <path d="M16,8 L50,12 L50,20 L16,16 Z" fill="url(#fc2)" opacity=".4"/>
      <circle cx="34" cy="21" r="4.5" fill="#fbbf24"/>
-     <circle cx="33" cy="20" r="1.5" fill="#fef3c7" opacity=".6"/>`, 'flags-logo');
+     <circle cx="33" cy="20" r="1.5" fill="#fef3c7" opacity=".7"/>`, 'flags-logo');
 
   if(cls==='speed') return svg(
-    rg('sc','#ef4444,#991b1b')+gid('sg','#93c5fd,#2563eb')+rg('sw','#1a1a24,#000'),
-    `<path class="sp-body" d="M12,36 L16,26 L48,26 L54,36 L54,42 L12,42 Z" fill="url(#sc)" stroke="#991b1b" stroke-width="1"/>
-     <path d="M12,36 L54,36 L48,36 L16,36 Z" fill="#fca5a5" opacity=".2"/>
-     <path d="M24,26 L28,16 L42,16 L46,26 Z" fill="url(#sg)" stroke="#2563eb" stroke-width="1"/>
-     <path d="M24,26 L46,26 L44,26 L26,26 Z" fill="#bfdbfe" opacity=".4"/>
-     <circle class="sp-wh" cx="22" cy="44" r="5.5" fill="url(#sw)" stroke="#4b5563" stroke-width="2"/>
-     <circle cx="22" cy="44" r="2" fill="#6b7280"/>
-     <circle class="sp-wh" cx="46" cy="44" r="5.5" fill="url(#sw)" stroke="#4b5563" stroke-width="2"/>
-     <circle cx="46" cy="44" r="2" fill="#6b7280"/>
-     <line class="sp-line" x1="2" y1="32" x2="10" y2="32" stroke="#fff" stroke-width="2" opacity=".35" stroke-linecap="round"/>
-     <line class="sp-line" x1="0" y1="38" x2="8" y2="38" stroke="#fff" stroke-width="1.5" opacity=".25" stroke-linecap="round"/>`, 'speed-logo');
+    rg('sc','#ef4444,#dc2626')+gid('sg','#60a5fa,#3b82f6')+rg('sw','#e5e7eb,#9ca3af'),
+    `<path class="sp-body" d="M12,36 L16,26 L48,26 L54,36 L54,42 L12,42 Z" fill="url(#sc)" stroke="#dc2626" stroke-width="1"/>
+     <path d="M12,36 L54,36 L48,36 L16,36 Z" fill="#fca5a5" opacity=".3"/>
+     <path d="M24,26 L28,16 L42,16 L46,26 Z" fill="url(#sg)" stroke="#3b82f6" stroke-width="1"/>
+     <path d="M24,26 L46,26 L44,26 L26,26 Z" fill="#bfdbfe" opacity=".5"/>
+     <circle class="sp-wh" cx="22" cy="44" r="5.5" fill="url(#sw)" stroke="#d1d5db" stroke-width="2"/>
+     <circle cx="22" cy="44" r="2" fill="#f3f4f6"/>
+     <circle class="sp-wh" cx="46" cy="44" r="5.5" fill="url(#sw)" stroke="#d1d5db" stroke-width="2"/>
+     <circle cx="46" cy="44" r="2" fill="#f3f4f6"/>
+     <line class="sp-line" x1="2" y1="32" x2="10" y2="32" stroke="#fff" stroke-width="2" opacity=".5" stroke-linecap="round"/>
+     <line class="sp-line" x1="0" y1="38" x2="8" y2="38" stroke="#fff" stroke-width="1.5" opacity=".35" stroke-linecap="round"/>`, 'speed-logo');
 
   if(cls==='snake') return svg(
-    rg('sk1','#16a34a,#15803d')+rg('sk2','#22c55e,#16a34a')+rg('sk3','#4ade80,#22c55e')+rg('sk4','#86efac,#4ade80'),
+    rg('sk1','#22c55e,#16a34a')+rg('sk2','#4ade80,#22c55e')+rg('sk3','#86efac,#4ade80')+rg('sk4','#bbf7d0,#86efac'),
     `<rect class="sk-seg" x="8" y="24" width="12" height="12" rx="4" fill="url(#sk1)"/>
-     <rect x="8" y="24" width="12" height="6" rx="4" fill="#4ade80" opacity=".3"/>
+     <rect x="8" y="24" width="12" height="6" rx="4" fill="#86efac" opacity=".4"/>
      <rect class="sk-seg" x="18" y="24" width="12" height="12" rx="4" fill="url(#sk2)"/>
      <rect class="sk-seg" x="28" y="24" width="12" height="12" rx="4" fill="url(#sk3)"/>
      <rect class="sk-seg" x="38" y="24" width="12" height="12" rx="4" fill="url(#sk4)"/>
@@ -277,125 +277,125 @@ function logo3d(cls, emoji){
      <circle class="sk-eye" cx="22" cy="22" r="2.5" fill="#fff"/>
      <circle cx="23" cy="22" r="1.2" fill="#000"/>
      <ellipse cx="52" cy="42" rx="3.5" ry="3" fill="#ef4444"/>
-     <ellipse cx="51" cy="41" rx="1" ry=".8" fill="#fca5a5" opacity=".6"/>`, 'snake-logo');
+     <ellipse cx="51" cy="41" rx="1" ry=".8" fill="#fca5a5" opacity=".7"/>`, 'snake-logo');
 
   if(cls==='g2048') return svg(
-    gid('gt1','#94a3b8,#475569')+gid('gt2','#cbd5e1,#94a3b8')+gid('gt3','#fbbf24,#d97706')+gid('gt4','#f97316,#ea580c'),
+    gid('gt1','#a78bfa,#7c3aed')+gid('gt2','#c084fc,#a855f7')+gid('gt3','#fbbf24,#f59e0b')+gid('gt4','#f97316,#ea580c'),
     `<rect class="g-tile" x="6" y="6" width="24" height="24" rx="5" fill="url(#gt1)"/>
-     <rect x="6" y="6" width="24" height="12" rx="5" fill="#94a3b8" opacity=".3"/>
+     <rect x="6" y="6" width="24" height="12" rx="5" fill="#c4b5fd" opacity=".4"/>
      <text x="18" y="23" font-size="15" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">2</text>
      <rect class="g-tile" x="34" y="6" width="24" height="24" rx="5" fill="url(#gt2)"/>
-     <rect x="34" y="6" width="24" height="12" rx="5" fill="#e2e8f0" opacity=".3"/>
-     <text x="46" y="23" font-size="15" font-weight="900" fill="#334155" text-anchor="middle" font-family="sans-serif">4</text>
+     <rect x="34" y="6" width="24" height="12" rx="5" fill="#e9d5ff" opacity=".4"/>
+     <text x="46" y="23" font-size="15" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">4</text>
      <rect class="g-tile" x="6" y="34" width="24" height="24" rx="5" fill="url(#gt3)"/>
-     <rect x="6" y="34" width="24" height="12" rx="5" fill="#fcd34d" opacity=".3"/>
+     <rect x="6" y="34" width="24" height="12" rx="5" fill="#fde68a" opacity=".4"/>
      <text x="18" y="51" font-size="15" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">8</text>
      <rect class="g-tile" x="34" y="34" width="24" height="24" rx="5" fill="url(#gt4)"/>
-     <rect x="34" y="34" width="24" height="12" rx="5" fill="#fb923c" opacity=".3"/>
+     <rect x="34" y="34" width="24" height="12" rx="5" fill="#fdba74" opacity=".4"/>
      <text x="46" y="51" font-size="12" font-weight="900" fill="#fff" text-anchor="middle" font-family="sans-serif">16</text>`, 'g2048-logo');
 
   if(cls==='reflex') return svg(
-    rg('rb','#facc15,#ca8a04')+rg('rk','#fde047,#f59e0b'),
-    `<polygon class="rf-bolt" points="32,2 40,26 30,26 38,62 20,32 30,32 22,2" fill="url(#rb)" stroke="#ca8a04" stroke-width="1"/>
-     <polygon points="32,2 36,26 32,26 36,62 22,32 28,32 24,2" fill="#fde68a" opacity=".25"/>
-     <circle class="rf-spark" cx="12" cy="14" r="3.5" fill="url(#rk)" opacity=".8"/>
-     <circle cx="11" cy="13" r="1.2" fill="#fef9c3" opacity=".6"/>
-     <circle class="rf-spark" cx="52" cy="18" r="3" fill="url(#rk)" opacity=".7"/>
-     <circle class="rf-spark" cx="50" cy="48" r="2.5" fill="url(#rk)" opacity=".6"/>`, 'reflex-logo');
+    rg('rb','#facc15,#eab308')+rg('rk','#fde047,#facc15'),
+    `<polygon class="rf-bolt" points="32,2 40,26 30,26 38,62 20,32 30,32 22,2" fill="url(#rb)" stroke="#eab308" stroke-width="1"/>
+     <polygon points="32,2 36,26 32,26 36,62 22,32 28,32 24,2" fill="#fef9c3" opacity=".35"/>
+     <circle class="rf-spark" cx="12" cy="14" r="3.5" fill="url(#rk)" opacity=".9"/>
+     <circle cx="11" cy="13" r="1.2" fill="#fefce8" opacity=".7"/>
+     <circle class="rf-spark" cx="52" cy="18" r="3" fill="url(#rk)" opacity=".8"/>
+     <circle class="rf-spark" cx="50" cy="48" r="2.5" fill="url(#rk)" opacity=".7"/>`, 'reflex-logo');
 
   if(cls==='tetris') return svg(
-    gid('tb1','#06b6d4,#0891b2')+gid('tb2','#22d3ee,#06b6d4')+rg('tb3','#0891b2,#155e75'),
+    gid('tb1','#22d3ee,#06b6d4')+gid('tb2','#67e8f9,#22d3ee')+rg('tb3','#0891b2,#155e75'),
     `<rect class="t-blk" x="18" y="2" width="14" height="14" rx="2" fill="url(#tb1)"/>
-     <rect x="18" y="2" width="14" height="7" rx="2" fill="#67e8f9" opacity=".35"/>
+     <rect x="18" y="2" width="14" height="7" rx="2" fill="#a5f3fc" opacity=".45"/>
      <rect class="t-blk" x="32" y="2" width="14" height="14" rx="2" fill="url(#tb2)"/>
-     <rect x="32" y="2" width="14" height="7" rx="2" fill="#a5f3fc" opacity=".3"/>
+     <rect x="32" y="2" width="14" height="7" rx="2" fill="#cffafe" opacity=".4"/>
      <rect class="t-blk" x="32" y="16" width="14" height="14" rx="2" fill="url(#tb3)"/>
-     <rect x="32" y="16" width="14" height="7" rx="2" fill="#22d3ee" opacity=".25"/>
+     <rect x="32" y="16" width="14" height="7" rx="2" fill="#67e8f9" opacity=".35"/>
      <rect class="t-blk" x="46" y="16" width="14" height="14" rx="2" fill="url(#tb1)"/>
-     <rect x="46" y="16" width="14" height="7" rx="2" fill="#67e8f9" opacity=".3"/>
-     <rect x="6" y="50" width="52" height="4" rx="2" fill="#d97706"/>
-     <rect x="6" y="50" width="52" height="2" rx="2" fill="#fbbf24" opacity=".4"/>`, 'tetris-logo');
+     <rect x="46" y="16" width="14" height="7" rx="2" fill="#a5f3fc" opacity=".4"/>
+     <rect x="6" y="50" width="52" height="4" rx="2" fill="#f59e0b"/>
+     <rect x="6" y="50" width="52" height="2" rx="2" fill="#fbbf24" opacity=".5"/>`, 'tetris-logo');
 
   if(cls==='minesweeper') return svg(
-    rg('mb','#1a1a24,#000')+rg('mf','#f59e0b,#d97706'),
+    rg('mb','#6b7280,#374151')+rg('mf','#fbbf24,#f59e0b'),
     `<circle class="m-body" cx="32" cy="32" r="13" fill="url(#mb)"/>
-     <circle cx="28" cy="28" r="4" fill="#374151" opacity=".4"/>
-     <line x1="32" y1="15" x2="32" y2="10" stroke="#0f0f1a" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="32" y1="49" x2="32" y2="54" stroke="#0f0f1a" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="15" y1="32" x2="10" y2="32" stroke="#0f0f1a" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="49" y1="32" x2="54" y2="32" stroke="#0f0f1a" stroke-width="3.5" stroke-linecap="round"/>
-     <line x1="20" y1="20" x2="16" y2="16" stroke="#0f0f1a" stroke-width="3" stroke-linecap="round"/>
-     <line x1="44" y1="20" x2="48" y2="16" stroke="#0f0f1a" stroke-width="3" stroke-linecap="round"/>
-     <line x1="20" y1="44" x2="16" y2="48" stroke="#0f0f1a" stroke-width="3" stroke-linecap="round"/>
-     <line x1="44" y1="44" x2="48" y2="48" stroke="#0f0f1a" stroke-width="3" stroke-linecap="round"/>
+     <circle cx="28" cy="28" r="4" fill="#9ca3af" opacity=".4"/>
+     <line x1="32" y1="15" x2="32" y2="10" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
+     <line x1="32" y1="49" x2="32" y2="54" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
+     <line x1="15" y1="32" x2="10" y2="32" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
+     <line x1="49" y1="32" x2="54" y2="32" stroke="#9ca3af" stroke-width="3.5" stroke-linecap="round"/>
+     <line x1="20" y1="20" x2="16" y2="16" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
+     <line x1="44" y1="20" x2="48" y2="16" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
+     <line x1="20" y1="44" x2="16" y2="48" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
+     <line x1="44" y1="44" x2="48" y2="48" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/>
      <circle cx="32" cy="26" r="2.5" fill="#e5e7eb"/>
      <circle cx="27" cy="32" r="2.5" fill="#e5e7eb"/>
      <circle cx="37" cy="32" r="2.5" fill="#e5e7eb"/>
      <circle cx="32" cy="38" r="2.5" fill="#e5e7eb"/>
      <circle class="m-spark" cx="32" cy="8" r="5" fill="url(#mf)"/>
-     <circle cx="31" cy="6" r="2" fill="#fef3c7" opacity=".7"/>`, 'minesweeper-logo');
+     <circle cx="31" cy="6" r="2" fill="#fef9c3" opacity=".8"/>`, 'minesweeper-logo');
 
   if(cls==='flappy') return svg(
-    rg('fb','#facc15,#ca8a04')+rg('fw','#eab308,#a16207'),
-    `<ellipse class="f-body" cx="30" cy="34" rx="18" ry="14" fill="url(#fb)" stroke="#ca8a04" stroke-width="1"/>
-     <ellipse cx="26" cy="28" rx="10" ry="7" fill="#fde68a" opacity=".3"/>
+    rg('fb','#facc15,#eab308')+rg('fw','#fde047,#f59e0b'),
+    `<ellipse class="f-body" cx="30" cy="34" rx="18" ry="14" fill="url(#fb)" stroke="#eab308" stroke-width="1"/>
+     <ellipse cx="26" cy="28" rx="10" ry="7" fill="#fef9c3" opacity=".4"/>
      <ellipse class="f-wing" cx="20" cy="30" rx="10" ry="6" fill="url(#fw)" transform="rotate(-20,20,30)"/>
      <polygon points="48,30 60,35 48,38" fill="#ea580c"/>
-     <polygon points="48,30 56,35 48,32" fill="#fb923c" opacity=".4"/>
+     <polygon points="48,30 56,35 48,32" fill="#fb923c" opacity=".5"/>
      <circle cx="40" cy="28" r="4.5" fill="#fff"/>
      <circle cx="41.5" cy="27.5" r="2.5" fill="#1a1a24"/>
      <circle cx="42.5" cy="26.5" r="1" fill="#fff"/>
      <path d="M24,42 Q30,47 36,42" stroke="#ca8a04" stroke-width="1.5" fill="none"/>`, 'flappy-logo');
 
   if(cls==='breakout') return svg(
-    gid('br','#ef4444,#991b1b')+gid('bo','#f97316,#c2410c')+gid('by','#fbbf24,#d97706')+gid('bg','#22c55e,#15803d')+gid('bc','#22d3ee,#0891b2')+gid('bp','#a855f7,#7e22ce')+rg('bb','#e5e7eb,#9ca3af'),
+    gid('br','#ef4444,#dc2626')+gid('bo','#f97316,#ea580c')+gid('by','#fbbf24,#f59e0b')+gid('bg','#22c55e,#16a34a')+gid('bc','#22d3ee,#06b6d4')+gid('bp','#a855f7,#9333ea')+rg('bb','#e5e7eb,#d1d5db'),
     `<rect x="8" y="4" width="15" height="8" rx="2" fill="url(#br)"/>
-     <rect x="8" y="4" width="15" height="4" rx="2" fill="#fca5a5" opacity=".4"/>
+     <rect x="8" y="4" width="15" height="4" rx="2" fill="#fca5a5" opacity=".5"/>
      <rect x="25" y="4" width="15" height="8" rx="2" fill="url(#bo)"/>
-     <rect x="25" y="4" width="15" height="4" rx="2" fill="#fdba74" opacity=".35"/>
+     <rect x="25" y="4" width="15" height="4" rx="2" fill="#fdba74" opacity=".45"/>
      <rect x="42" y="4" width="15" height="8" rx="2" fill="url(#by)"/>
-     <rect x="42" y="4" width="15" height="4" rx="2" fill="#fde68a" opacity=".35"/>
+     <rect x="42" y="4" width="15" height="4" rx="2" fill="#fde68a" opacity=".45"/>
      <rect x="8" y="14" width="15" height="8" rx="2" fill="url(#bg)"/>
-     <rect x="8" y="14" width="15" height="4" rx="2" fill="#86efac" opacity=".3"/>
+     <rect x="8" y="14" width="15" height="4" rx="2" fill="#86efac" opacity=".4"/>
      <rect x="25" y="14" width="15" height="8" rx="2" fill="url(#bc)"/>
-     <rect x="25" y="14" width="15" height="4" rx="2" fill="#67e8f9" opacity=".3"/>
+     <rect x="25" y="14" width="15" height="4" rx="2" fill="#67e8f9" opacity=".4"/>
      <rect x="42" y="14" width="15" height="8" rx="2" fill="url(#bp)"/>
-     <rect x="42" y="14" width="15" height="4" rx="2" fill="#c4b5fd" opacity=".3"/>
+     <rect x="42" y="14" width="15" height="4" rx="2" fill="#c4b5fd" opacity=".4"/>
      <rect class="b-paddle" x="18" y="50" width="28" height="7" rx="3.5" fill="#a3e635"/>
-     <rect x="18" y="50" width="28" height="3.5" rx="3.5" fill="#d9f99d" opacity=".4"/>
+     <rect x="18" y="50" width="28" height="3.5" rx="3.5" fill="#d9f99d" opacity=".5"/>
      <circle class="b-ball" cx="32" cy="40" r="6" fill="url(#bb)"/>
-     <circle cx="30" cy="38" r="2" fill="#fff" opacity=".5"/>`, 'breakout-logo');
+     <circle cx="30" cy="38" r="2" fill="#fff" opacity=".6"/>`, 'breakout-logo');
 
   if(cls==='whack') return svg(
-    rg('wm','#a16207,#713f12')+rg('wh','#78350f,#451a03')+rg('whh','#92400e,#451a03'),
-    `<ellipse cx="32" cy="48" rx="16" ry="7" fill="#0f0f1a"/>
-     <ellipse cx="32" cy="48" rx="12" ry="4" fill="#1a1a24"/>
-     <ellipse class="w-mole" cx="32" cy="40" rx="11" ry="11" fill="url(#wm)" stroke="#713f12" stroke-width="1"/>
-     <ellipse cx="28" cy="30" rx="4" ry="5" fill="#713f12" opacity=".3"/>
+    rg('wm','#f59e0b,#d97706')+rg('wh','#78350f,#451a03')+rg('whh','#92400e,#713f12'),
+    `<ellipse cx="32" cy="48" rx="16" ry="7" fill="#1a1a24"/>
+     <ellipse cx="32" cy="48" rx="12" ry="4" fill="#374151"/>
+     <ellipse class="w-mole" cx="32" cy="40" rx="11" ry="11" fill="url(#wm)" stroke="#d97706" stroke-width="1"/>
+     <ellipse cx="28" cy="30" rx="4" ry="5" fill="#b45309" opacity=".35"/>
      <circle cx="27" cy="36" r="3" fill="#fff"/>
      <circle cx="37" cy="36" r="3" fill="#fff"/>
-     <circle cx="28" cy="36" r="1.5" fill="#0f0f1a"/>
-     <circle cx="38" cy="36" r="1.5" fill="#0f0f1a"/>
-     <ellipse cx="32" cy="42" rx="3.5" ry="2.5" fill="#451a03"/>
+     <circle cx="28" cy="36" r="1.5" fill="#1a1a24"/>
+     <circle cx="38" cy="36" r="1.5" fill="#1a1a24"/>
+     <ellipse cx="32" cy="42" rx="3.5" ry="2.5" fill="#713f12"/>
      <g class="w-hammer">
        <rect x="44" y="6" width="14" height="8" rx="3" fill="url(#wh)"/>
-       <rect x="44" y="6" width="14" height="4" rx="3" fill="#a16207" opacity=".3"/>
+       <rect x="44" y="6" width="14" height="4" rx="3" fill="#a16207" opacity=".4"/>
        <rect x="48" y="12" width="6" height="24" rx="3" fill="url(#whh)"/>
-       <rect x="48" y="12" width="3" height="24" rx="3" fill="#b45309" opacity=".3"/>
+       <rect x="48" y="12" width="3" height="24" rx="3" fill="#b45309" opacity=".4"/>
      </g>`, 'whack-logo');
 
   if(cls==='stack') return svg(
-    rg('sa','#38bdf8,#0284c7')+rg('sb','#a855f7,#7e22ce')+rg('sc2','#facc15,#d97706')+rg('sd','#ef4444,#dc2626')+rg('se','#22c55e,#16a34a'),
+    rg('sa','#38bdf8,#0ea5e9')+rg('sb','#a855f7,#9333ea')+rg('sc2','#facc15,#eab308')+rg('sd','#ef4444,#dc2626')+rg('se','#22c55e,#16a34a'),
     `<rect x="10" y="50" width="44" height="10" rx="3" fill="url(#sa)"/>
-     <rect x="10" y="50" width="44" height="5" rx="3" fill="#7dd3fc" opacity=".3"/>
+     <rect x="10" y="50" width="44" height="5" rx="3" fill="#7dd3fc" opacity=".4"/>
      <rect x="12" y="38" width="40" height="10" rx="3" fill="url(#sb)"/>
-     <rect x="12" y="38" width="40" height="5" rx="3" fill="#c4b5fd" opacity=".3"/>
+     <rect x="12" y="38" width="40" height="5" rx="3" fill="#c4b5fd" opacity=".4"/>
      <rect x="14" y="26" width="36" height="10" rx="3" fill="url(#sc2)"/>
-     <rect x="14" y="26" width="36" height="5" rx="3" fill="#fde68a" opacity=".3"/>
+     <rect x="14" y="26" width="36" height="5" rx="3" fill="#fde68a" opacity=".4"/>
      <rect x="16" y="14" width="32" height="10" rx="3" fill="url(#sd)"/>
-     <rect x="16" y="14" width="32" height="5" rx="3" fill="#fca5a5" opacity=".3"/>
+     <rect x="16" y="14" width="32" height="5" rx="3" fill="#fca5a5" opacity=".4"/>
      <rect class="st-fall" x="8" y="2" width="32" height="10" rx="3" fill="url(#se)" opacity=".9"/>
-     <rect x="8" y="2" width="32" height="5" rx="3" fill="#86efac" opacity=".3"/>`, 'stack-logo');
+     <rect x="8" y="2" width="32" height="5" rx="3" fill="#86efac" opacity=".4"/>`, 'stack-logo');
 
   return `<span class="card-emoji">${emoji}</span>`;
 }
@@ -807,25 +807,6 @@ document.getElementById('mute-btn').addEventListener('click', function () {
 });
 if (isMuted()) document.getElementById('mute-btn').textContent = '🔇';
 
-const langBtn = document.getElementById('lang-btn');
-function paintLang() {
-  const cur = LANGUAGES.find(l => l.code === getLang());
-  langBtn.textContent = cur ? cur.flag : '🌐';
-}
-langBtn.addEventListener('click', () => {
-  sfx.click();
-  const cur = getLang();
-  const idx = LANGUAGES.findIndex(l => l.code === cur);
-  const next = LANGUAGES[(idx + 1) % LANGUAGES.length];
-  setLang(next.code);
-  if (next.code !== 'en' && next.code !== 'hi') {
-    translateAll(next.code).then(() => { paintLang(); router(); });
-  } else {
-    paintLang();
-    router();
-  }
-});
-paintLang();
 document.getElementById('foot-year').textContent = new Date().getFullYear();
 document.getElementById('day-chip').textContent = '#' + dayNumber();
 applyAdsConfig();

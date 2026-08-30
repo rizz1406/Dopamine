@@ -17,6 +17,10 @@
   <url><loc>https://dopaminegames.pages.dev/breakout</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/whack</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/stack</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/suika</loc><priority>0.9</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/connections</loc><priority>0.9</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/aim</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/sort</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/leaderboard</loc><priority>0.7</priority></url>
   <url><loc>https://dopaminegames.pages.dev/stats</loc><priority>0.6</priority></url>
 </urlset>

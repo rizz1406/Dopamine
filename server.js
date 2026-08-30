@@ -13,8 +13,8 @@ if (ADMIN_PASSWORD === 'rizwan') {
   console.warn('⚠️  Using default ADMIN_PASSWORD=rizwan — change it with: ADMIN_PASSWORD=your-secret node server.js');
 }
 
-const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048', 'tetris', 'minesweeper', 'flappy', 'breakout', 'whack', 'stack'];
-const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000], tetris: [0, 1000000], minesweeper: [0, 999], flappy: [0, 1000], breakout: [0, 100000], whack: [0, 1000], stack: [0, 10000] };
+const GAMES = ['reel', 'hl', 'word', 'memory', 'timeline', 'flags', 'reflex', 'speed', 'snake', 'g2048', 'tetris', 'minesweeper', 'flappy', 'breakout', 'whack', 'stack', 'suika', 'connections', 'aim', 'sort'];
+const SCORE_LIMITS = { reel: [0, 5], hl: [0, 100000], word: [0, 6], memory: [0, 1000], timeline: [0, 3], flags: [0, 10], reflex: [0, 1000], g2048: [0, 1000000], speed: [0, 1000000], snake: [0, 100000], tetris: [0, 1000000], minesweeper: [0, 999], flappy: [0, 1000], breakout: [0, 100000], whack: [0, 1000], stack: [0, 10000], suika: [0, 10000], connections: [0, 2000], aim: [0, 5000], sort: [0, 5000] };
 
 // ── storage ───────────────────────────────────────────────
 let scores = {};   // { 'YYYY-MM-DD': { game: [{name, score, ts}] } }

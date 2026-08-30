@@ -36,6 +36,10 @@ const renderFlappy = lazy(() => import('./games/flappy.js'));
 const renderBreakout = lazy(() => import('./games/breakout.js'));
 const renderWhack = lazy(() => import('./games/whack.js'));
 const renderStack = lazy(() => import('./games/stack.js'));
+const renderSuika = lazy(() => import('./games/suika.js'));
+const renderConnections = lazy(() => import('./games/connections.js'));
+const renderAim = lazy(() => import('./games/aim.js'));
+const renderSort = lazy(() => import('./games/sort.js'));
 const renderLeaderboard = lazy(() => import('./games/leaderboard.js'));
 const renderStats = lazy(() => import('./pages/stats.js'));
 const renderSEO = lazy(() => import('./pages/seo.js'));
@@ -46,7 +50,7 @@ const SITE = 'https://dopamine.games';
 
 // ── route table: path → { render, title, desc } ──
 const ROUTES = {
-  '/': { render: renderHub, title: 'DOPAMINE — Daily Arcade 🎮 | 16 Free Mini-Games', desc: 'Your daily dose of pointless brilliance. 16 free mini-games: emoji movie quiz, word guess, flag rush, car racing, snake and more. Same puzzles for everyone, new every day.' },
+  '/': { render: renderHub, title: 'DOPAMINE — Daily Arcade 🎮 | 20 Free Mini-Games', desc: 'Your daily dose of pointless brilliance. 20 free mini-games: suika merge, connections, aim trainer, color sort, emoji movie quiz, word guess and more. Same puzzles for everyone, new every day.' },
   '/reel': { render: renderReel, title: 'REEL — Guess the Movie from Emojis | Daily Puzzle', desc: 'Today\'s REEL puzzle: guess the movie from emojis in 4 tries with escalating hints. Same puzzle for everyone, new daily at 00:00 UTC. Free.' },
   '/hl': { render: renderHigherLower, title: 'Higher or Lower — Search Volume Game', desc: 'Which does the internet search more? Build the longest streak in this addictive daily guessing game. Free, no account needed.' },
   '/word': { render: renderWord, title: 'Word Guess — Daily 5-Letter Word Puzzle', desc: 'A new 5-letter word every day. 6 tries, color-coded hints, streaks and a shareable grid. The daily word puzzle for word nerds.' },
@@ -62,6 +66,10 @@ const ROUTES = {
   '/breakout': { render: renderBreakout, title: 'Breakout — Free Brick Breaker Game', desc: 'Breakout free online. Bounce the ball, smash the bricks, clear the level. Global leaderboard.' },
   '/whack': { render: renderWhack, title: 'Whack-a-Mole — Free Speed Tap Game', desc: 'Whack-a-Mole free online. 30 seconds, 9 holes, how many can you tap? Global leaderboard.' },
   '/stack': { render: renderStack, title: 'Stack 3D — Free Tower Stack Game', desc: 'Stack 3D free online. Time the drop, build the tower. How high can you go? Global leaderboard.' },
+  '/suika': { render: renderSuika, title: 'Suika Merge — Fruit Drop Puzzle', desc: 'Suika viral fruit merge: drop fruits, merge same to bigger, chase watermelon. Addictive physics puzzle.' },
+  '/connections': { render: renderConnections, title: 'Connections — Group 16 Words Into 4', desc: 'NYT-style connections: find 4 groups of 4 words. 4 mistakes allowed. Daily puzzle.' },
+  '/aim': { render: renderAim, title: 'Aim Trainer — Reflex Target Game', desc: 'Aim trainer: hit 30 targets in 30 seconds. Test speed and accuracy.' },
+  '/sort': { render: renderSort, title: 'Color Sort — Water Sort Puzzle', desc: 'Water sort puzzle: sort colors into tubes. Trending logic game.' },
   '/games-like-wordle': { render: renderSEO('games-like-wordle'), title: '10 Free Games Like Wordle — Daily Puzzle Games', desc: 'Love Wordle? Discover 10 free daily puzzle games like Wordle — emoji movie quizzes, flag quizzes, memory games and more. No signup.' },
   '/brain-games': { render: renderSEO('brain-games'), title: 'Free Brain Games — Train Memory, Reflexes & Logic Daily', desc: 'Free online brain games to train memory, reaction time and logic. Short daily challenges, a global leaderboard and streaks. No signup.' },
   '/reflex': { render: renderReflex, title: 'Reflex Test — How Fast Are You Really?', desc: 'A 5-round reaction time test with instant verdicts. Average under 250ms? You might be superhuman. Free.' },
@@ -631,6 +639,65 @@ function logo3d(cls, emoji, size = 'normal'){
     );
   }
 
+  if(cls === 'suika') {
+    return svgWrap('#ff6b6b', '#4ecdc4', 'rgba(255,107,107,0.45)',
+      gRadial('su-wm', '#86efac', '#15803d') +
+      gRadial('su-flesh', '#f87171', '#dc2626') +
+      gLinear('su-rind', '#22c55e', '#166534'),
+      `<g filter="url(#drop-${cls})">
+        <circle cx="32" cy="34" r="18" fill="url(#su-wm)" stroke="#166534" stroke-width="1.5"/>
+        <circle cx="32" cy="34" r="14" fill="url(#su-flesh)" opacity="0.95"/>
+        <ellipse cx="28" cy="28" rx="6" ry="5" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="26" cy="36" r="1.8" fill="#1f2937"/><circle cx="32" cy="40" r="1.8" fill="#1f2937"/><circle cx="38" cy="36" r="1.8" fill="#1f2937"/><circle cx="32" cy="30" r="1.8" fill="#1f2937"/>
+        <circle cx="18" cy="18" r="6" fill="#f97316" stroke="#9a3412" stroke-width="1"/><circle cx="18" cy="18" r="1" fill="#fff"/>
+        <circle cx="46" cy="20" r="5" fill="#eab308" stroke="#854d0e" stroke-width="1"/><circle cx="46" cy="20" r="1" fill="#fff"/>
+      </g>`
+    );
+  }
+
+  if(cls === 'connections') {
+    return svgWrap('#8b5cf6', '#06b6d4', 'rgba(139,92,246,0.45)',
+      gLinear('co-a', '#a78bfa', '#7c3aed') + gLinear('co-b', '#67e8f9', '#0891b2') + gLinear('co-c', '#fde68a', '#eab308') + gLinear('co-d', '#86efac', '#16a34a'),
+      `<g filter="url(#drop-${cls})">
+        <rect x="8" y="12" width="24" height="18" rx="3" fill="url(#co-a)" stroke="rgba(255,255,255,.4)" stroke-width="1"/><text x="20" y="24" font-size="5" font-weight="900" fill="#fff" text-anchor="middle">APPLE</text>
+        <rect x="34" y="12" width="24" height="18" rx="3" fill="url(#co-a)" stroke="rgba(255,255,255,.4)" stroke-width="1"/><text x="46" y="24" font-size="5" font-weight="900" fill="#fff" text-anchor="middle">BASS</text>
+        <rect x="8" y="34" width="24" height="18" rx="3" fill="url(#co-b)" stroke="rgba(255,255,255,.4)" stroke-width="1"/><text x="20" y="46" font-size="5" font-weight="900" fill="#fff" text-anchor="middle">GOLD</text>
+        <rect x="34" y="34" width="24" height="18" rx="3" fill="url(#co-c)" stroke="rgba(255,255,255,.4)" stroke-width="1"/><text x="46" y="46" font-size="5" font-weight="900" fill="#4a044e" text-anchor="middle">MARS</text>
+      </g>`
+    );
+  }
+
+  if(cls === 'aim') {
+    return svgWrap('#ef4444', '#f59e0b', 'rgba(239,68,68,0.45)',
+      gRadial('aim-out', '#fca5a5', '#dc2626') + gRadial('aim-mid', '#fef08a', '#f59e0b') + gRadial('aim-in', '#fff', '#e5e7eb'),
+      `<g filter="url(#drop-${cls})">
+        <circle cx="32" cy="32" r="20" fill="url(#aim-out)" stroke="#fff" stroke-width="1.5"/>
+        <circle cx="32" cy="32" r="13" fill="url(#aim-mid)" stroke="#fff" stroke-width="1"/>
+        <circle cx="32" cy="32" r="6" fill="url(#aim-in)" stroke="#dc2626" stroke-width="1"/>
+        <circle cx="32" cy="32" r="2.5" fill="#dc2626"/>
+        <line x1="32" y1="8" x2="32" y2="14" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="32" y1="50" x2="32" y2="56" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="8" y1="32" x2="14" y2="32" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+        <line x1="50" y1="32" x2="56" y2="32" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      </g>`
+    );
+  }
+
+  if(cls === 'sort') {
+    return svgWrap('#a855f7', '#ec4899', 'rgba(168,85,247,0.45)',
+      gLinear('so-r', '#f87171', '#dc2626') + gLinear('so-g', '#4ade80', '#16a34a') + gLinear('so-b', '#60a5fa', '#2563eb') + gLinear('so-y', '#fde047', '#ca8a04'),
+      `<g filter="url(#drop-${cls})">
+        <rect x="10" y="18" width="10" height="28" rx="5" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+        <rect x="11" y="38" width="8" height="7" rx="2" fill="url(#so-r)"/><rect x="11" y="30" width="8" height="7" rx="2" fill="url(#so-g)"/><rect x="11" y="22" width="8" height="7" rx="2" fill="url(#so-b)"/>
+        <rect x="27" y="18" width="10" height="28" rx="5" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+        <rect x="28" y="38" width="8" height="7" rx="2" fill="url(#so-y)"/><rect x="28" y="30" width="8" height="7" rx="2" fill="url(#so-r)"/><rect x="28" y="22" width="8" height="7" rx="2" fill="url(#so-g)"/>
+        <rect x="44" y="18" width="10" height="28" rx="5" fill="rgba(255,255,255,.12)" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+        <rect x="45" y="38" width="8" height="7" rx="2" fill="url(#so-b)"/><rect x="45" y="30" width="8" height="7" rx="2" fill="url(#so-y)"/>
+        <path d="M22,12 L28,8 L34,12 Z" fill="#facc15" opacity="0.9"/>
+      </g>`
+    );
+  }
+
   return `<div class="${wrapCls}"><span class="card-emoji">${emoji}</span></div>`;
 }
 
@@ -700,7 +767,7 @@ function renderHub() {
 
     <!-- Filter bar — sticky on mobile -->
     <div class="filter-bar" data-test="filter-bar">
-      <button class="filter-btn active" data-filter="all">All 16</button>
+      <button class="filter-btn active" data-filter="all">All 20</button>
       <button class="filter-btn" data-filter="daily">Daily</button>
       <button class="filter-btn" data-filter="3d">3D</button>
       <button class="filter-btn" data-filter="puzzle">Puzzle</button>
@@ -794,6 +861,26 @@ function renderHub() {
         href: '/stack', emoji: '🧊', name: 'STACK 3D',
         desc: 'Time the drop, build the tower. How high can you get?',
         streakKey: 'stack', glow: 'rgba(56,189,248,.22)', daily: false, cls: 'stack', cat: '3d'
+      })}
+      ${gameCard({
+        href: '/suika', emoji: '🍉', name: 'SUIKA MERGE',
+        desc: 'Drop fruits, merge same — chase the watermelon!',
+        streakKey: 'suika', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'suika', cat: 'puzzle'
+      })}
+      ${gameCard({
+        href: '/connections', emoji: '🔗', name: 'CONNECTIONS',
+        desc: 'Find 4 groups of 4 words. 4 mistakes only.',
+        streakKey: 'connections', glow: 'rgba(139,92,246,.22)', daily: false, cls: 'connections', cat: 'puzzle'
+      })}
+      ${gameCard({
+        href: '/aim', emoji: '🎯', name: 'AIM TRAINER',
+        desc: 'Hit 30 targets in 30 seconds. How fast are you?',
+        streakKey: 'aim', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'aim', cat: 'arcade'
+      })}
+      ${gameCard({
+        href: '/sort', emoji: '🧪', name: 'COLOR SORT',
+        desc: 'Sort colors into tubes. Trending puzzle.',
+        streakKey: 'sort', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'sort', cat: 'puzzle'
       })}
     </section>
 

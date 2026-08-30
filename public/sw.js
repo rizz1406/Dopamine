@@ -13,7 +13,8 @@ const CORE = [
   '/js/games/flagrush.js', '/js/games/speed.js', '/js/games/snake.js',
   '/js/games/g2048.js', '/js/games/tetris.js', '/js/games/minesweeper.js',
   '/js/games/flappy.js', '/js/games/breakout.js', '/js/games/whack.js',
-  '/js/games/stack.js', '/js/games/leaderboard.js', '/js/games/admin.js'
+  '/js/games/stack.js', '/js/games/suika.js', '/js/games/connections.js',
+  '/js/games/aim.js', '/js/games/sort.js', '/js/games/leaderboard.js', '/js/games/admin.js'
 ];
 
 self.addEventListener('install', e => {

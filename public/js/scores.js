@@ -10,7 +10,8 @@ export const GAME_LABELS = {
   reel: '🎬 REEL', hl: '⚖️ Higher/Lower', word: '🔤 Word Guess',
   memory: '🧠 Memory', timeline: '⏳ Timeline', flags: '🏳️ Flag Rush', reflex: '⚡ Reflex',
   speed: '🏎️ Speed Rush', snake: '🐍 Snake', g2048: '🔢 2048',
-  tetris: '🧱 Tetris', minesweeper: '💣 Minesweeper', flappy: '🐦 Flappy', breakout: '🎯 Breakout', whack: '🔨 Whack-a-Mole', stack: '🧊 Stack 3D'
+  tetris: '🧱 Tetris', minesweeper: '💣 Minesweeper', flappy: '🐦 Flappy', breakout: '🎯 Breakout', whack: '🔨 Whack-a-Mole', stack: '🧊 Stack 3D',
+  suika: '🍉 Suika Merge', connections: '🔗 Connections', aim: '🎯 Aim Trainer', sort: '🧪 Color Sort'
 };
 
 export function getName() {
@@ -89,8 +90,7 @@ export async function submitScore(game, score) {
     const j = await res.json();
     // TTS score announcement
     if (score > 0) announceScore(score).catch(() => {});
-    return j;
-    return j.rank != null ? { rank: j.rank } : null;
+    return j.rank != null ? { rank: j.rank } : j;
   } catch (e) {
     console.error('[scores] submit failed:', e);
     return null;

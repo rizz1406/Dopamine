@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://dopaminegames.pages.dev/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/reel</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/word</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/higher-lower</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/</loc><priority>1.0</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/reel</loc><priority>0.9</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/word</loc><priority>0.9</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/hl</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/memory</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/timeline</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/flags</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/reflex</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/speed</loc><priority>0.8</priority></url>
   <url><loc>https://dopaminegames.pages.dev/snake</loc><priority>0.8</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/reflex</loc><priority>0.8</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/leaderboard</loc><changefreq>hourly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/about</loc><priority>0.4</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/privacy</loc><priority>0.3</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/terms</loc><priority>0.3</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/contact</loc><priority>0.3</priority></url>
   <url><loc>https://dopaminegames.pages.dev/2048</loc><priority>0.8</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/games-like-wordle</loc><priority>0.7</priority></url>
-  <url><loc>https://dopaminegames.pages.dev/brain-games</loc><priority>0.7</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/tetris</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/minesweeper</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/flappy</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/breakout</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/whack</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/stack</loc><priority>0.8</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/leaderboard</loc><priority>0.7</priority></url>
+  <url><loc>https://dopaminegames.pages.dev/stats</loc><priority>0.6</priority></url>
 </urlset>

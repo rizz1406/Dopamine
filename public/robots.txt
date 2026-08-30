@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
 Sitemap: https://dopaminegames.pages.dev/sitemap.xml

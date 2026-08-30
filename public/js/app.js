@@ -707,6 +707,12 @@ function renderHub() {
       <button class="filter-btn" data-filter="arcade">Arcade</button>
     </div>
 
+    <div style="margin:12px 0 8px;position:relative">
+      <input id="hub-search" type="search" placeholder="Search games…" aria-label="Search games" autocomplete="off"
+        style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:14px;color:var(--text);padding:12px 16px 12px 40px;font-family:inherit;outline:none" />
+      <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.6">🔍</span>
+    </div>
+
     <h3 class="hub-section-title">${t('arcade')}</h3>
     <section class="game-grid" id="game-grid">
       ${gameCard({
@@ -805,15 +811,24 @@ function renderHub() {
         <div class="hiw"><span>3</span><b>${t('hiw3')}</b><p>${t('hiw3p')}</p></div>
       </div>
     </section>`;
-  // filter bar
+  // filter + search
+  const hubSearch = document.getElementById('hub-search');
+  function applyHubFilters() {
+    const f = view.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+    const q = (hubSearch?.value || '').toLowerCase().trim();
+    view.querySelectorAll('.game-card').forEach(c=>{
+      const catOk = f==='all' || c.dataset.cat===f;
+      const text = (c.textContent || '').toLowerCase();
+      const searchOk = !q || text.includes(q);
+      c.style.display = (catOk && searchOk) ? '' : 'none';
+    });
+  }
+  hubSearch?.addEventListener('input', applyHubFilters);
   view.querySelectorAll('.filter-btn').forEach(btn=>{
     btn.addEventListener('click',()=>{
       view.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      const f=btn.dataset.filter;
-      view.querySelectorAll('.game-card').forEach(c=>{
-        c.style.display=(f==='all'||c.dataset.cat===f)?'':'none';
-      });
+      applyHubFilters();
       sfx.click();
     });
   });

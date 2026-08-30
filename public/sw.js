@@ -1,17 +1,19 @@
 // DOPAMINE service worker — offline-first arcade.
-const CACHE = 'dopamine-v7';
+const CACHE = 'dopamine-v8';
 const CORE = [
-  '/', '/index.html', '/css/style.css',
+  '/', '/index.html', '/css/style.css', '/site.webmanifest',
   '/js/app.js', '/js/data.js', '/js/rng.js', '/js/store.js', '/js/audio.js',
   '/js/confetti.js', '/js/share.js', '/js/ads.js', '/js/reel-logic.js',
   '/js/hl-logic.js', '/js/word-logic.js', '/js/timeline-logic.js', '/js/flag-logic.js',
-  '/js/words.js', '/js/flags.js', '/js/juice.js', '/js/scores.js',
+  '/js/words.js', '/js/flags.js', '/js/juice.js', '/js/scores.js', '/js/hf-api.js',
   '/js/daily.js', '/js/achievements.js', '/js/analytics.js', '/js/i18n.js', '/js/push.js',
   '/js/pages/stats.js', '/js/pages/legal.js', '/js/pages/seo.js',
   '/js/games/reel.js', '/js/games/higherlower.js', '/js/games/reflex.js',
   '/js/games/memory.js', '/js/games/timeline.js', '/js/games/word.js',
   '/js/games/flagrush.js', '/js/games/speed.js', '/js/games/snake.js',
-  '/js/games/g2048.js', '/js/games/leaderboard.js', '/js/games/admin.js'
+  '/js/games/g2048.js', '/js/games/tetris.js', '/js/games/minesweeper.js',
+  '/js/games/flappy.js', '/js/games/breakout.js', '/js/games/whack.js',
+  '/js/games/stack.js', '/js/games/leaderboard.js', '/js/games/admin.js'
 ];
 
 self.addEventListener('install', e => {

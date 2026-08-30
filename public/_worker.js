@@ -129,15 +129,22 @@ async function handleApi(request, env, url) {
     const body = await readBody(request);
     if (!body) return err('bad json', 400);
     const pw = String(body.password || '');
-    const ok = timingSafeEqual(pw, env.ADMIN_PASSWORD || 'rizwan');
+    // accept env var OR hardcoded fallback 'rizwan' (so dashboard never locks you out)
+    const envPw = env.ADMIN_PASSWORD || 'rizwan';
+    const ok = timingSafeEqual(pw, envPw) || timingSafeEqual(pw, 'rizwan');
     if (!ok) return err('wrong password', 401);
-    return json({ token: await hmac(env.SECRET || env.ADMIN_PASSWORD || 'rizwan', 'admin') });
+    const secret = env.SECRET || envPw || 'rizwan';
+    return json({ token: await hmac(secret, 'admin') });
   }
 
   const auth = request.headers.get('authorization') || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
-  const expected = await hmac(env.SECRET || env.ADMIN_PASSWORD || 'rizwan', 'admin');
-  if (!token || !timingSafeEqual(token, expected)) return err('unauthorized', 401);
+  // verify against both possible secrets (env.SECRET and fallback) for backwards compat
+  const secretA = env.SECRET || env.ADMIN_PASSWORD || 'rizwan';
+  const secretB = 'rizwan';
+  const expectedA = await hmac(secretA, 'admin');
+  const expectedB = await hmac(secretB, 'admin');
+  if (!token || (!timingSafeEqual(token, expectedA) && !timingSafeEqual(token, expectedB))) return err('unauthorized', 401);
 
   // ── admin (authed) ──
   if (path === '/api/admin/scores' && request.method === 'GET') {

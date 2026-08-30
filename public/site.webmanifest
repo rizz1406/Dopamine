@@ -1,7 +1,7 @@
 {
   "name": "DOPAMINE — Daily Arcade",
   "short_name": "DOPAMINE",
-  "description": "Your daily dose of pointless brilliance. 9 free daily mini-games, global leaderboard, new puzzles daily.",
+  "description": "Your daily dose of pointless brilliance. 16 free mini-games, global leaderboard, new puzzles daily.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b0b12",

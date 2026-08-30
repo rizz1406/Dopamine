@@ -16,7 +16,9 @@ const lazy = (loader) => {
   let mod = null;
   return async (...args) => {
     if (!mod) mod = await loader();
-    return mod.default ? mod.default(...args) : mod[Object.keys(mod)[0]](...args);
+    if (mod.default) return mod.default(...args);
+    const fn = Object.values(mod).find(v => typeof v === 'function');
+    return fn ? fn(...args) : null;
   };
 };
 
@@ -169,7 +171,7 @@ export const ui = {
 };
 
 function logo3d(cls, emoji){
-  const svg = (defs, inner, cls='') => `<svg class="logo-svg ${cls}" viewBox="0 0 64 64" width="56" height="56" aria-hidden="true"><defs>${defs}</defs>${inner}</svg>`;
+  const svg = (defs, inner, cls='') => `<svg class="logo-svg ${cls}" viewBox="0 0 64 64" aria-hidden="true"><defs>${defs}</defs>${inner}</svg>`;
   const gid = (id,stops) => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${stops[0]}"/><stop offset="100%" stop-color="${stops[1]}"/></linearGradient>`;
   const rg = (id,stops) => `<radialGradient id="${id}" cx="35%" cy="35%"><stop offset="0%" stop-color="${stops[0]}"/><stop offset="100%" stop-color="${stops[1]}"/></radialGradient>`;
 
@@ -552,62 +554,62 @@ function renderHub() {
       ${gameCard({
         href: '/reel', emoji: '🎬', name: 'REEL',
         desc: 'Guess the movie from emojis. 4 tries, hints get desperate.',
-        streakKey: 'reel', glow: 'rgba(244,114,182,.25)', daily: true, cls: 'reel', cat: 'daily', cat: 'daily'
+        streakKey: 'reel', glow: 'rgba(244,114,182,.25)', daily: true, cls: 'reel', cat: 'daily'
       })}
       ${gameCard({
         href: '/hl', emoji: '⚖️', name: 'HIGHER OR LOWER',
         desc: 'What does the internet search more? Build an insane streak.',
-        streakKey: 'hl', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'hl', cat: 'arcade', cat: 'arcade'
+        streakKey: 'hl', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'hl', cat: 'arcade'
       })}
       ${gameCard({
         href: '/word', emoji: '🔤', name: 'WORD GUESS',
         desc: 'Crack the hidden 5-letter word. 6 tries. Daily.',
-        streakKey: 'word', glow: 'rgba(251,191,36,.2)', daily: true, cls: 'word', cat: 'daily', cat: 'daily'
+        streakKey: 'word', glow: 'rgba(251,191,36,.2)', daily: true, cls: 'word', cat: 'daily'
       })}
       ${gameCard({
         href: '/memory', emoji: '🧠', name: 'MEMORY',
         desc: 'Watch the pattern. Repeat it. How far can your brain go?',
-        streakKey: 'memory', glow: 'rgba(124,58,237,.28)', daily: false, cls: 'memory', cat: 'puzzle', cat: 'puzzle'
+        streakKey: 'memory', glow: 'rgba(124,58,237,.28)', daily: false, cls: 'memory', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/timeline', emoji: '⏳', name: 'TIMELINE',
         desc: 'Order the movies from oldest to newest. 3 strikes only.',
-        streakKey: 'timeline', glow: 'rgba(251,191,36,.18)', daily: false, cls: 'timeline', cat: 'puzzle', cat: 'puzzle'
+        streakKey: 'timeline', glow: 'rgba(251,191,36,.18)', daily: false, cls: 'timeline', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/flags', emoji: '🏳️', name: 'FLAG RUSH',
         desc: '10 flags, 5 seconds each. How many countries do you know?',
-        streakKey: 'flags', glow: 'rgba(34,211,238,.2)', daily: false, cls: 'flags', cat: 'puzzle', cat: 'puzzle'
+        streakKey: 'flags', glow: 'rgba(34,211,238,.2)', daily: false, cls: 'flags', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/speed', emoji: '🏎️', name: 'SPEED RUSH',
         desc: 'Dodge traffic at insane speeds. How far can you get?',
-        streakKey: 'speed', glow: 'rgba(251,113,133,.22)', daily: false, cls: 'speed', cat: 'arcade', cat: 'arcade'
+        streakKey: 'speed', glow: 'rgba(251,113,133,.22)', daily: false, cls: 'speed', cat: 'arcade'
       })}
       ${gameCard({
         href: '/snake', emoji: '🐍', name: 'SNAKE',
         desc: 'The classic. Eat apples, grow long, don\'t bite yourself.',
-        streakKey: 'snake', glow: 'rgba(163,230,53,.22)', daily: false, cls: 'snake', cat: 'arcade', cat: 'arcade'
+        streakKey: 'snake', glow: 'rgba(163,230,53,.22)', daily: false, cls: 'snake', cat: 'arcade'
       })}
       ${gameCard({
         href: '/2048', emoji: '🔢', name: '2048',
         desc: 'Slide, merge, chase the legendary 2048 tile.',
-        streakKey: 'g2048', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'g2048', cat: 'puzzle', cat: 'puzzle'
+        streakKey: 'g2048', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'g2048', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/reflex', emoji: '⚡', name: 'REFLEX',
         desc: '5 clicks. One average. Are you superhuman or just sleepy?',
-        streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex', cat: 'arcade', cat: 'arcade'
+        streakKey: 'reflex', glow: 'rgba(163,230,53,.2)', daily: false, cls: 'reflex', cat: 'arcade'
       })}
       ${gameCard({
         href: '/tetris', emoji: '🧱', name: 'TETRIS',
         desc: 'Stack blocks, clear lines. The timeless stacking puzzle.',
-        streakKey: 'tetris', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'tetris', cat: 'puzzle', cat: 'puzzle'
+        streakKey: 'tetris', glow: 'rgba(34,211,238,.22)', daily: false, cls: 'tetris', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/minesweeper', emoji: '💣', name: 'MINESWEEPER',
         desc: 'Flag the mines, clear the board. Logic at its purest.',
-        streakKey: 'minesweeper', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'minesweeper', cat: 'puzzle', cat: 'puzzle'
+        streakKey: 'minesweeper', glow: 'rgba(239,68,68,.22)', daily: false, cls: 'minesweeper', cat: 'puzzle'
       })}
       ${gameCard({
         href: '/flappy', emoji: '🐦', name: 'FLAPPY 3D',
@@ -617,12 +619,12 @@ function renderHub() {
       ${gameCard({
         href: '/breakout', emoji: '🎯', name: 'BREAKOUT',
         desc: 'Bounce the ball, smash the bricks. Pure arcade joy.',
-        streakKey: 'breakout', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'breakout', cat: 'arcade', cat: 'arcade'
+        streakKey: 'breakout', glow: 'rgba(168,85,247,.22)', daily: false, cls: 'breakout', cat: 'arcade'
       })}
       ${gameCard({
         href: '/whack', emoji: '🔨', name: 'WHACK-A-MOLE',
         desc: '30 seconds, 9 holes. How fast can you hammer?',
-        streakKey: 'whack', glow: 'rgba(251,146,60,.22)', daily: false, cls: 'whack', cat: 'arcade', cat: 'arcade'
+        streakKey: 'whack', glow: 'rgba(251,146,60,.22)', daily: false, cls: 'whack', cat: 'arcade'
       })}
       ${gameCard({
         href: '/stack', emoji: '🧊', name: 'STACK 3D',
@@ -637,17 +639,18 @@ function renderHub() {
       <div>📊 <a href="/stats" data-nav>${t('yourStats')}</a></div>
     </section>
 
-    <section class="ai-section" style="margin-top:24px;padding:20px;background:linear-gradient(135deg,rgba(168,85,247,.12),rgba(56,189,248,.12));border:1px solid rgba(255,255,255,.08);border-radius:16px">
-      <h3 class="hub-section-title">🤖 AI-Powered Features</h3>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px">
-        <button class="btn ghost" id="ai-bg-btn" style="font-size:.8rem">🎨 Generate Background</button>
-        <button class="btn ghost" id="ai-music-btn" style="font-size:.8rem">🎵 AI Music</button>
-        <button class="btn ghost" id="ai-sfx-btn" style="font-size:.8rem">🔊 AI Sound Effect</button>
-        <button class="btn ghost" id="ai-recap-btn" style="font-size:.8rem">📝 Daily Recap</button>
-        <button class="btn ghost" id="ai-pixel-btn" style="font-size:.8rem">👾 Generate Pixel Art</button>
-        <button class="btn ghost" id="ai-remove-bg-btn" style="font-size:.8rem">✂️ Remove Background</button>
+    <section class="ai-section" style="margin-top:24px;padding:24px">
+      <h3 class="hub-section-title" style="margin-bottom:4px">🤖 AI-Powered Features</h3>
+      <p style="color:var(--muted);font-size:.82rem;margin-bottom:16px">Try HuggingFace AI models right in your browser — all free, no API key needed</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+        <button class="btn" id="ai-bg-btn">🎨 Backgrounds</button>
+        <button class="btn" id="ai-music-btn">🎵 AI Music</button>
+        <button class="btn" id="ai-sfx-btn">🔊 Sound FX</button>
+        <button class="btn" id="ai-recap-btn">📝 Daily Recap</button>
+        <button class="btn" id="ai-pixel-btn">👾 Pixel Art</button>
+        <button class="btn" id="ai-remove-bg-btn">✂️ Remove BG</button>
       </div>
-      <div id="ai-output" style="display:none;margin-top:14px;padding:14px;background:var(--surface-2);border-radius:12px;color:var(--muted);font-size:.85rem;min-height:40px"></div>
+      <div id="ai-output" style="display:none;margin-top:16px;padding:16px;background:rgba(0,0,0,.25);border-radius:12px;color:var(--muted);font-size:.85rem;min-height:40px"></div>
     </section>
 
     <section class="how-it-works">
@@ -670,6 +673,30 @@ function renderHub() {
       sfx.click();
     });
   });
+
+  // Featured carousel auto-scroll
+  const featuredTrack = view.querySelector('.featured-track');
+  if (featuredTrack) {
+    if (window._featuredScrollInterval) clearInterval(window._featuredScrollInterval);
+    let scrollDir = 1;
+    window._featuredScrollInterval = setInterval(() => {
+      const maxScroll = featuredTrack.scrollWidth - featuredTrack.clientWidth;
+      if (featuredTrack.scrollLeft >= maxScroll) scrollDir = -1;
+      else if (featuredTrack.scrollLeft <= 0) scrollDir = 1;
+      featuredTrack.scrollBy({ left: scrollDir * 2, behavior: 'auto' });
+    }, 30);
+    featuredTrack.addEventListener('mouseenter', () => {
+      clearInterval(window._featuredScrollInterval);
+    });
+    featuredTrack.addEventListener('mouseleave', () => {
+      window._featuredScrollInterval = setInterval(() => {
+        const maxScroll = featuredTrack.scrollWidth - featuredTrack.clientWidth;
+        if (featuredTrack.scrollLeft >= maxScroll) scrollDir = -1;
+        else if (featuredTrack.scrollLeft <= 0) scrollDir = 1;
+        featuredTrack.scrollBy({ left: scrollDir * 2, behavior: 'auto' });
+      }, 30);
+    });
+  }
 
   // AI feature buttons
   const aiOutput = document.getElementById('ai-output');

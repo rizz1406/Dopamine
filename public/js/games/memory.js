@@ -7,6 +7,7 @@ import { submitScore, mountLeaderboard } from '../scores.js';
 import { maybeShowInterstitial } from '../ads.js';
 import { ui } from '../app.js';
 import { shareTargets, nativeShare, hasNativeShare } from '../share.js';
+import { styleTransfer } from '../hf-api.js';
 
 const BEST_KEY = 'memory-level';
 const PADS = [
@@ -32,7 +33,42 @@ export function renderMemory(view) {
         <div class="stat-chip"><b id="best-num">${store.best(BEST_KEY)}</b><span>best</span></div>
       </div>
     </div>
-    <section class="stage" id="stage"></section>`;
+    <section class="stage" id="stage">    </section>
+    <section style="margin-top:16px;padding:16px;background:var(--surface-2);border-radius:12px">
+      <h4 style="font-size:.85rem;color:var(--muted);margin-bottom:10px">🎨 AI Style Transfer</h4>
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:10px">Upload a photo and convert it to a cartoon style!</p>
+      <input type="file" id="style-upload" accept="image/*" style="display:none" />
+      <button class="btn ghost" id="style-btn" style="font-size:.8rem;width:100%">📸 Upload Photo</button>
+      <div id="style-output" style="display:none;margin-top:10px;text-align:center"></div>
+    </section>`;
+
+  // Style transfer handler
+  const styleBtn = document.getElementById('style-btn');
+  const styleUpload = document.getElementById('style-upload');
+  const styleOutput = document.getElementById('style-output');
+
+  styleBtn.addEventListener('click', () => styleUpload.click());
+  styleUpload.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    styleBtn.disabled = true;
+    styleBtn.textContent = 'Converting to cartoon...';
+    styleOutput.style.display = 'block';
+    styleOutput.innerHTML = '<div class="spinner"></div>';
+    try {
+      const cartoonBlob = await styleTransfer(file);
+      if (cartoonBlob) {
+        const url = URL.createObjectURL(cartoonBlob);
+        styleOutput.innerHTML = `
+          <img src="${url}" style="max-width:100%;border-radius:8px" />
+          <button class="btn ghost" style="margin-top:8px;font-size:.8rem" onclick="window.open('${url}','_blank')">Open Full Size</button>`;
+      }
+    } catch {
+      styleOutput.textContent = 'Style transfer unavailable right now.';
+    }
+    styleBtn.disabled = false;
+    styleBtn.textContent = '📸 Upload Another';
+  });
 
   const stage = document.getElementById('stage');
   const levelEl = document.getElementById('level-num');

@@ -8,7 +8,7 @@ import { todaySummary, nextDailyHref } from './daily.js';
 import { events } from './analytics.js';
 import { t, getLang, setLang, LANGUAGES, translateAll, getAIHint, announceScore, checkUsername } from './i18n.js';
 import { renderLegal, legalMeta } from './pages/legal.js';
-import { generateBackground, generateMusic, generateSoundEffect, generateRecap, analyzeSentiment, generatePixelArt, removeBackground } from './hf-api.js';
+import { generateBackground, generateMusic, generateSoundEffect, generateRecap, analyzeSentiment, generatePixelArt, removeBackground, styleTransfer } from './hf-api.js';
 import { GAME_LABELS } from './scores.js';
 
 // Lazy load games for code splitting
@@ -644,6 +644,8 @@ function renderHub() {
         <button class="btn ghost" id="ai-music-btn" style="font-size:.8rem">🎵 AI Music</button>
         <button class="btn ghost" id="ai-sfx-btn" style="font-size:.8rem">🔊 AI Sound Effect</button>
         <button class="btn ghost" id="ai-recap-btn" style="font-size:.8rem">📝 Daily Recap</button>
+        <button class="btn ghost" id="ai-pixel-btn" style="font-size:.8rem">👾 Generate Pixel Art</button>
+        <button class="btn ghost" id="ai-remove-bg-btn" style="font-size:.8rem">✂️ Remove Background</button>
       </div>
       <div id="ai-output" style="display:none;margin-top:14px;padding:14px;background:var(--surface-2);border-radius:12px;color:var(--muted);font-size:.85rem;min-height:40px"></div>
     </section>
@@ -717,6 +719,58 @@ function renderHub() {
       const recap = await generateRecap(stats);
       showAI(recap);
     } catch { showAI('Recap unavailable right now.'); }
+  });
+
+  // Pixel art generator
+  document.getElementById('ai-pixel-btn')?.addEventListener('click', async () => {
+    showAI('Enter a prompt to generate pixel art (e.g., "a purple alien holding a sword"):');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'e.g., a purple alien holding a sword';
+    input.className = 'ai-pixel-input';
+    input.style.cssText = 'width:100%;margin-top:10px;padding:12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit';
+    aiOutput.appendChild(input);
+    input.focus();
+    const genBtn = document.createElement('button');
+    genBtn.className = 'btn';
+    genBtn.textContent = 'Generate';
+    genBtn.style.cssText = 'width:100%;margin-top:8px;font-size:.8rem';
+    aiOutput.appendChild(genBtn);
+    genBtn.addEventListener('click', async () => {
+      const prompt = input.value.trim();
+      if (!prompt) return;
+      genBtn.disabled = true;
+      genBtn.textContent = 'Generating...';
+      try {
+        const blob = await generatePixelArt(prompt);
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          aiOutput.innerHTML = `<img src="${url}" style="width:100%;border-radius:8px;image-rendering:pixelated" />`;
+        }
+      } catch { showAI('Pixel art generation unavailable right now.'); }
+    });
+  });
+
+  // Background removal
+  document.getElementById('ai-remove-bg-btn')?.addEventListener('click', () => {
+    showAI('Upload an image to remove its background:');
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.cssText = 'display:block;width:100%;margin-top:10px;color:var(--text)';
+    aiOutput.appendChild(fileInput);
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files?.[0];
+      if (!file) return;
+      showAI('Removing background...');
+      try {
+        const blob = await removeBackground(file);
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          aiOutput.innerHTML = `<img src="${url}" style="width:100%;border-radius:8px" />`;
+        }
+      } catch { showAI('Background removal unavailable right now.'); }
+    });
   });
 
   setTimeout(initLogoAnimations, 50);

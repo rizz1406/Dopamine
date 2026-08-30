@@ -8,6 +8,7 @@ import { winJuice } from '../juice.js';
 import { submitScore, mountLeaderboard } from '../scores.js';
 import { maybeShowInterstitial } from '../ads.js';
 import { ui } from '../app.js';
+import { detectObjects } from '../hf-api.js';
 
 const BEST_KEY = 'flag-score';
 
@@ -28,7 +29,46 @@ export function renderFlagRush(view) {
         <div class="stat-chip"><b id="flag-best">${store.best(BEST_KEY)}</b><span>best</span></div>
       </div>
     </div>
-    <section class="stage" id="stage"></section>`;
+    <section class="stage" id="stage">    </section>
+    <section style="margin-top:16px;padding:16px;background:var(--surface-2);border-radius:12px">
+      <h4 style="font-size:.85rem;color:var(--muted);margin-bottom:10px">🔍 AI Object Detection</h4>
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:10px">Upload an image and detect objects in it!</p>
+      <input type="file" id="obj-upload" accept="image/*" style="display:none" />
+      <button class="btn ghost" id="obj-btn" style="font-size:.8rem;width:100%">📸 Upload Image</button>
+      <div id="obj-output" style="display:none;margin-top:10px"></div>
+    </section>`;
+
+  // Object detection handler
+  const objBtn = document.getElementById('obj-btn');
+  const objUpload = document.getElementById('obj-upload');
+  const objOutput = document.getElementById('obj-output');
+
+  objBtn.addEventListener('click', () => objUpload.click());
+  objUpload.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    objBtn.disabled = true;
+    objBtn.textContent = 'Detecting objects...';
+    objOutput.style.display = 'block';
+    objOutput.innerHTML = '<div class="spinner"></div>';
+    try {
+      const results = await detectObjects(file);
+      if (results && results.length > 0) {
+        objOutput.innerHTML = `
+          <ul style="list-style:none;padding:0;margin:0;font-size:.85rem">
+            ${results.map(r => `<li style="margin-bottom:8px;padding:8px;background:var(--surface);border-radius:8px">
+              <b>${r.label}</b> — ${(r.score * 100).toFixed(1)}%
+            </li>`).join('')}
+          </ul>`;
+      } else {
+        objOutput.textContent = 'No objects detected.';
+      }
+    } catch {
+      objOutput.textContent = 'Object detection unavailable right now.';
+    }
+    objBtn.disabled = false;
+    objBtn.textContent = '📸 Upload Another';
+  });
 
   const stage = document.getElementById('stage');
   const scoreEl = document.getElementById('flag-score');

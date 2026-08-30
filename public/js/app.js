@@ -8,8 +8,6 @@ import { todaySummary, nextDailyHref } from './daily.js';
 import { events } from './analytics.js';
 import { t, getAIHint, announceScore, checkUsername } from './i18n.js';
 import { renderLegal, legalMeta } from './pages/legal.js';
-import { generateBackground, generateMusic, generateSoundEffect, generateRecap, analyzeSentiment, generatePixelArt, removeBackground, styleTransfer } from './hf-api.js';
-import { GAME_LABELS } from './scores.js';
 
 // Lazy load games for code splitting
 const lazy = (loader) => {
@@ -639,20 +637,6 @@ function renderHub() {
       <div>📊 <a href="/stats" data-nav>${t('yourStats')}</a></div>
     </section>
 
-    <section class="ai-section" style="margin-top:24px;padding:24px">
-      <h3 class="hub-section-title" style="margin-bottom:4px">🤖 AI-Powered Features</h3>
-      <p style="color:var(--muted);font-size:.82rem;margin-bottom:16px">Try HuggingFace AI models right in your browser — all free, no API key needed</p>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
-        <button class="btn" id="ai-bg-btn">🎨 Backgrounds</button>
-        <button class="btn" id="ai-music-btn">🎵 AI Music</button>
-        <button class="btn" id="ai-sfx-btn">🔊 Sound FX</button>
-        <button class="btn" id="ai-recap-btn">📝 Daily Recap</button>
-        <button class="btn" id="ai-pixel-btn">👾 Pixel Art</button>
-        <button class="btn" id="ai-remove-bg-btn">✂️ Remove BG</button>
-      </div>
-      <div id="ai-output" style="display:none;margin-top:16px;padding:16px;background:rgba(0,0,0,.25);border-radius:12px;color:var(--muted);font-size:.85rem;min-height:40px"></div>
-    </section>
-
     <section class="how-it-works">
       <h3 class="hub-section-title">${t('howItWorks')}</h3>
       <div class="hiw-grid">
@@ -671,132 +655,6 @@ function renderHub() {
         c.style.display=(f==='all'||c.dataset.cat===f)?'':'none';
       });
       sfx.click();
-    });
-  });
-
-  // Featured carousel auto-scroll
-  const featuredTrack = view.querySelector('.featured-track');
-  if (featuredTrack) {
-    if (window._featuredScrollInterval) clearInterval(window._featuredScrollInterval);
-    let scrollDir = 1;
-    window._featuredScrollInterval = setInterval(() => {
-      const maxScroll = featuredTrack.scrollWidth - featuredTrack.clientWidth;
-      if (featuredTrack.scrollLeft >= maxScroll) scrollDir = -1;
-      else if (featuredTrack.scrollLeft <= 0) scrollDir = 1;
-      featuredTrack.scrollBy({ left: scrollDir * 2, behavior: 'auto' });
-    }, 30);
-    featuredTrack.addEventListener('mouseenter', () => {
-      clearInterval(window._featuredScrollInterval);
-    });
-    featuredTrack.addEventListener('mouseleave', () => {
-      window._featuredScrollInterval = setInterval(() => {
-        const maxScroll = featuredTrack.scrollWidth - featuredTrack.clientWidth;
-        if (featuredTrack.scrollLeft >= maxScroll) scrollDir = -1;
-        else if (featuredTrack.scrollLeft <= 0) scrollDir = 1;
-        featuredTrack.scrollBy({ left: scrollDir * 2, behavior: 'auto' });
-      }, 30);
-    });
-  }
-
-  // AI feature buttons
-  const aiOutput = document.getElementById('ai-output');
-  function showAI(text) { aiOutput.style.display = 'block'; aiOutput.textContent = text; }
-
-  document.getElementById('ai-bg-btn')?.addEventListener('click', async () => {
-    showAI('Generating AI background...');
-    try {
-      const blob = await generateBackground('neon arcade game, dark purple, abstract shapes');
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        aiOutput.innerHTML = `<img src="${url}" style="width:100%;border-radius:8px" />`;
-      }
-    } catch { showAI('Background generation unavailable right now.'); }
-  });
-
-  document.getElementById('ai-music-btn')?.addEventListener('click', async () => {
-    showAI('Generating AI music...');
-    try {
-      const blob = await generateMusic('upbeat retro chiptune arcade music');
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        aiOutput.innerHTML = `<audio controls src="${url}" style="width:100%"></audio>`;
-      }
-    } catch { showAI('Music generation unavailable right now.'); }
-  });
-
-  document.getElementById('ai-sfx-btn')?.addEventListener('click', async () => {
-    showAI('Generating sound effect...');
-    try {
-      const blob = await generateSoundEffect('retro arcade coin collect sound');
-      if (blob) {
-        const url = URL.createObjectURL(blob);
-        aiOutput.innerHTML = `<audio controls src="${url}" style="width:100%"></audio>`;
-      }
-    } catch { showAI('Sound effect generation unavailable right now.'); }
-  });
-
-  document.getElementById('ai-recap-btn')?.addEventListener('click', async () => {
-    showAI('Generating daily recap...');
-    try {
-      const stats = {
-        points: store.streak('reel').best + store.streak('word').best,
-        gamesPlayed: Object.keys(GAME_LABELS).reduce((s, g) => s + (store.streak(g).best > 0 ? 1 : 0), 0),
-        bestStreak: bestStreak
-      };
-      const recap = await generateRecap(stats);
-      showAI(recap);
-    } catch { showAI('Recap unavailable right now.'); }
-  });
-
-  // Pixel art generator
-  document.getElementById('ai-pixel-btn')?.addEventListener('click', async () => {
-    showAI('Enter a prompt to generate pixel art (e.g., "a purple alien holding a sword"):');
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.placeholder = 'e.g., a purple alien holding a sword';
-    input.className = 'ai-pixel-input';
-    input.style.cssText = 'width:100%;margin-top:10px;padding:12px;border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:inherit';
-    aiOutput.appendChild(input);
-    input.focus();
-    const genBtn = document.createElement('button');
-    genBtn.className = 'btn';
-    genBtn.textContent = 'Generate';
-    genBtn.style.cssText = 'width:100%;margin-top:8px;font-size:.8rem';
-    aiOutput.appendChild(genBtn);
-    genBtn.addEventListener('click', async () => {
-      const prompt = input.value.trim();
-      if (!prompt) return;
-      genBtn.disabled = true;
-      genBtn.textContent = 'Generating...';
-      try {
-        const blob = await generatePixelArt(prompt);
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          aiOutput.innerHTML = `<img src="${url}" style="width:100%;border-radius:8px;image-rendering:pixelated" />`;
-        }
-      } catch { showAI('Pixel art generation unavailable right now.'); }
-    });
-  });
-
-  // Background removal
-  document.getElementById('ai-remove-bg-btn')?.addEventListener('click', () => {
-    showAI('Upload an image to remove its background:');
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.style.cssText = 'display:block;width:100%;margin-top:10px;color:var(--text)';
-    aiOutput.appendChild(fileInput);
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
-      showAI('Removing background...');
-      try {
-        const blob = await removeBackground(file);
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          aiOutput.innerHTML = `<img src="${url}" style="width:100%;border-radius:8px" />`;
-        }
-      } catch { showAI('Background removal unavailable right now.'); }
     });
   });
 

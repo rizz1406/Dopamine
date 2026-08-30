@@ -1,4 +1,5 @@
 // localStorage persistence with graceful fallback (private mode safe).
+import { analyzeSentiment } from './hf-api.js';
 
 const KEY = 'dopamine:v1';
 
@@ -95,5 +96,23 @@ export const store = {
   /** All daily results for a given day: { reel: {score, won}, ... } */
   getDailySummary(day) {
     return read().daily?.[day] || {};
+  },
+
+  // ── sentiment tracking ──
+  async trackMood(text) {
+    try {
+      const result = await analyzeSentiment(text);
+      const mood = result?.label || 'neutral';
+      const score = result?.score || 0.5;
+      const db = read();
+      if (!db.moods) db.moods = [];
+      db.moods.push({ text, mood, score, ts: Date.now() });
+      if (db.moods.length > 50) db.moods = db.moods.slice(-50);
+      write(db);
+      return { mood, score };
+    } catch { return { mood: 'neutral', score: 0.5 }; }
+  },
+  getMoodHistory() {
+    return read().moods || [];
   }
 };

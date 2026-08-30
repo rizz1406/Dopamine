@@ -3,6 +3,7 @@ import { dayNumber } from './rng.js';
 import { sfx } from './audio.js';
 import { store } from './store.js';
 import { events, track } from './analytics.js';
+import { checkUsername, announceScore } from './i18n.js';
 
 const NAME_KEY = 'dopamine:name';
 export const GAME_LABELS = {
@@ -43,9 +44,20 @@ export function promptName() {
     const input = backdrop.querySelector('#lb-name');
     input.focus();
     const close = v => { backdrop.remove(); resolve(v); };
-    const save = () => {
+    const save = async () => {
       const v = input.value.trim().slice(0, 16).replace(/[<>&"]/g, '');
-      if (v) { setName(v); sfx.correct(); close(v); } else input.focus();
+      if (!v) { input.focus(); return; }
+      input.disabled = true;
+      const { ok, reason } = await checkUsername(v);
+      if (!ok) {
+        input.disabled = false;
+        input.style.borderColor = '#ef4444';
+        input.placeholder = reason;
+        input.value = '';
+        input.focus();
+        return;
+      }
+      setName(v); sfx.correct(); close(v);
     };
     backdrop.querySelector('[data-test="name-save"]').addEventListener('click', save);
     input.addEventListener('keydown', e => { if (e.key === 'Enter') save(); });
@@ -75,6 +87,9 @@ export async function submitScore(game, score) {
     });
     if (!res.ok) return null;
     const j = await res.json();
+    // TTS score announcement
+    if (score > 0) announceScore(score).catch(() => {});
+    return j;
     return j.rank != null ? { rank: j.rank } : null;
   } catch (e) {
     console.error('[scores] submit failed:', e);

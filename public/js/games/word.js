@@ -9,6 +9,7 @@ import { submitScore, mountLeaderboard } from '../scores.js';
 import { events } from '../analytics.js';
 import { maybeShowInterstitial } from '../ads.js';
 import { ui } from '../app.js';
+import { getAIHint, t } from '../i18n.js';
 
 const KEYS = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
@@ -48,6 +49,8 @@ export function renderWord(view, registerCleanup) {
       <div class="word-keyboard" id="word-kb" data-test="keyboard">
         ${KEYS.map(row => `<div class="kb-row">${row.map(k => `<button class="kb-key ${k.length > 1 ? 'wide' : ''}" data-key="${k}" data-test="key-${k}">${k === 'BACK' ? '⌫' : k}</button>`).join('')}</div>`).join('')}
       </div>
+      <button class="btn ghost" id="ai-hint-btn" style="width:100%;margin-top:14px;font-size:.85rem">💡 ${t('getHint')}</button>
+      <div id="ai-hint-box" style="display:none;margin-top:10px;padding:12px;background:var(--surface-2);border-radius:12px;color:var(--muted);font-size:.85rem"></div>
     </section>`;
 
   const board = document.getElementById('word-board');
@@ -57,6 +60,23 @@ export function renderWord(view, registerCleanup) {
   });
   document.addEventListener('keydown', onPhysicalKey);
   registerCleanup(() => document.removeEventListener('keydown', onPhysicalKey));
+
+  // AI Hint button
+  const hintBtn = document.getElementById('ai-hint-btn');
+  const hintBox = document.getElementById('ai-hint-box');
+  hintBtn.addEventListener('click', async () => {
+    hintBtn.disabled = true;
+    hintBtn.textContent = t('loadingHint');
+    hintBox.style.display = 'block';
+    hintBox.textContent = '...';
+    try {
+      const hint = await getAIHint(answer);
+      hintBox.textContent = '💡 ' + hint;
+    } catch {
+      hintBox.textContent = 'Could not load hint. Try again later.';
+    }
+    hintBtn.textContent = t('aiHint') + ' ✓';
+  });
 
   function onPhysicalKey(e) {
     if (state.done) return;
